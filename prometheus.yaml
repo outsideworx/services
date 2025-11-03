@@ -5,7 +5,6 @@ scrape_configs:
     static_configs:
       - targets: [ "loki:3100" ]
   - job_name: sites
-    metrics_path: /metrics.txt
     static_configs:
       - targets: [
         "come-in-and-find-out",

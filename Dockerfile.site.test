@@ -9,6 +9,7 @@ COPY --from=fetcher /site /usr/local/apache2/htdocs/
 
 RUN sed -i \
     -e 's|#LoadModule headers_module modules/mod_headers.so|LoadModule headers_module modules/mod_headers.so|' \
+    -e 's|#LoadModule negotiation_module modules/mod_negotiation.so|LoadModule negotiation_module modules/mod_negotiation.so|' \
     -e 's|#LoadModule proxy_module modules/mod_proxy.so|LoadModule proxy_module modules/mod_proxy.so|' \
     -e 's|#LoadModule proxy_http_module modules/mod_proxy_http.so|LoadModule proxy_http_module modules/mod_proxy_http.so|' \
     -e 's|#LoadModule ratelimit_module modules/mod_ratelimit.so|LoadModule ratelimit_module modules/mod_ratelimit.so|' \
@@ -88,6 +89,9 @@ ProxyPassReverse "/api/" "http://host.docker.internal/api/"
 <IfModule reqtimeout_module>
     RequestReadTimeout header=2-5,MinRate=2048 body=5-30,MinRate=4096
 </IfModule>
+<Directory "/usr/local/apache2/htdocs">
+    Options +MultiViews
+</Directory>
 EOF
 
 EXPOSE 80
