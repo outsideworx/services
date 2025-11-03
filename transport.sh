@@ -25,10 +25,10 @@ elif [ "$1" == "--deploy" ]; then
         "$SCRIPT_DIR/pom.xml" \
         "$SCRIPT_DIR/prometheus.yaml" \
         "$SCRIPT_DIR/target" \
-        root@"$SERVER_IP":/home/outsideworx/vault
+        root@"$SERVER_IP":/home/outsideworx/services
     echo "Deployment starts: $SERVER_IP"
     ssh root@"$SERVER_IP" "
-        cd /home/outsideworx/vault;
+        cd /home/outsideworx/services;
         docker compose build --no-cache --pull
         docker compose up --force-recreate --no-deps -d;
         docker system prune -af;
