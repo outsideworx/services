@@ -2,10 +2,10 @@ app:
   clients:
     ciafo:
       caller: "come-in-and-find-out"
-      origin: "https://services.outsideworx.net:9001"
+      origin: "https://sites.outsideworx.net:9001"
     peeps:
       caller: "gaiapeeps"
-      origin: "https://services.outsideworx.net:9003"
+      origin: "https://sites.outsideworx.net:9003"
   services:
     grafana:
       url: "https://services.outsideworx.net:3000"
