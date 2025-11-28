@@ -11,6 +11,8 @@ app:
       url: "https://services.outsideworx.net:3000"
     loki:
       url: "http://loki:3100"
+    ntfy:
+      url: "https://services.outsideworx.net:3001"
 management:
   endpoints:
     web:
