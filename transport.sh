@@ -9,7 +9,7 @@ SERVER_IP="$2"
 
 if [ "$1" == "--download" ]; then
     echo "Downloading files: $SERVER_IP"
-    rsync -rvh --delete devs@"$SERVER_IP":/home/outsideworx /tmp;
+    rsync -rvh --delete root@"$SERVER_IP":/home/outsideworx /tmp;
 elif [ "$1" == "--deploy" ]; then
     echo "Packaging project"
     mvn clean package -f "$SCRIPT_DIR/pom.xml"
