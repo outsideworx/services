@@ -1,6 +1,7 @@
 auth-default-access: "deny-all"
 auth-file: "/etc/ntfy/data/user.db"
 base-url: "https://services.outsideworx.net"
+enable-login: true
 enable-metrics: true
 listen-http: "-"
 listen-https: ":3001"
