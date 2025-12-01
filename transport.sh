@@ -22,6 +22,7 @@ elif [ "$1" == "--deploy" ]; then
         "$SCRIPT_DIR/Dockerfile.site" \
         "$SCRIPT_DIR/grafana.ini" \
         "$SCRIPT_DIR/loki.yaml" \
+        "$SCRIPT_DIR/ntfy.yaml" \
         "$SCRIPT_DIR/prometheus.yaml" \
         "$SCRIPT_DIR/target" \
         root@"$SERVER_IP":/home/outsideworx/services

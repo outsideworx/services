@@ -12,6 +12,14 @@ services:
     image: grafana/loki:3.5.5
     ports:
       - "3100:3100"
+  ntfy:
+    command: serve
+    container_name: ntfy
+    image: binwiederhier/ntfy:v2.15.0
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./ntfy-test.yaml:/etc/ntfy/server.yml
   postgres:
     container_name: postgres
     environment:

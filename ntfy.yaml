@@ -1,0 +1,10 @@
+auth-default-access: "deny-all"
+auth-file: "/etc/ntfy/data/user.db"
+base-url: "https://services.outsideworx.net"
+enable-metrics: true
+listen-http: "-"
+listen-https: ":3001"
+metrics-listen-http: ":80"
+require-login: true
+web-push-email-address: "info@outsideworx.net"
+web-push-file: "/etc/ntfy/data/webpush.db"

@@ -29,6 +29,22 @@ services:
     volumes:
       - /home/outsideworx/loki:/loki
       - ./loki.yaml:/etc/loki/config.yml
+  ntfy:
+    command: serve
+    container_name: ntfy
+    environment:
+      NTFY_CERT_FILE: $SERVER_SSL_CERTIFICATE
+      NTFY_KEY_FILE: $SERVER_SSL_CERTIFICATE_PRIVATE_KEY
+      NTFY_WEB_PUSH_PUBLIC_KEY: $NTFY_WEB_PUSH_PUBLIC_KEY
+      NTFY_WEB_PUSH_PRIVATE_KEY: $NTFY_WEB_PUSH_PRIVATE_KEY
+    image: binwiederhier/ntfy:v2.15.0
+    ports:
+      - "3001:3001"
+    volumes:
+      - /home/outsideworx/ntfy:/etc/ntfy/data
+      - ./ntfy.yaml:/etc/ntfy/server.yml
+      - *common-certificate
+      - *common-certificate-private-key
   postgres:
     container_name: postgres
     environment:

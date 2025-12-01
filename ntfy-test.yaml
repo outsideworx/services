@@ -1,0 +1,5 @@
+base-url: "http://localhost:3001"
+enable-metrics: true
+listen-http: ":3001"
+metrics-listen-http: ":80"
+upstream-base-url: "https://ntfy.sh"
