@@ -1,6 +1,8 @@
 auth-default-access: "deny-all"
 auth-file: "/etc/ntfy/data/user.db"
-base-url: "https://services.outsideworx.net"
+base-url: "https://services.outsideworx.net:3001"
+cache-duration: "30d"
+cache-file: "/etc/ntfy/data/cache.db"
 enable-login: true
 enable-metrics: true
 listen-http: "-"
