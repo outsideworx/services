@@ -12,6 +12,12 @@ services:
     image: grafana/loki:3.5.5
     ports:
       - "3100:3100"
+  node-exporter:
+    container_name: node-exporter
+    image: quay.io/prometheus/node-exporter:v1.10.2
+    pid: host
+    volumes:
+      - /:/rootfs:ro
   ntfy:
     command: serve
     container_name: ntfy

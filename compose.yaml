@@ -29,6 +29,16 @@ services:
     volumes:
       - /home/outsideworx/loki:/loki
       - ./loki.yaml:/etc/loki/config.yml
+  node-exporter:
+    command:
+      - '--collector.processes'
+      - '--collector.systemd'
+    container_name: node-exporter
+    image: quay.io/prometheus/node-exporter:v1.10.2
+    pid: host
+    restart: unless-stopped
+    volumes:
+      - /:/rootfs:ro
   ntfy:
     command: serve
     container_name: ntfy
