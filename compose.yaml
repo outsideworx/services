@@ -29,16 +29,6 @@ services:
     volumes:
       - /home/outsideworx/loki:/loki
       - ./loki.yaml:/etc/loki/config.yml
-  node-exporter:
-    command:
-      - '--collector.processes'
-      - '--collector.systemd'
-    container_name: node-exporter
-    image: quay.io/prometheus/node-exporter:v1.10.2
-    pid: host
-    restart: unless-stopped
-    volumes:
-      - /:/rootfs:ro
   ntfy:
     command: serve
     container_name: ntfy
@@ -70,7 +60,7 @@ services:
       DATA_SOURCE_URI: postgres:5432/?sslmode=disable
       DATA_SOURCE_USER: $SPRING_DATASOURCE_USERNAME
       DATA_SOURCE_PASS: $SPRING_DATASOURCE_PASSWORD
-    image: prometheuscommunity/postgres-exporter:v0.18.1
+    image: quay.io/prometheuscommunity/postgres-exporter:v0.18.1
   prometheus:
     container_name: prometheus
     image: prom/prometheus:v3.6.0
