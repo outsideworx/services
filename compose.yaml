@@ -46,6 +46,8 @@ services:
       - *common-certificate
       - *common-certificate-private-key
   postgres:
+    command:
+      - "--storage.tsdb.retention.time=365d"
     container_name: postgres
     environment:
       POSTGRES_USER: $SPRING_DATASOURCE_USERNAME
