@@ -6,6 +6,9 @@ app:
     peeps:
       caller: "gaiapeeps"
       origin: "https://sites.outsideworx.net:9003"
+    soup:
+      caller: "soupart"
+      origin: "https://sites.outsideworx.net:9005"
   services:
     grafana:
       url: "https://services.outsideworx.net:3000"

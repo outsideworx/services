@@ -23,11 +23,11 @@ final class CallbackController {
     private final EmailService emailService;
 
     @PostMapping("/api/callback")
-    void callback(@RequestHeader("X-Caller-Id") String recipient, @RequestBody Callback callback) {
-        log.info("Callback received for: [{}], with payload: [{}]", recipient, callback);
+    void callback(@RequestHeader("X-Caller-Id") String callerId, @RequestBody Callback callback) {
+        log.info("Callback received for: [{}], with payload: [{}]", callerId, callback);
         try {
             emailService.send(
-                    recipient,
+                    callerId,
                     "Someone is interested!",
                     String.format(
                             "A visitor left the following contact: %s.<br>The product he was interested in is: <a href=%s>this</a>.",
@@ -39,7 +39,7 @@ final class CallbackController {
             CallbackEntity callbackEntity = new CallbackEntity();
             callbackEntity.setAddress(callback.getAddress());
             callbackEntity.setProduct(callback.getProduct());
-            callbackEntity.setRecipient(recipient);
+            callbackEntity.setRecipient(callerId);
             callbackRepository.save(callbackEntity);
             log.info("Callback saved with id: [{}]", callbackEntity.getId());
         }

@@ -2,6 +2,7 @@ package application.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,11 +15,13 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "USERS")
-public final class User implements UserDetails {
+public final class UserEntity implements UserDetails {
     private boolean accountNonExpired;
     private boolean accountNonLocked;
     private boolean credentialsNonExpired;
     private boolean enabled;
+    @ManyToMany
+    private List<LicenseEntity> licenses;
     private String password;
     @Id
     private String username;

@@ -6,6 +6,9 @@ app:
     peeps:
       origin: "*"
       token: "test"
+    soup:
+      origin: "*"
+      token: "test"
   services:
     grafana:
       url: "http://localhost:3000"

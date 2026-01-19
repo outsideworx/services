@@ -13,10 +13,10 @@ public final class EmailService {
     @Value("${mailersend.sdk.token:#{null}}")
     private String token;
 
-    public void send(String recipient, String subject, String text) throws MailerSendException {
+    public void send(String callerId, String subject, String text) throws MailerSendException {
         Email email = new Email();
         email.setFrom("Outside Worx", "info@outsideworx.net");
-        email.addRecipient(null, recipient.concat("@outsideworx.net"));
+        email.addRecipient(null, callerId.concat("@outsideworx.net"));
         email.setSubject(subject);
         email.setHtml(text);
         MailerSend mailerSend = new MailerSend();
