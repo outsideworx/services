@@ -105,7 +105,7 @@
                                     <textarea class="form-control" th:name="|items[${iter.index}].description|" rows="6" th:text="${item.description}"></textarea>
                                 </td>
                                 <td>
-                                    <img th:src="${item.thumbnail}" th:classappend="${item.thumbnail} ?'thumbnail-filled':'thumbnail-empty'" class="thumbnail-base">
+                                    <img th:src="${item.image}" th:classappend="${item.image} ?'thumbnail-filled':'thumbnail-empty'" class="thumbnail-base">
                                     <button type="button" class="btn btn-light file-upload-button" onclick="selectFile(this)">Choose File</button>
                                     <input type="file" th:name="|items[${iter.index}].image|" class="form-control d-none" onchange="updateButtonText(this)">
                                 </td>

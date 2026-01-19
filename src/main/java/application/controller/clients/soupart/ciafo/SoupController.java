@@ -2,10 +2,7 @@ package application.controller.clients.soupart.ciafo;
 
 import application.controller.ModelVisitor;
 import application.converter.clients.SoupConverter;
-import application.model.clients.ciafo.CiafoEntity;
-import application.model.clients.ciafo.mapping.CiafoThumbnails;
 import application.model.clients.soup.SoupEntity;
-import application.model.clients.soup.mapping.SoupThumbnail;
 import application.repository.clients.SoupRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,7 +45,7 @@ class SoupController implements ModelVisitor {
                 "art",
                 "design",
                 "illustration");
-        Map<String, List<SoupThumbnail>> items = categories
+        Map<String, List<SoupEntity>> items = categories
                 .stream()
                 .collect(Collectors.toMap(Function.identity(), soupRepository::getThumbnailsByCategory));
         model.addObject("items", items);
