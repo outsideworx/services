@@ -95,6 +95,7 @@
                             <tr>
                                 <th class="text-center">Description</th>
                                 <th class="text-center">Image</th>
+                                <th class="text-center">Thumbnail</th>
                                 <th class="text-center">Actions</th>
                             </tr>
                             </thead>
@@ -107,6 +108,11 @@
                                     <img th:src="${item.thumbnail}" th:classappend="${item.thumbnail} ?'thumbnail-filled':'thumbnail-empty'" class="thumbnail-base">
                                     <button type="button" class="btn btn-light file-upload-button" onclick="selectFile(this)">Choose File</button>
                                     <input type="file" th:name="|items[${iter.index}].image|" class="form-control d-none" onchange="updateButtonText(this)">
+                                </td>
+                                <td>
+                                    <img th:src="${item.thumbnail}" th:classappend="${item.thumbnail} ?'thumbnail-filled':'thumbnail-empty'" class="thumbnail-base">
+                                    <button type="button" class="btn btn-light file-upload-button" onclick="selectFile(this)">Choose File</button>
+                                    <input type="file" th:name="|items[${iter.index}].thumbnail|" class="form-control d-none" onchange="updateButtonText(this)">
                                 </td>
                                 <td style="text-align: center;">
                                     <br>
@@ -152,6 +158,11 @@
             <img src="" class="thumbnail-base thumbnail-empty" alt=""/>
             <button type="button" class="btn btn-light file-upload-button" onclick="selectFile(this)">Choose File</button>
             <input type="file" name="items[${tableSize}].image" class="form-control d-none" onchange="updateButtonText(this)">
+        </td>
+        <td>
+            <img src="" class="thumbnail-base thumbnail-empty" alt=""/>
+            <button type="button" class="btn btn-light file-upload-button" onclick="selectFile(this)">Choose File</button>
+            <input type="file" name="items[${tableSize}].thumbnail" class="form-control d-none" onchange="updateButtonText(this)">
         </td>
         <td style="text-align: center;">
             <br>

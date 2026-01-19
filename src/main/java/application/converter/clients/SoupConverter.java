@@ -57,7 +57,7 @@ public final class SoupConverter extends ImageConverter {
                             .filter(description -> !StringUtils.isEmptyOrWhitespace(description))
                             .orElse(null));
                     item.setImage(getImage(files, iterator, "image"));
-                    item.setThumbnail(getThumbnail(files, iterator, "image"));
+                    item.setThumbnail(getThumbnail(files, iterator, "thumbnail"));
                     return item;
                 })
                 .toList();

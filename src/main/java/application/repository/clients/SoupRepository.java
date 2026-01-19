@@ -23,11 +23,11 @@ public interface SoupRepository extends CrudRepository<SoupEntity, Long> {
 
     @Cacheable(value = "soupItems", key = "#category + #offset")
     @Query(value = """
-            SELECT id, category, description, image
+            SELECT id, category, description, image, thumbnail
                     FROM SOUP
                     WHERE category = :category
                     ORDER BY id
-                    LIMIT 4 OFFSET :offset
+                    LIMIT 9 OFFSET :offset
             """, nativeQuery = true)
     List<SoupImage> getImagesByCategoryAndOffset(String category, int offset);
 
