@@ -23,4 +23,5 @@ public final class SoupEntity {
     private String image;
     @Column(columnDefinition = "TEXT")
     private String thumbnail;
+    private String link;
 }

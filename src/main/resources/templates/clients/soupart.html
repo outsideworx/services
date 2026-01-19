@@ -94,7 +94,8 @@
                             <thead>
                             <tr>
                                 <th class="text-center">Description</th>
-                                <th class="text-center">Image</th>
+                                <th class="text-center" th:if="${category == 'animation'}">Link</th>
+                                <th class="text-center" th:if="${category != 'animation'}">Image</th>
                                 <th class="text-center">Thumbnail</th>
                                 <th class="text-center">Actions</th>
                             </tr>
@@ -104,7 +105,10 @@
                                 <td>
                                     <textarea class="form-control" th:name="|items[${iter.index}].description|" rows="6" th:text="${item.description}"></textarea>
                                 </td>
-                                <td>
+                                <td th:if="${category == 'animation'}">
+                                    <textarea class="form-control" th:name="|items[${iter.index}].link|" rows="6" th:text="${item.link}"></textarea>
+                                </td>
+                                <td th:if="${category != 'animation'}">
                                     <img th:src="${item.image}" th:classappend="${item.image} ?'thumbnail-filled':'thumbnail-empty'" class="thumbnail-base">
                                     <button type="button" class="btn btn-light file-upload-button" onclick="selectFile(this)">Choose File</button>
                                     <input type="file" th:name="|items[${iter.index}].image|" class="form-control d-none" onchange="updateButtonText(this)">
@@ -150,24 +154,50 @@
         const tableBody = document.getElementById('tableBody' + category);
         const tableSize = tableBody.querySelectorAll('tr').length;
         const newRow = document.createElement('tr');
+        const linkColumn = category === 'animation'
+            ? `
+        <td>
+            <textarea class="form-control" name="items[${tableSize}].link" rows="6"></textarea>
+        </td>
+        `
+            : '';
+        const imageColumn = category !== 'animation'
+            ? `
+        <td>
+            <img src="" class="thumbnail-base thumbnail-empty" alt=""/>
+            <button type="button" class="btn btn-light file-upload-button" onclick="selectFile(this)">Choose File</button>
+            <input type="file"
+                   name="items[${tableSize}].image"
+                   class="form-control d-none"
+                   onchange="updateButtonText(this)">
+        </td>
+        `
+            : '';
         newRow.innerHTML = `
         <td>
             <textarea class="form-control" name="items[${tableSize}].description" rows="6"></textarea>
         </td>
+        ${linkColumn}
+        ${imageColumn}
         <td>
             <img src="" class="thumbnail-base thumbnail-empty" alt=""/>
             <button type="button" class="btn btn-light file-upload-button" onclick="selectFile(this)">Choose File</button>
-            <input type="file" name="items[${tableSize}].image" class="form-control d-none" onchange="updateButtonText(this)">
-        </td>
-        <td>
-            <img src="" class="thumbnail-base thumbnail-empty" alt=""/>
-            <button type="button" class="btn btn-light file-upload-button" onclick="selectFile(this)">Choose File</button>
-            <input type="file" name="items[${tableSize}].thumbnail" class="form-control d-none" onchange="updateButtonText(this)">
+            <input type="file"
+                   name="items[${tableSize}].thumbnail"
+                   class="form-control d-none"
+                   onchange="updateButtonText(this)">
         </td>
         <td style="text-align: center;">
             <br>
-            <input type="checkbox" class="btn-check" name="items[${tableSize}].delete" id="'btn-check-outlined-success-' + ${category} + '-' + ${tableSize}">
-            <label class="btn btn-outline-danger" for="'btn-check-outlined-success-' + ${category} + '-' + ${tableSize}" title="Mark as deleted"><i class="bi bi-trash"></i></label>
+            <input type="checkbox"
+                   class="btn-check"
+                   name="items[${tableSize}].delete"
+                   id="btn-check-outlined-success-${category}-${tableSize}">
+            <label class="btn btn-outline-danger"
+                   for="btn-check-outlined-success-${category}-${tableSize}"
+                   title="Mark as deleted">
+                <i class="bi bi-trash"></i>
+            </label>
             <input type="hidden" name="items[${tableSize}].id">
         </td>
         `;
