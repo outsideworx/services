@@ -13,11 +13,11 @@ import java.util.Map;
 
 public abstract class ImageConverter extends ItemsConverter {
     protected String getImage(Map<String, MultipartFile> files, Integer iterator, String field) {
-        return convertToBase64(files, iterator, field, 1280, 720);
+        return convertToBase64(files, iterator, field, 1920, 1080);
     }
 
     protected String getThumbnail(Map<String, MultipartFile> files, Integer iterator, String field) {
-        return convertToBase64(files, iterator, field, 192, 108);
+        return convertToBase64(files, iterator, field, 384, 216);
     }
 
     private String convertToBase64(Map<String, MultipartFile> files, Integer iterator, String field, double desiredWidth, double desiredHeight) {
