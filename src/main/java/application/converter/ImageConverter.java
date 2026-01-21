@@ -17,7 +17,7 @@ public abstract class ImageConverter extends ItemsConverter {
     }
 
     protected String getThumbnail(Map<String, MultipartFile> files, Integer iterator, String field) {
-        return convertToBase64(files, iterator, field, 384, 216);
+        return convertToBase64(files, iterator, field, 480, 360);
     }
 
     private String convertToBase64(Map<String, MultipartFile> files, Integer iterator, String field, double desiredWidth, double desiredHeight) {
