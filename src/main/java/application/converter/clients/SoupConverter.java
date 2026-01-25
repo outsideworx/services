@@ -1,7 +1,6 @@
 package application.converter.clients;
 
 import application.converter.ImageConverter;
-import application.model.clients.ciafo.CiafoEntity;
 import application.model.clients.soup.SoupEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
