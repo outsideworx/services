@@ -48,8 +48,8 @@ class SoupController implements ModelVisitor {
         Map<String, List<SoupEntity>> items = categories
                 .stream()
                 .collect(Collectors.toMap(Function.identity(), soupRepository::getThumbnailsByCategory));
-        model.addObject("items", items);
         model.addObject("categories", categories);
+        model.addObject("items", items);
         return model;
     }
 }

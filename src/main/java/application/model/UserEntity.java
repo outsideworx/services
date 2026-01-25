@@ -20,8 +20,6 @@ public final class UserEntity implements UserDetails {
     private boolean accountNonLocked;
     private boolean credentialsNonExpired;
     private boolean enabled;
-    @ManyToMany
-    private List<LicenseEntity> licenses;
     private String password;
     @Id
     private String username;
