@@ -33,7 +33,7 @@ spring:
   cache:
     type: caffeine
     caffeine:
-      spec: maximumWeight=201326592
+      spec: maximumSize=76
   datasource:
     url: jdbc:postgresql://postgres:5432/
   jackson:
