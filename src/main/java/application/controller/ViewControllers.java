@@ -21,7 +21,6 @@ class ViewControllers implements WebMvcConfigurer {
                 .values()
                 .forEach(client -> registry.addRedirectViewController(
                         "/clients/".concat(client.getCaller()),
-                        client.getOrigin()
-                ));
+                        client.getOrigin()));
     }
 }

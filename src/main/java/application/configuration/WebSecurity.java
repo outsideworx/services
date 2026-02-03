@@ -12,7 +12,14 @@ class WebSecurity {
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/actuator/**", "/api/**", "/clients/**", "/grafana", "/img/**", "/login", "/ntfy")
+                        .requestMatchers(
+                                "/actuator/**",
+                                "/api/**",
+                                "/clients/**",
+                                "/grafana",
+                                "/img/**",
+                                "/login",
+                                "/ntfy")
                         .permitAll()
                         .anyRequest()
                         .authenticated())
