@@ -13,6 +13,8 @@ class ViewControllers implements WebMvcConfigurer {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addRedirectViewController("/grafana", properties.getServices().get("grafana").getUrl());
+        registry.addRedirectViewController("/ntfy", properties.getServices().get("ntfy").getUrl());
         registry.addViewController("/login").setViewName("login");
         properties
                 .getClients()
@@ -20,12 +22,6 @@ class ViewControllers implements WebMvcConfigurer {
                 .forEach(client -> registry.addRedirectViewController(
                         "/clients/".concat(client.getCaller()),
                         client.getOrigin()
-                ));
-        properties
-                .getServices()
-                .forEach((name, service) -> registry.addRedirectViewController(
-                        "/".concat(name),
-                        service.getUrl()
                 ));
     }
 }
