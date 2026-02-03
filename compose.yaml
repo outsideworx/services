@@ -11,7 +11,7 @@ services:
       GF_SERVER_PROTOCOL: https
       GF_SERVER_CERT_FILE: $SERVER_SSL_CERTIFICATE
       GF_SERVER_CERT_KEY: $SERVER_SSL_CERTIFICATE_PRIVATE_KEY
-    image: grafana/grafana:12.2.0
+    image: grafana/grafana:12.3.0
     ports:
       - "3000:3000"
     restart: unless-stopped
@@ -23,7 +23,7 @@ services:
       - *common-certificate-private-key
   loki:
     container_name: loki
-    image: grafana/loki:3.5.5
+    image: grafana/loki:3.6.4
     restart: unless-stopped
     user: root
     volumes:
@@ -37,7 +37,7 @@ services:
       NTFY_KEY_FILE: $SERVER_SSL_CERTIFICATE_PRIVATE_KEY
       NTFY_WEB_PUSH_PUBLIC_KEY: $NTFY_WEB_PUSH_PUBLIC_KEY
       NTFY_WEB_PUSH_PRIVATE_KEY: $NTFY_WEB_PUSH_PRIVATE_KEY
-    image: binwiederhier/ntfy:v2.15.0
+    image: binwiederhier/ntfy:v2.16.0
     ports:
       - "3001:3001"
     volumes:
@@ -65,7 +65,7 @@ services:
     image: quay.io/prometheuscommunity/postgres-exporter:v0.18.1
   prometheus:
     container_name: prometheus
-    image: prom/prometheus:v3.6.0
+    image: prom/prometheus:v3.9.1
     restart: unless-stopped
     user: root
     volumes:

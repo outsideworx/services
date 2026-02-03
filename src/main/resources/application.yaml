@@ -9,6 +9,9 @@ app:
     soup:
       caller: "soupart"
       origin: "https://sites.outsideworx.net:9005"
+    green:
+      caller: "gogreengo"
+      origin: "https://sites.outsideworx.net:9007"
   services:
     grafana:
       url: "https://services.outsideworx.net:3000"

@@ -4,18 +4,18 @@ services:
     environment:
       GF_AUTH_ANONYMOUS_ENABLED: true
       GF_AUTH_ANONYMOUS_ORG_ROLE: Admin
-    image: grafana/grafana:12.2.0
+    image: grafana/grafana:12.3.0
     ports:
       - "3000:3000"
   loki:
     container_name: loki
-    image: grafana/loki:3.5.5
+    image: grafana/loki:3.6.4
     ports:
       - "3100:3100"
   ntfy:
     command: serve
     container_name: ntfy
-    image: binwiederhier/ntfy:v2.15.0
+    image: binwiederhier/ntfy:v2.16.0
     ports:
       - "3001:3001"
     volumes:
@@ -36,6 +36,6 @@ services:
     image: quay.io/prometheuscommunity/postgres-exporter:v0.18.1
   prometheus:
     container_name: prometheus
-    image: prom/prometheus:v3.6.0
+    image: prom/prometheus:v3.9.1
     volumes:
       - ./prometheus-test.yaml:/etc/prometheus/prometheus.yml

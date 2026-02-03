@@ -14,7 +14,7 @@ public class Properties {
     private final Map<String, Service> services;
 
     @Data
-    static final class Client {
+    public static final class Client {
         private String caller;
         private String origin;
         private String token;
