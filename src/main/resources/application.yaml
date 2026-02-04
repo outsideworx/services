@@ -2,10 +2,10 @@ app:
   clients:
     ciafo:
       caller: "come-in-and-find-out"
-      origin: "https://sites.outsideworx.net:9001"
+      origin: "https://sites.outsideworx.net:9000"
     peeps:
       caller: "gaiapeeps"
-      origin: "https://sites.outsideworx.net:9003"
+      origin: "https://sites.outsideworx.net:9002"
     soup:
       caller: "soupart"
       origin: "https://sites.outsideworx.net:9005"
