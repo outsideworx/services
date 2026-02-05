@@ -16,11 +16,5 @@ class ViewControllers implements WebMvcConfigurer {
         registry.addRedirectViewController("/grafana", properties.getServices().get("grafana").getUrl());
         registry.addRedirectViewController("/ntfy", properties.getServices().get("ntfy").getUrl());
         registry.addViewController("/login").setViewName("login");
-        properties
-                .getClients()
-                .values()
-                .forEach(client -> registry.addRedirectViewController(
-                        "/clients/".concat(client.getCaller()),
-                        client.getOrigin()));
     }
 }

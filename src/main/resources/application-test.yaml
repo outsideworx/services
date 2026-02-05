@@ -9,9 +9,6 @@ app:
     soup:
       origin: "*"
       token: "test"
-    green:
-      origin: "*"
-      token: "test"
   services:
     grafana:
       url: "http://localhost:3000"
