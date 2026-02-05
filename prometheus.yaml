@@ -19,7 +19,8 @@ scrape_configs:
         "igli",
         "outsideworx",
         "soupart",
-        "soupkitchen"
+        "soupkitchen",
+        "gogreengo"
       ]
   - job_name: vault
     metrics_path: /actuator/prometheus
