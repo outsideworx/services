@@ -7,7 +7,7 @@
             app = vault
         </labels>
         <message>
-            <pattern>%-5level %logger{36} --- requestId=%X{requestId:-unknown}: %msg%n</pattern>
+            <pattern>%logger{36} --- requestId=%X{requestId:-unknown}: %msg%n</pattern>
         </message>
     </appender>
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
