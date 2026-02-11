@@ -16,10 +16,8 @@ elif [ "$1" == "--deploy" ]; then
     echo "Uploading project: $SERVER_IP"
     rsync -rvh --delete \
         "$SCRIPT_DIR/.env" \
-        "$SCRIPT_DIR/compose.override.yaml" \
         "$SCRIPT_DIR/compose.yaml" \
         "$SCRIPT_DIR/Dockerfile" \
-        "$SCRIPT_DIR/Dockerfile.site" \
         "$SCRIPT_DIR/grafana.ini" \
         "$SCRIPT_DIR/loki.yaml" \
         "$SCRIPT_DIR/ntfy.yaml" \
