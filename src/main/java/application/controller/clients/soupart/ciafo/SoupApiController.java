@@ -24,7 +24,7 @@ final class SoupApiController {
     @GetMapping("/api/cached/soupart")
     List<SoupImage> getSoupImages(@RequestParam String category, @RequestParam int offset) {
         log.info("Incoming API request for category: [{}], with offset: [{}]", category, offset);
-        grafanaService.registerRequest("soupart", "all");
+        grafanaService.registerRequest("soupart", category);
         return soupRepository.getImagesByCategoryAndOffset(category, offset);
     }
 }

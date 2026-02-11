@@ -25,7 +25,7 @@ final class CiafoApiController {
     @GetMapping("/api/come-in-and-find-out")
     List<CiafoFirstImage> getCiafoFirstImages(@RequestParam String category, @RequestParam int offset) {
         log.info("Incoming API request for category: [{}], with offset: [{}]", category, offset);
-        grafanaService.registerRequest("come-in-and-find-out", "categories");
+        grafanaService.registerRequest("come-in-and-find-out", category);
         return ciafoRepository.getFirstImagesByCategoryAndOffset(category, offset);
     }
 
