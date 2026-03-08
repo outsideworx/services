@@ -20,7 +20,7 @@ scrape_configs:
         "outsideworx",
         "soupart",
         "soupkitchen",
-        "gogreengo"
+        "thegreen"
       ]
   - job_name: vault
     metrics_path: /actuator/prometheus
