@@ -17,7 +17,7 @@ scrape_configs:
         "gaiapeeps",
         "soupart"
       ]
-  - job_name: vault
+  - job_name: services
     metrics_path: /actuator/prometheus
     static_configs:
       - targets: [ "host.docker.internal" ]

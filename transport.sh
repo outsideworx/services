@@ -30,7 +30,7 @@ elif [ "$1" == "--deploy" ]; then
         docker compose build --no-cache --pull
         docker compose up --force-recreate --no-deps -d;
         docker system prune -af;
-        docker logs vault -f"
+        docker logs services -f"
 else
     echo "Error: Only download & deploy modes are supported!"
     exit 1

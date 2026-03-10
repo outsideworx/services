@@ -71,9 +71,9 @@ services:
     volumes:
       - /home/outsideworx/prometheus:/prometheus
       - ./prometheus.yaml:/etc/prometheus/prometheus.yml
-  vault:
+  services:
     build: .
-    container_name: vault
+    container_name: services
     depends_on:
       - loki
       - postgres

@@ -4,7 +4,7 @@
             <url>${LOKI_URL}/loki/api/v1/push</url>
         </http>
         <labels>
-            app = vault
+            app = services
         </labels>
         <message>
             <pattern>%logger{36} --- requestId=%X{requestId:-unknown}: %msg%n</pattern>

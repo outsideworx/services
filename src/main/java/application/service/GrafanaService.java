@@ -11,12 +11,12 @@ public final class GrafanaService {
     private final MeterRegistry registry;
 
     public void registerException(String type) {
-        getCounter("vault_exceptions", "type", type)
+        getCounter("services_exceptions", "type", type)
                 .increment();
     }
 
     public void registerRequest(String endpoint, String fetch) {
-        getCounter("vault_requests", "endpoint", endpoint, "fetch", fetch)
+        getCounter("services_requests", "endpoint", endpoint, "fetch", fetch)
                 .increment();
     }
 

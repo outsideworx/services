@@ -1,5 +1,5 @@
 FROM openjdk:25-ea
-COPY target/*.jar vault.jar
+COPY target/*.jar services.jar
 
 EXPOSE 80 443
-CMD ["java", "-jar", "vault.jar"]
+CMD ["java", "-jar", "services.jar"]

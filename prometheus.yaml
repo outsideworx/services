@@ -22,7 +22,7 @@ scrape_configs:
         "soupkitchen",
         "thegreen"
       ]
-  - job_name: vault
+  - job_name: services
     metrics_path: /actuator/prometheus
     static_configs:
-      - targets: [ "vault" ]
+      - targets: [ "services" ]
