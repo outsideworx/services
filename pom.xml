@@ -115,7 +115,6 @@
     <distributionManagement>
         <repository>
             <id>github</id>
-            <name>GitHub OutsideWorx Apache Maven Packages</name>
             <url>https://maven.pkg.github.com/outsideworx/services</url>
         </repository>
     </distributionManagement>
