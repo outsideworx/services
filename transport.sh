@@ -17,6 +17,7 @@ elif [ "$1" == "--deploy" ]; then
     rsync -rvh --delete \
         "$SCRIPT_DIR/.env" \
         "$SCRIPT_DIR/compose.yaml" \
+        "$SCRIPT_DIR/docker-stats.sh" \
         "$SCRIPT_DIR/Dockerfile" \
         "$SCRIPT_DIR/grafana.ini" \
         "$SCRIPT_DIR/loki.yaml" \
