@@ -116,12 +116,12 @@ printf "  %s\n" "$(printf '%.0s-' $(seq 1 $total))"
 
 
 if [ -n "$stopped" ]; then
-    printf "${BOLD}${RED}  ⚠   Stopped containers:${RESET}\n"
+    printf "${BOLD}${RED}  ⚠  Stopped containers:${RESET}\n"
     while IFS=$'\t' read -r name status; do
         printf "  ${RED}%-30s${RESET}  %s\n" "$name" "$status"
     done <<< "$stopped"
 else
-    printf "${GREEN}  ✔   All containers are running.${RESET}\n"
+    printf "${GREEN}  ✔  All containers are running.${RESET}\n"
 fi
 
 printf "\n"
