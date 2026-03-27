@@ -67,6 +67,9 @@ printf "${BOLD}  %-${C1}s  %${C2}s  %${C3}s  %${C4}s  %${C5}s${RESET}\n" \
     "CONTAINER" "CPU %" "RAM (MB)" "NET IN (GB)" "NET OUT (GB)"
 printf "  %s\n" "$(printf '%.0s-' $(seq 1 $total))"
 
+total_cpu=0
+total_ram_mb=0
+
 while IFS=$'\t' read -r name cpu mem mem_pct netio; do
     net_in=$(echo  "$netio" | awk '{print $1}')
     net_out=$(echo "$netio" | awk '{print $3}')
@@ -76,7 +79,7 @@ while IFS=$'\t' read -r name cpu mem mem_pct netio; do
     net_out_gb=$(to_gb "$net_out")
     ram_mb=$(to_mb     "$ram")
 
-    cpu_num=$(echo "$cpu"     | sed 's/%//')
+    cpu_num=$(echo "$cpu" | sed 's/%//')
     mem_num=$(echo "$mem_pct" | sed 's/%//')
 
     cpu_color=$(color_pct "$cpu_num")
@@ -86,28 +89,19 @@ while IFS=$'\t' read -r name cpu mem mem_pct netio; do
 
     printf "  ${CYAN}%-${C1}s${RESET}  ${cpu_color}%${C2}s${RESET}  ${ram_color}%${C3}s${RESET}  ${net_in_color}%${C4}s${RESET}  ${net_out_color}%${C5}s${RESET}\n" \
         "$name" "$cpu" "${ram_mb} MB" "${net_in_gb} GB" "${net_out_gb} GB"
+
+    total_cpu=$(awk "BEGIN {printf \"%.2f\", $total_cpu + $cpu_num}")
+    total_ram_mb=$(awk "BEGIN {printf \"%.2f\", $total_ram_mb + $ram_mb}")
 done <<< "$stats_data"
 
 printf "\n"
 
-total_cpu=$(echo "$stats_data" | awk -F'\t' '{gsub(/%/,"",$2); sum+=$2} END {printf "%.2f", sum}')
-total_ram_mb=$(echo "$stats_data" | awk -F'\t' '{
-    val=$3; gsub(/[^0-9.]/,"",val)
-    unit=$3; gsub(/[0-9.]/,"",unit); unit=toupper(unit)
-    if      (unit == "TIB" || unit == "TB") val=val*1024*1024
-    else if (unit == "GIB" || unit == "GB") val=val*1024
-    else if (unit == "KIB" || unit == "KB") val=val/1024
-    else if (unit == "B")                   val=val/1024/1024
-    sum+=val
-} END {printf "%.2f", sum}')
-avg_mem_pct=$(echo "$stats_data" | awk -F'\t' '{gsub(/%/,"",$4); sum+=$4; n++} END {printf "%.2f", sum/n}')
-
-host_mem_total=$(awk '/MemTotal/ {print $2}' /proc/meminfo)
-host_mem_avail=$(awk '/MemAvailable/ {print $2}' /proc/meminfo)
-host_mem_used_pct=$(awk "BEGIN {printf \"%.2f\", (($host_mem_total - $host_mem_avail) / $host_mem_total) * 100}")
+host_mem_total_kb=$(awk '/MemTotal/ {print $2}' /proc/meminfo)
+host_mem_total_mb=$(awk "BEGIN {printf \"%.2f\", $host_mem_total_kb / 1024}")
+total_ram_pct=$(awk "BEGIN {printf \"%.2f\", ($total_ram_mb / $host_mem_total_mb) * 100}")
 
 cpu_color=$(color_pct "$total_cpu")
-ram_color=$(color_pct "$host_mem_used_pct")
+ram_color=$(color_pct "$total_ram_pct")
 
 printf "${BOLD}  Summary${RESET}\n"
 printf "  %s\n" "$(printf '%.0s-' $(seq 1 $total))"
@@ -122,12 +116,12 @@ printf "  %s\n" "$(printf '%.0s-' $(seq 1 $total))"
 
 
 if [ -n "$stopped" ]; then
-    printf "${BOLD}${RED}  ⚠  Stopped containers:${RESET}\n"
+    printf "${BOLD}${RED}  ⚠   Stopped containers:${RESET}\n"
     while IFS=$'\t' read -r name status; do
         printf "  ${RED}%-30s${RESET}  %s\n" "$name" "$status"
     done <<< "$stopped"
 else
-    printf "${GREEN}  ✔  All containers are running.${RESET}\n"
+    printf "${GREEN}  ✔   All containers are running.${RESET}\n"
 fi
 
 printf "\n"
