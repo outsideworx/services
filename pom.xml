@@ -15,49 +15,55 @@
         <java.version>25</java.version>
     </properties>
     <dependencies>
-        <!--    Libraries    -->
+        <!--  Libraries  -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <groupId>org.springframework.boot</groupId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
+            <groupId>org.springframework.boot</groupId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <groupId>org.springframework.boot</groupId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
+            <groupId>org.springframework.boot</groupId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-cache</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
-        <!--    Connector    -->
         <dependency>
-            <groupId>org.postgresql</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+            <groupId>org.springframework.boot</groupId>
+        </dependency>
+        <!--  Test  -->
+        <dependency>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <scope>test</scope>
+        </dependency>
+        <!--  Connector  -->
+        <dependency>
             <artifactId>postgresql</artifactId>
+            <groupId>org.postgresql</groupId>
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>com.mailersend</groupId>
             <artifactId>java-sdk</artifactId>
+            <groupId>com.mailersend</groupId>
             <version>1.4.1</version>
         </dependency>
         <dependency>
-            <groupId>com.github.loki4j</groupId>
             <artifactId>loki-logback-appender</artifactId>
+            <groupId>com.github.loki4j</groupId>
+            <scope>runtime</scope>
             <version>2.0.3</version>
         </dependency>
         <dependency>
-            <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>caffeine</artifactId>
             <exclusions>
                 <exclusion>
@@ -69,22 +75,25 @@
                     <groupId>com.google.errorprone</groupId>
                 </exclusion>
             </exclusions>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <scope>runtime</scope>
         </dependency>
-        <!--    Analytics    -->
+        <!--  Analytics  -->
         <dependency>
-            <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
+            <groupId>io.micrometer</groupId>
+            <scope>runtime</scope>
         </dependency>
-        <!-- Image processor -->
+        <!--  Image processor  -->
         <dependency>
-            <groupId>net.coobird</groupId>
             <artifactId>thumbnailator</artifactId>
+            <groupId>net.coobird</groupId>
             <version>0.4.21</version>
         </dependency>
-        <!--    Utilities    -->
+        <!--  Utilities  -->
         <dependency>
-            <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <groupId>org.projectlombok</groupId>
             <scope>provided</scope>
         </dependency>
     </dependencies>

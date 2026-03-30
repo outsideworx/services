@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 @Slf4j
 final class IndexController {
-    private final Pattern domainPattern = Pattern.compile("(?<=@)[^.]+(?=\\.)");
+    private static final Pattern domainPattern = Pattern.compile("(?<=@)[^.]+(?=\\.)");
 
     private final List<ModelVisitor> models;
 
