@@ -15,7 +15,6 @@ import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class LogbackFilterTest {
-
     @Mock
     private FilterChain chain;
 

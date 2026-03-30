@@ -9,7 +9,6 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ItemsConverterTest {
-
     private static class TestConverter extends ItemsConverter {
         public <T> Optional<T> testGetValue(Map<String, T> params, int iterator, String field) {
             return getValue(params, iterator, field);

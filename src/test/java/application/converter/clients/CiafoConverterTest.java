@@ -8,7 +8,6 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class CiafoConverterTest {
-
     private final CiafoConverter converter = new CiafoConverter();
 
     private CiafoEntity entity(Long id, boolean delete) {

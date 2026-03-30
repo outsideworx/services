@@ -9,7 +9,6 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class PeepsConverterTest {
-
     private final PeepsConverter converter = new PeepsConverter();
 
     @Test

@@ -8,7 +8,6 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class SoupConverterTest {
-
     private final SoupConverter converter = new SoupConverter();
 
     private SoupEntity entity(Long id, boolean delete) {
