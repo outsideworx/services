@@ -3,7 +3,7 @@
 SCRIPT_PATH=$(realpath "$0")
 
 if [ "$1" == "--apply" ]; then
-    CRON_JOB="0 * * * * $SCRIPT_PATH"
+    CRON_JOB="0 * * * * bash $SCRIPT_PATH"
     (crontab -l 2>/dev/null | grep -v "$SCRIPT_PATH"; echo "$CRON_JOB") | crontab -
     echo "Cronjob installed: runs every hour"
     exit 0
