@@ -11,7 +11,7 @@ fi
 
 source <(grep -A999 'services-ntfy' "$HOME/.bashrc" | head -n $(grep -c '' <(sed -n '/services-ntfy/,/^}/p' "$HOME/.bashrc")))
 
-PARENT_DIR=$(dirname "$(dirname "$SCRIPT_PATH")"
+PARENT_DIR=$(dirname "$(dirname "$SCRIPT_PATH")")
 HASH_FILE="$PARENT_DIR/commits.txt"
 
 touch "$HASH_FILE"
