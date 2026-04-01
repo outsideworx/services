@@ -13,7 +13,7 @@ fi
 
 if [ "$1" == "--install" ]; then
     apt update
-    apt install -y openjdk-25-jdk maven docker.io
+    apt install -y docker-compose-v2 openjdk-25-jdk maven
     exit 0
 fi
 
