@@ -3,6 +3,8 @@
 SCRIPT_DIR=$(dirname "$(realpath "$0")")
 DEST="/home/outsideworx/services"
 
+set -e
+
 if [ "$1" == "--letsencrypt" ]; then
     # WARNING: For this section to work, port 80 has to be open and accessible via the below mentioned address.
     certbot certonly --standalone --noninteractive --agree-tos --email info@outsideworx.net -d services.outsideworx.net
@@ -16,21 +18,17 @@ if [ "$1" == "--install" ]; then
 fi
 
 if [ -n "$1" ]; then
-    echo "Error: Unknown parameter '$1'"
+    echo "Error: Unknown parameter '$1'."
     exit 1
 fi
 
-if [ ! -f "$SCRIPT_DIR/.env" ]; then
-    echo "Error: .env file not found"
-    exit 1
-fi
-
-echo "Packaging project"
-mvn clean package -f "$SCRIPT_DIR/pom.xml"
-
-echo "Copying project files to: $DEST"
+echo "Packaging and installing project to: $DEST."
 rm -rf "$DEST"
 mkdir -p "$DEST"
+mvn clean package -f "$SCRIPT_DIR/pom.xml"
+cp -r "$SCRIPT_DIR/target" "$DEST"
+
+echo "Copying standalone project files to: $DEST"
 cp "$SCRIPT_DIR/.env" \
    "$SCRIPT_DIR/compose.yaml" \
    "$SCRIPT_DIR/docker-stats.sh" \
@@ -41,13 +39,12 @@ cp "$SCRIPT_DIR/.env" \
    "$SCRIPT_DIR/ntfy.yaml" \
    "$SCRIPT_DIR/prometheus.yaml" \
    "$DEST"
-cp -r "$SCRIPT_DIR/target" "$DEST"
 
-echo "Deployment starts"
+echo "Container deployment starts."
 cd "$DEST"
 docker compose build --no-cache --pull
 docker compose up --force-recreate --no-deps -d
-echo "Sleep, to make sure everything is running"
+echo "Sleep, to make sure everything is running."
 sleep 10
 docker system prune -af
 docker logs services -f
