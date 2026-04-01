@@ -6,6 +6,13 @@ DEST="/home/outsideworx/services"
 if [ "$1" == "--letsencrypt" ]; then
     # WARNING: For this section to work, port 80 has to be open and accessible via the below mentioned address.
     certbot certonly --standalone --noninteractive --agree-tos --email info@outsideworx.net -d services.outsideworx.net
+    exit 0
+fi
+
+if [ "$1" == "--install" ]; then
+    apt update
+    apt install -y openjdk-25-jdk maven docker.io
+    exit 0
 fi
 
 echo "Packaging project"
