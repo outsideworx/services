@@ -9,6 +9,11 @@ if [ "$1" == "--apply" ]; then
     exit 0
 fi
 
+if [ -n "$1" ]; then
+    echo "Error: Unknown parameter '$1'"
+    exit 1
+fi
+
 source <(grep -A999 'services-ntfy' "$HOME/.bashrc" | head -n $(grep -c '' <(sed -n '/services-ntfy/,/^}/p' "$HOME/.bashrc")))
 
 PARENT_DIR=$(dirname "$(dirname "$SCRIPT_PATH")")

@@ -15,6 +15,16 @@ if [ "$1" == "--install" ]; then
     exit 0
 fi
 
+if [ -n "$1" ]; then
+    echo "Error: Unknown parameter '$1'"
+    exit 1
+fi
+
+if [ ! -f "$SCRIPT_DIR/.env" ]; then
+    echo "Error: .env file not found"
+    exit 1
+fi
+
 echo "Packaging project"
 mvn clean package -f "$SCRIPT_DIR/pom.xml"
 
