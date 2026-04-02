@@ -4,9 +4,6 @@ services:
     environment:
       GF_SECURITY_ADMIN_USER: $GF_SECURITY_ADMIN_USER
       GF_SECURITY_ADMIN_PASSWORD: $GF_SECURITY_ADMIN_PASSWORD
-      GF_SERVER_PROTOCOL: https
-      GF_SERVER_CERT_FILE: $SERVER_SSL_CERTIFICATE
-      GF_SERVER_CERT_KEY: $SERVER_SSL_CERTIFICATE_PRIVATE_KEY
     image: grafana/grafana:12.3.0
     labels:
       - traefik.enable=true
@@ -44,8 +41,6 @@ services:
       - /home/outsideworx/ntfy:/etc/ntfy/data
       - ./ntfy.yaml:/etc/ntfy/server.yml
   postgres:
-    command:
-      - "--storage.tsdb.retention.time=365d"
     container_name: postgres
     environment:
       POSTGRES_USER: $SPRING_DATASOURCE_USERNAME
@@ -62,6 +57,8 @@ services:
       DATA_SOURCE_PASS: $SPRING_DATASOURCE_PASSWORD
     image: quay.io/prometheuscommunity/postgres-exporter:v0.18.1
   prometheus:
+    command:
+      - "--storage.tsdb.retention.time=365d"
     container_name: prometheus
     image: prom/prometheus:v3.9.1
     restart: unless-stopped

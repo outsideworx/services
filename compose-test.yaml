@@ -8,10 +8,14 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.grafana.rule=Host(`grafana.localhost`)
-      - traefik.http.services.grafana.loadbalancer.server.port=3000
+      - traefik.http.services.ntfy.loadbalancer.server.port=81
+    volumes:
+      - ./grafana-test.ini:/etc/grafana/grafana.ini
   loki:
     container_name: loki
     image: grafana/loki:3.6.4
+    ports:
+      - "3100:3100"
   ntfy:
     command: serve
     container_name: ntfy
@@ -19,7 +23,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.ntfy.rule=Host(`ntfy.localhost`)
-      - traefik.http.services.ntfy.loadbalancer.server.port=80
+      - traefik.http.services.ntfy.loadbalancer.server.port=81
     volumes:
       - ./ntfy-test.yaml:/etc/ntfy/server.yml
   postgres:
@@ -51,4 +55,4 @@ services:
     ports:
       - "80:80"
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - $HOME/.docker/run/docker.sock:/var/run/docker.sock:ro

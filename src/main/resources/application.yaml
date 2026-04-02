@@ -2,29 +2,27 @@ app:
   clients:
     ciafo:
       caller: "come-in-and-find-out"
-      origin: "https://sites.outsideworx.net:9000"
+      origin: "https://come-in-and-find-out.ch"
     peeps:
       caller: "gaiapeeps"
-      origin: "https://sites.outsideworx.net:9002"
+      origin: "https://gaiapeeps.com"
     soup:
       caller: "soupart"
-      origin: "https://sites.outsideworx.net:9005"
+      origin: "https://soupart.net"
   services:
     grafana:
-      url: "https://services.outsideworx.net:3000"
+      url: "https://grafana.outsideworx.net"
     loki:
       url: "http://loki:3100"
     ntfy:
-      url: "https://services.outsideworx.net:3001"
+      url: "https://ntfy.outsideworx.net"
 management:
   endpoints:
     web:
       exposure:
         include: prometheus
   server:
-    port: 80
-    ssl:
-      enabled: false
+    port: 8080
 server:
   port: 81
   tomcat:
