@@ -8,7 +8,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.grafana.rule=Host(`grafana.localhost`)
-      - traefik.http.services.ntfy.loadbalancer.server.port=81
+      - traefik.http.services.grafana.loadbalancer.server.port=81
     volumes:
       - ./grafana-test.ini:/etc/grafana/grafana.ini
   loki:
