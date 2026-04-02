@@ -1,7 +1,3 @@
-x-common-certificate: &common-certificate
-  ${SERVER_SSL_CERTIFICATE}:${SERVER_SSL_CERTIFICATE}
-x-common-certificate-private-key: &common-certificate-private-key
-  ${SERVER_SSL_CERTIFICATE_PRIVATE_KEY}:${SERVER_SSL_CERTIFICATE_PRIVATE_KEY}
 services:
   grafana:
     container_name: grafana
@@ -12,15 +8,17 @@ services:
       GF_SERVER_CERT_FILE: $SERVER_SSL_CERTIFICATE
       GF_SERVER_CERT_KEY: $SERVER_SSL_CERTIFICATE_PRIVATE_KEY
     image: grafana/grafana:12.3.0
-    ports:
-      - "3000:3000"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.grafana.rule=Host(`grafana.outsideworx.net`)
+      - traefik.http.routers.grafana.entrypoints=websecure
+      - traefik.http.routers.grafana.tls.certresolver=letsencrypt
+      - traefik.http.services.grafana.loadbalancer.server.port=81
     restart: unless-stopped
     user: root
     volumes:
       - /home/outsideworx/grafana:/var/lib/grafana
       - ./grafana.ini:/etc/grafana/grafana.ini
-      - *common-certificate
-      - *common-certificate-private-key
   loki:
     container_name: loki
     image: grafana/loki:3.6.4
@@ -33,18 +31,18 @@ services:
     command: serve
     container_name: ntfy
     environment:
-      NTFY_CERT_FILE: $SERVER_SSL_CERTIFICATE
-      NTFY_KEY_FILE: $SERVER_SSL_CERTIFICATE_PRIVATE_KEY
       NTFY_WEB_PUSH_PUBLIC_KEY: $NTFY_WEB_PUSH_PUBLIC_KEY
       NTFY_WEB_PUSH_PRIVATE_KEY: $NTFY_WEB_PUSH_PRIVATE_KEY
     image: binwiederhier/ntfy:v2.16.0
-    ports:
-      - "3001:3001"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.grafana.rule=Host(`ntfy.outsideworx.net`)
+      - traefik.http.routers.grafana.entrypoints=websecure
+      - traefik.http.routers.grafana.tls.certresolver=letsencrypt
+      - traefik.http.services.ntfy.loadbalancer.server.port=81
     volumes:
       - /home/outsideworx/ntfy:/etc/ntfy/data
       - ./ntfy.yaml:/etc/ntfy/server.yml
-      - *common-certificate
-      - *common-certificate-private-key
   postgres:
     command:
       - "--storage.tsdb.retention.time=365d"
@@ -79,9 +77,31 @@ services:
       - postgres
     env_file:
       - .env
-    ports:
-      - "443:443"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.grafana.rule=Host(`services.outsideworx.net`)
+      - traefik.http.routers.grafana.entrypoints=websecure
+      - traefik.http.routers.grafana.tls.certresolver=letsencrypt
+      - traefik.http.services.services.loadbalancer.server.port=81
     restart: on-failure:4
+  traefik:
+    container_name: traefik
+    image: traefik:v3.6.12
+    command:
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --providers.docker.endpoint=unix:///var/run/docker.sock
+      - --entrypoints.web.address=:80
+      - --entrypoints.web.http.redirections.entrypoint.to=websecure
+      - --entrypoints.web.http.redirections.entrypoint.scheme=https
+      - --entrypoints.websecure.address=:443
+      - --certificatesresolvers.letsencrypt.acme.httpchallenge=true
+      - --certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web
+      - --certificatesresolvers.letsencrypt.acme.email=info@outsideworx.net
+      - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
+    ports:
+      - "80:80"
+      - "443:443"
     volumes:
-      - *common-certificate
-      - *common-certificate-private-key
+      - /home/outsideworx/letsencrypt:/letsencrypt
+      - /var/run/docker.sock:/var/run/docker.sock:ro
