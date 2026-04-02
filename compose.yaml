@@ -58,6 +58,7 @@ services:
     image: quay.io/prometheuscommunity/postgres-exporter:v0.18.1
   prometheus:
     command:
+      - --config.file=/etc/prometheus/prometheus.yml
       - --storage.tsdb.retention.time=365d
     container_name: prometheus
     image: prom/prometheus:v3.9.1
