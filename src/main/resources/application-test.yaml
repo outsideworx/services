@@ -16,6 +16,9 @@ app:
       url: "http://localhost:3100"
     ntfy:
       url: "http://ntfy.localhost"
+management:
+  server:
+    port: 8080
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/
