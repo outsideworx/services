@@ -49,10 +49,11 @@ services:
     container_name: traefik
     image: traefik:v3.6.12
     command:
+      - --accesslog=true
+      - --entrypoints.web.address=:80
+      - --metrics.prometheus=true
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
-      - --entrypoints.web.address=:80
-      - --accesslog=true
     ports:
       - "80:80"
     volumes:

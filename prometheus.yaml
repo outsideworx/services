@@ -26,3 +26,6 @@ scrape_configs:
     metrics_path: /actuator/prometheus
     static_configs:
       - targets: [ "services" ]
+  - job_name: traefik
+    static_configs:
+      - targets: [ "traefik:8080" ]
