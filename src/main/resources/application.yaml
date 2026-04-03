@@ -13,7 +13,7 @@ app:
     grafana:
       url: "https://grafana.outsideworx.net"
     loki:
-      url: "http://loki:3100"
+      url: "http://loki"
     ntfy:
       url: "https://ntfy.outsideworx.net"
 management:
