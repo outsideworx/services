@@ -1,5 +1,10 @@
 server:
   http_listen_port: 80
+common:
+  ring:
+    kvstore:
+      store: inmemory
+  replication_factor: 1
 schema_config:
   configs:
     - from: 2020-10-24
