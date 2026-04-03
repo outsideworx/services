@@ -23,7 +23,7 @@ services:
     user: root
     volumes:
       - /home/outsideworx/loki:/loki
-      - ./loki.yaml:/etc/loki/config.yml
+      - ./loki.yaml:/etc/loki/local-config.yaml
   ntfy:
     command: serve
     container_name: ntfy
