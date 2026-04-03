@@ -13,6 +13,7 @@ class ViewControllers implements WebMvcConfigurer {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addRedirectViewController("/clients/thegreen", "http://outsideworx.net:9007");
         registry.addRedirectViewController("/grafana", properties.getServices().get("grafana").getUrl());
         registry.addRedirectViewController("/ntfy", properties.getServices().get("ntfy").getUrl());
         registry.addViewController("/login").setViewName("login");
