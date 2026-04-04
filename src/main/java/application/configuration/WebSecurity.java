@@ -15,6 +15,7 @@ class WebSecurity {
                         .requestMatchers(
                                 "/actuator/**",
                                 "/api/**",
+                                "/clients/**",
                                 "/grafana",
                                 "/img/**",
                                 "/login",
