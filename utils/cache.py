@@ -80,22 +80,26 @@ def sync_table(cur, table, labels, subdir, hashes):
 def sync():
     hashes = load_hashes()
     conn = psycopg2.connect(host=DB_HOST, port=DB_PORT, dbname=DB_NAME, user=DB_USER, password=DB_PASS)
+    success = True
     try:
         cur = conn.cursor()
         try:
             sync_table(cur, "ciafo", CIAFO_LABELS, "ciafo", hashes)
         except Exception as e:
             logging.error(f"CIAFO sync failed: {e}")
+            success = False
         try:
             sync_table(cur, "soup", SOUP_LABELS, "soup", hashes)
         except Exception as e:
             logging.error(f"SOUP sync failed: {e}")
+            success = False
         cur.close()
     finally:
         conn.close()
     save_hashes(hashes)
-    with open(SCAN_TIME_FILE, "w") as f:
-        f.write(datetime.now().isoformat())
+    if success:
+        with open(SCAN_TIME_FILE, "w") as f:
+            f.write(datetime.now().isoformat())
 
 
 while True:
