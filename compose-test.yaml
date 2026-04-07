@@ -73,5 +73,4 @@ services:
       DB_PASSWORD:
     image: python:3.13-slim
     volumes:
-      - /tmp/outsideworx/utils:/utils
       - ./utils:/etc/utils
