@@ -24,6 +24,7 @@ cp -r "$SCRIPT_DIR/target" "$DEST"
 
 echo "Copying standalone project files to: $DEST"
 cp "$SCRIPT_DIR/.env" \
+   "$SCRIPT_DIR/cache.py" \
    "$SCRIPT_DIR/compose.yaml" \
    "$SCRIPT_DIR/docker-stats.sh" \
    "$SCRIPT_DIR/docker-wipe.sh" \

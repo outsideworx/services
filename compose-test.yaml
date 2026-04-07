@@ -1,4 +1,16 @@
 services:
+  cache:
+    command: bash -c "pip install psycopg2-binary -q && python /app/cache.py"
+    container_name: cache
+    depends_on:
+      - postgres
+    environment:
+      DB_USERNAME: postgres
+      DB_PASSWORD:
+    image: python:3.13-slim
+    volumes:
+      - /tmp/outsideworx/cache:/cache
+      - ./cache.py:/app/cache.py
   grafana:
     container_name: grafana
     environment:
@@ -45,22 +57,6 @@ services:
     image: prom/prometheus:v3.9.1
     volumes:
       - ./prometheus-test.yaml:/etc/prometheus/prometheus.yml
-  image-cache:
-    container_name: image-cache
-    image: python:3.13-slim
-    command: bash -c "pip install psycopg2-binary -q && python /app/cache_images.py"
-    environment:
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_NAME: postgres
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD:
-      CACHE_DIR: /tmp/outsideworx/cache
-    depends_on:
-      - postgres
-    volumes:
-      - ./cache_images.py:/app/cache_images.py
-      - /tmp/outsideworx/cache:/tmp/outsideworx/cache
   traefik:
     container_name: traefik
     image: traefik:v3.6.12

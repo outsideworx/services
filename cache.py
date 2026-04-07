@@ -6,12 +6,12 @@ import psycopg2
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 
-DB_HOST = os.environ["DB_HOST"]
-DB_PORT = os.environ.get("DB_PORT", "5432")
-DB_NAME = os.environ.get("DB_NAME", "postgres")
-DB_USER = os.environ["SPRING_DATASOURCE_USERNAME"]
-DB_PASS = os.environ["SPRING_DATASOURCE_PASSWORD"]
-OUTPUT_DIR = os.environ.get("CACHE_DIR", "/home/outsideworx/cache")
+OUTPUT_DIR = "/cache"
+DB_HOST = "postgres"
+DB_PORT = "5432"
+DB_USER = os.environ["DB_USERNAME"]
+DB_PASS = os.environ.get("DB_PASSWORD", "")
+DB_NAME = DB_USER
 INTERVAL = 60
 
 CIAFO_LABELS = ["image1", "image2", "image3", "image4", "thumbnail1", "thumbnail2", "thumbnail3", "thumbnail4"]
@@ -96,7 +96,6 @@ def sync():
 while True:
     try:
         sync()
-        logging.info("Sync complete.")
     except Exception as e:
         logging.error(f"Sync failed: {e}")
     time.sleep(INTERVAL)
