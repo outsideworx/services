@@ -3,8 +3,9 @@ import logging
 import os
 import psycopg2
 import time
+from common.logging_config import setup_logging
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+setup_logging("cache")
 
 OUTPUT_DIR = "/utils/cache"
 DB_HOST = "postgres"

@@ -61,8 +61,9 @@ services:
   utils:
     command: >-
       bash -c '
-      pip install -r /etc/utils/requirements.txt -q &&
-      for script in /etc/utils/*.py;
+      cd /etc/utils &&
+      pip install -r requirements.txt -q &&
+      for script in *.py;
       do python "$$script" & done;
       wait'
     container_name: utils
@@ -71,6 +72,7 @@ services:
     environment:
       DB_USERNAME: postgres
       DB_PASSWORD:
+      LOKI_PORT: 3100
     image: python:3.13-slim
     volumes:
       - ./utils:/etc/utils

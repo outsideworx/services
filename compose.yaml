@@ -107,14 +107,16 @@ services:
   utils:
     command: >-
       bash -c '
-      pip install -r /etc/utils/requirements.txt -q &&
-      for script in /etc/utils/*.py;
+      cd /etc/utils &&
+      pip install -r requirements.txt -q &&
+      for script in *.py;
       do python "$$script" & done;
       wait'
     container_name: utils
     environment:
       DB_USERNAME: $SPRING_DATASOURCE_USERNAME
       DB_PASSWORD: $SPRING_DATASOURCE_PASSWORD
+      LOKI_PORT: 80
     image: python:3.13-slim
     restart: unless-stopped
     volumes:
