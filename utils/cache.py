@@ -3,6 +3,7 @@ import logging
 import os
 import psycopg2
 import time
+from datetime import datetime
 from common.logging_config import setup_logging
 
 setup_logging("cache")
@@ -18,6 +19,7 @@ INTERVAL = 60
 CIAFO_LABELS = ["image1", "image2", "image3", "image4", "thumbnail1", "thumbnail2", "thumbnail3", "thumbnail4"]
 SOUP_LABELS = ["image", "thumbnail"]
 HASH_FILE = f"{OUTPUT_DIR}/hashes.txt"
+SCAN_TIME_FILE = f"{OUTPUT_DIR}/last_scan.txt"
 
 os.makedirs(f"{OUTPUT_DIR}/ciafo", exist_ok=True)
 os.makedirs(f"{OUTPUT_DIR}/soup", exist_ok=True)
@@ -92,6 +94,8 @@ def sync():
     finally:
         conn.close()
     save_hashes(hashes)
+    with open(SCAN_TIME_FILE, "w") as f:
+        f.write(datetime.now().isoformat())
 
 
 while True:
