@@ -11,7 +11,7 @@ OUTPUT_DIR = "/utils/cache"
 DB_HOST = "postgres"
 DB_PORT = "5432"
 DB_USER = os.environ["DB_USERNAME"]
-DB_PASS = os.environ.get("DB_PASSWORD", "")
+DB_PASS = os.environ["DB_PASSWORD"]
 DB_NAME = DB_USER
 INTERVAL = 60
 

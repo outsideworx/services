@@ -71,7 +71,7 @@ services:
       - postgres
     environment:
       DB_USERNAME: postgres
-      DB_PASSWORD:
+      DB_PASSWORD: ""
       LOKI_PORT: 3100
     image: python:3.13-slim
     volumes:
