@@ -1,12 +1,12 @@
-import os
 import base64
-import time
 import logging
+import os
 import psycopg2
+import time
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 
-OUTPUT_DIR = "/cache"
+OUTPUT_DIR = "/utils/data/cache"
 DB_HOST = "postgres"
 DB_PORT = "5432"
 DB_USER = os.environ["DB_USERNAME"]

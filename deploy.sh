@@ -21,10 +21,10 @@ rm -rf "$DEST"
 mkdir -p "$DEST"
 mvn clean package -f "$SCRIPT_DIR/pom.xml"
 cp -r "$SCRIPT_DIR/target" "$DEST"
+cp -r "$SCRIPT_DIR/utils" "$DEST"
 
 echo "Copying standalone project files to: $DEST"
 cp "$SCRIPT_DIR/.env" \
-   "$SCRIPT_DIR/cache.py" \
    "$SCRIPT_DIR/compose.yaml" \
    "$SCRIPT_DIR/docker-stats.sh" \
    "$SCRIPT_DIR/docker-wipe.sh" \
