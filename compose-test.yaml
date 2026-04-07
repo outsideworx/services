@@ -60,7 +60,8 @@ services:
       - $HOME/.docker/run/docker.sock:/var/run/docker.sock:ro
   utils:
     command: >-
-      bash -c 'pip install psycopg2-binary -q &&
+      bash -c '
+      pip install -r /utils/requirements.txt -q &&
       for script in /utils/*.py;
       do python "$$script" & done;
       wait'
