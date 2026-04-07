@@ -107,8 +107,8 @@ services:
   utils:
     command: >-
       bash -c '
-      pip install -r /utils/requirements.txt -q &&
-      for script in /utils/*.py;
+      pip install -r /etc/utils/requirements.txt -q &&
+      for script in /etc/utils/*.py;
       do python "$$script" & done;
       wait'
     container_name: utils
@@ -118,5 +118,5 @@ services:
     image: python:3.13-slim
     restart: unless-stopped
     volumes:
-      - /home/outsideworx/utils:/utils/data
-      - ./utils:/utils
+      - /home/outsideworx/utils:/utils
+      - ./utils:/etc/utils
