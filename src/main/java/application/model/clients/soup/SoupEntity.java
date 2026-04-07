@@ -19,6 +19,7 @@ public final class SoupEntity {
     @Transient
     private Boolean delete;
     private String description;
+    private String hash;
     @Column(columnDefinition = "TEXT")
     private String image;
     @Column(columnDefinition = "TEXT")

@@ -19,6 +19,7 @@ public final class CiafoEntity {
     @Transient
     private Boolean delete;
     private String description;
+    private String hash;
     @Column(columnDefinition = "TEXT")
     private String image1;
     @Column(columnDefinition = "TEXT")

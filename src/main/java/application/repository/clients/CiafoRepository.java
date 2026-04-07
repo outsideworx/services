@@ -16,7 +16,7 @@ import java.util.List;
 public interface CiafoRepository extends CrudRepository<CiafoEntity, Long> {
     @Cacheable(value = "ciafoItems", key = "#category")
     @Query(value = """
-            SELECT id, category, description, thumbnail1, thumbnail2, thumbnail3, thumbnail4
+            SELECT id, category, description, hash, thumbnail1, thumbnail2, thumbnail3, thumbnail4
                     FROM CIAFO
                     WHERE category = :category
             """, nativeQuery = true)
@@ -24,7 +24,7 @@ public interface CiafoRepository extends CrudRepository<CiafoEntity, Long> {
 
     @Cacheable(value = "ciafoItems", key = "#id")
     @Query(value = """
-            SELECT id, category, description, image1, image2, image3, image4
+            SELECT id, category, description, hash, image1, image2, image3, image4
                     FROM CIAFO
                     WHERE id = :id
             """, nativeQuery = true)
@@ -32,7 +32,7 @@ public interface CiafoRepository extends CrudRepository<CiafoEntity, Long> {
 
     @Cacheable(value = "ciafoItems", key = "#category + #offset")
     @Query(value = """
-            SELECT id, category, description, image1
+            SELECT id, category, description, hash, image1
                     FROM CIAFO
                     WHERE category = :category
                     ORDER BY id
@@ -45,6 +45,7 @@ public interface CiafoRepository extends CrudRepository<CiafoEntity, Long> {
             UPDATE CIAFO SET
                     category = :#{#item.category},
                     description = :#{#item.description},
+                    hash = :#{#item.hash},
                     image1 = COALESCE(:#{#item.image1}, image1),
                     image2 = COALESCE(:#{#item.image2}, image2),
                     image3 = COALESCE(:#{#item.image3}, image3),

@@ -38,6 +38,8 @@ spring:
     default-property-inclusion: NON_EMPTY
   jpa:
     generate-ddl: true
+  liquibase:
+    change-log: classpath:db/changelog-master.yaml
   servlet:
     multipart:
       max-file-size: 4MB

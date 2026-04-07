@@ -9,7 +9,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.10</version>
+        <version>3.5.13</version>
     </parent>
     <properties>
         <java.version>25</java.version>
@@ -58,6 +58,16 @@
             <version>1.4.1</version>
         </dependency>
         <dependency>
+            <artifactId>gson</artifactId>
+            <groupId>com.google.code.gson</groupId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>error_prone_annotations</artifactId>
+                    <groupId>com.google.errorprone</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
             <artifactId>loki-logback-appender</artifactId>
             <groupId>com.github.loki4j</groupId>
             <scope>runtime</scope>
@@ -65,16 +75,6 @@
         </dependency>
         <dependency>
             <artifactId>caffeine</artifactId>
-            <exclusions>
-                <exclusion>
-                    <artifactId>checker-qual</artifactId>
-                    <groupId>org.checkerframework</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>error_prone_annotations</artifactId>
-                    <groupId>com.google.errorprone</groupId>
-                </exclusion>
-            </exclusions>
             <groupId>com.github.ben-manes.caffeine</groupId>
             <scope>runtime</scope>
         </dependency>
@@ -91,6 +91,30 @@
             <version>0.4.21</version>
         </dependency>
         <!--  Utilities  -->
+        <dependency>
+            <artifactId>liquibase-core</artifactId>
+            <groupId>org.liquibase</groupId>
+            <scope>runtime</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>commons-io</artifactId>
+                    <groupId>commons-io</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <artifactId>opencsv</artifactId>
+            <groupId>com.opencsv</groupId>
+            <scope>runtime</scope>
+            <!--  Should match the version required by liquibase-core  -->
+            <version>5.9</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>commons-text</artifactId>
+                    <groupId>org.apache.commons</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
         <dependency>
             <artifactId>lombok</artifactId>
             <groupId>org.projectlombok</groupId>

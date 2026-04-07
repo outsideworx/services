@@ -14,7 +14,7 @@ import java.util.List;
 public interface SoupRepository extends CrudRepository<SoupEntity, Long> {
     @Cacheable(value = "soupItems", key = "#category")
     @Query(value = """
-            SELECT id, category, description, image, thumbnail, link
+            SELECT id, category, description, hash, image, thumbnail, link
                     FROM SOUP
                     WHERE category = :category
             """, nativeQuery = true)
@@ -22,7 +22,7 @@ public interface SoupRepository extends CrudRepository<SoupEntity, Long> {
 
     @Cacheable(value = "soupItems", key = "#category + #offset")
     @Query(value = """
-            SELECT id, category, description, image, thumbnail, link
+            SELECT id, category, description, hash, image, thumbnail, link
                     FROM SOUP
                     WHERE category = :category
                     ORDER BY id
@@ -35,6 +35,7 @@ public interface SoupRepository extends CrudRepository<SoupEntity, Long> {
             UPDATE SOUP SET
                     category = :#{#item.category},
                     description = :#{#item.description},
+                    hash = :#{#item.hash},
                     image = COALESCE(:#{#item.image}, image),
                     thumbnail = COALESCE(:#{#item.thumbnail}, thumbnail),
                     link = COALESCE(:#{#item.link}, link)

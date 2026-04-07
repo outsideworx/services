@@ -4,4 +4,5 @@ public interface SoupMeta {
     Long getId();
     String getCategory();
     String getDescription();
+    String getHash();
 }
