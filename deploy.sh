@@ -11,6 +11,21 @@ if [ "$1" == "--install" ]; then
     exit 0
 fi
 
+if [ "$1" == "--network" ]; then
+    if [ -z "$2" ]; then
+        echo "Error: an IP address as 2nd parameter is required."
+        exit 1
+    fi
+    # Required open ports:
+    # 2377/tcp      - communication with and between manager nodes
+    # 7946/tcp+udp  - overlay network node discovery
+    # 4789/udp      - overlay network traffic (configurable)
+    docker swarm init --advertise-addr "$2"
+    docker network create -d overlay --attachable outsideworx
+    docker service create --name keepalive --network outsideworx --mode global alpine:3.21 sleep infinity
+    exit 0
+fi
+
 if [ -n "$1" ]; then
     echo "Error: Unknown parameter '$1'."
     exit 1
