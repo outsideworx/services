@@ -87,6 +87,10 @@ while IFS=$'\t' read -r name cpu mem mem_pct netio; do
     net_in_color=$(color_gb  "$net_in_gb")
     net_out_color=$(color_gb "$net_out_gb")
 
+    if [ ${#name} -gt 26 ]; then
+        name="${name:0:23}..."
+    fi
+
     printf "  ${CYAN}%-${C1}s${RESET}  ${cpu_color}%${C2}s${RESET}  ${ram_color}%${C3}s${RESET}  ${net_in_color}%${C4}s${RESET}  ${net_out_color}%${C5}s${RESET}\n" \
         "$name" "$cpu" "${ram_mb} MB" "${net_in_gb} GB" "${net_out_gb} GB"
 
