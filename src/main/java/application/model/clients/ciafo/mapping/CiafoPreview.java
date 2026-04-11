@@ -1,5 +1,5 @@
 package application.model.clients.ciafo.mapping;
 
-public interface CiafoFirstImage extends CiafoMeta {
+public interface CiafoPreview extends CiafoMeta {
     String getImage1();
 }

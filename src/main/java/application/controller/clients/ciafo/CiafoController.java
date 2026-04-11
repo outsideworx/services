@@ -53,7 +53,7 @@ class CiafoController implements ModelVisitor {
                 "Vehicles");
         Map<String, List<CiafoThumbnails>> items = categories
                 .stream()
-                .collect(Collectors.toMap(Function.identity(), ciafoRepository::getThumbnailsByCategory));
+                .collect(Collectors.toMap(Function.identity(), ciafoRepository::getThumbnails));
         model.addObject("categories", categories);
         model.addObject("items", items);
         return model;

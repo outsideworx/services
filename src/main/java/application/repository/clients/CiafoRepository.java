@@ -1,7 +1,7 @@
 package application.repository.clients;
 
-import application.model.clients.ciafo.mapping.CiafoFirstImage;
-import application.model.clients.ciafo.mapping.CiafoImages;
+import application.model.clients.ciafo.mapping.CiafoPreview;
+import application.model.clients.ciafo.mapping.CiafoPayload;
 import application.model.clients.ciafo.CiafoEntity;
 import application.model.clients.ciafo.mapping.CiafoThumbnails;
 import org.springframework.cache.annotation.Cacheable;
@@ -19,8 +19,9 @@ public interface CiafoRepository extends CrudRepository<CiafoEntity, Long> {
             SELECT id, category, description, hash, thumbnail1, thumbnail2, thumbnail3, thumbnail4
                     FROM CIAFO
                     WHERE category = :category
+                    ORDER BY id
             """, nativeQuery = true)
-    List<CiafoThumbnails> getThumbnailsByCategory(String category);
+    List<CiafoThumbnails> getThumbnails(String category);
 
     @Cacheable(value = "ciafoItems", key = "#id")
     @Query(value = """
@@ -28,7 +29,7 @@ public interface CiafoRepository extends CrudRepository<CiafoEntity, Long> {
                     FROM CIAFO
                     WHERE id = :id
             """, nativeQuery = true)
-    CiafoImages getImagesById(Long id);
+    CiafoPayload get(Long id);
 
     @Cacheable(value = "ciafoItems", key = "#category + #offset")
     @Query(value = """
@@ -38,7 +39,7 @@ public interface CiafoRepository extends CrudRepository<CiafoEntity, Long> {
                     ORDER BY id
                     LIMIT 6 OFFSET :offset
             """, nativeQuery = true)
-    List<CiafoFirstImage> getFirstImagesByCategoryAndOffset(String category, int offset);
+    List<CiafoPreview> getPreviews(String category, int offset);
 
     @Modifying
     @Query(value = """

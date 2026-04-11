@@ -1,6 +1,6 @@
 package application.controller.clients.soupart.ciafo;
 
-import application.model.clients.soup.mapping.SoupImage;
+import application.model.clients.soup.SoupEntity;
 import application.repository.clients.SoupRepository;
 import application.service.GrafanaService;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +22,9 @@ final class SoupApiController {
     private final SoupRepository soupRepository;
 
     @GetMapping("/api/cached/soupart")
-    List<SoupImage> getSoupImages(@RequestParam String category, @RequestParam int offset) {
+    List<SoupEntity> getSoupItems(@RequestParam String category, @RequestParam int offset) {
         log.info("Incoming API request for category: [{}], with offset: [{}]", category, offset);
         grafanaService.registerRequest("soupart", category);
-        return soupRepository.getImagesByCategoryAndOffset(category, offset);
+        return soupRepository.get(category, offset);
     }
 }
