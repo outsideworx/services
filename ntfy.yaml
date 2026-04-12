@@ -5,8 +5,7 @@ cache-duration: "365d"
 cache-file: "/etc/ntfy/data/cache.db"
 enable-login: true
 enable-metrics: true
-listen-http: ":81"
-metrics-listen-http: ":80"
+metrics-listen-http: ":81"
 require-login: true
 web-push-email-address: "info@outsideworx.net"
 web-push-file: "/etc/ntfy/data/webpush.db"

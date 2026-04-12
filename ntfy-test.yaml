@@ -1,4 +1,3 @@
 base-url: "http://ntfy.localhost"
 enable-metrics: true
-listen-http: ":81"
-metrics-listen-http: ":80"
+metrics-listen-http: ":81"

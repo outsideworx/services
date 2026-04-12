@@ -1,7 +1,8 @@
 databaseChangeLog:
   - changeSet:
       id: 001-ciafo-hash-trigger
-      author: outsideworx
+      author: services
+      comment: Creates function and trigger to auto-compute hash on ciafo image columns
       changes:
         - sql:
             splitStatements: false
@@ -24,23 +25,3 @@ databaseChangeLog:
               CREATE OR REPLACE TRIGGER ciafo_hash_trigger
               BEFORE INSERT OR UPDATE ON ciafo
               FOR EACH ROW EXECUTE FUNCTION compute_ciafo_hash();
-
-  - changeSet:
-      id: 001-soup-hash-trigger
-      author: outsideworx
-      changes:
-        - sql:
-            splitStatements: false
-            sql: |
-              CREATE OR REPLACE FUNCTION compute_soup_hash() RETURNS TRIGGER AS $$
-              BEGIN
-                NEW.hash = encode(sha256(convert_to(
-                  COALESCE(NEW.image, '') ||
-                  COALESCE(NEW.thumbnail, ''), 'UTF8')), 'hex');
-                RETURN NEW;
-              END;
-              $$ LANGUAGE plpgsql;
-
-              CREATE OR REPLACE TRIGGER soup_hash_trigger
-              BEFORE INSERT OR UPDATE ON soup
-              FOR EACH ROW EXECUTE FUNCTION compute_soup_hash();

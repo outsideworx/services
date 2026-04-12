@@ -22,9 +22,9 @@ management:
       exposure:
         include: prometheus
   server:
-    port: 80
+    port: 81
 server:
-  port: 81
+  port: 80
   tomcat:
     max-part-count: 50
 spring:
@@ -36,8 +36,6 @@ spring:
     url: jdbc:postgresql://postgres:5432/
   jackson:
     default-property-inclusion: NON_EMPTY
-  jpa:
-    generate-ddl: true
   liquibase:
     change-log: classpath:db/changelog-master.yaml
   servlet:

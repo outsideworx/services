@@ -10,7 +10,6 @@ services:
       - traefik.http.routers.grafana.entrypoints=websecure
       - traefik.http.routers.grafana.rule=Host(`grafana.outsideworx.net`)
       - traefik.http.routers.grafana.tls.certresolver=letsencrypt
-      - traefik.http.services.grafana.loadbalancer.server.port=81
     restart: unless-stopped
     user: root
     volumes:
@@ -36,7 +35,6 @@ services:
       - traefik.http.routers.ntfy.entrypoints=websecure
       - traefik.http.routers.ntfy.rule=Host(`ntfy.outsideworx.net`)
       - traefik.http.routers.ntfy.tls.certresolver=letsencrypt
-      - traefik.http.services.ntfy.loadbalancer.server.port=81
     volumes:
       - /home/outsideworx/ntfy:/etc/ntfy/data
       - ./ntfy.yaml:/etc/ntfy/server.yml
@@ -50,6 +48,8 @@ services:
     volumes:
       - /home/outsideworx/data:/var/lib/postgresql/data
   postgres-exporter:
+    command:
+      - --web.listen-address=:81
     container_name: postgres-exporter
     environment:
       DATA_SOURCE_URI: postgres:5432/?sslmode=disable
@@ -80,7 +80,6 @@ services:
       - traefik.http.routers.services.entrypoints=websecure
       - traefik.http.routers.services.rule=Host(`services.outsideworx.net`)
       - traefik.http.routers.services.tls.certresolver=letsencrypt
-      - traefik.http.services.services.loadbalancer.server.port=81
     restart: on-failure:4
   traefik:
     container_name: traefik
@@ -90,6 +89,7 @@ services:
       - --certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web
       - --certificatesresolvers.letsencrypt.acme.email=info@outsideworx.net
       - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
+      - --entrypoints.traefik.address=:81
       - --entrypoints.web.address=:80
       - --entrypoints.web.http.redirections.entrypoint.scheme=https
       - --entrypoints.web.http.redirections.entrypoint.to=websecure

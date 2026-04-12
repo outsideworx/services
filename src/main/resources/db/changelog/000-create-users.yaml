@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: 000-create-users
+      author: services
+      comment: Creates the users table for authentication
+      changes:
+        - sql:
+            sql: |
+              CREATE TABLE IF NOT EXISTS users (
+                username VARCHAR(255) PRIMARY KEY,
+                account_non_expired BOOLEAN,
+                account_non_locked BOOLEAN,
+                credentials_non_expired BOOLEAN,
+                enabled BOOLEAN,
+                password VARCHAR(255)
+              );

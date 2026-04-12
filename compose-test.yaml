@@ -8,7 +8,6 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.grafana.rule=Host(`grafana.localhost`)
-      - traefik.http.services.grafana.loadbalancer.server.port=81
     volumes:
       - ./grafana-test.ini:/etc/grafana/grafana.ini
   loki:
@@ -23,7 +22,6 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.ntfy.rule=Host(`ntfy.localhost`)
-      - traefik.http.services.ntfy.loadbalancer.server.port=81
     volumes:
       - ./ntfy-test.yaml:/etc/ntfy/server.yml
   postgres:
@@ -34,6 +32,8 @@ services:
     ports:
       - "5432:5432"
   postgres-exporter:
+    command:
+      - --web.listen-address=:81
     container_name: postgres-exporter
     environment:
       DATA_SOURCE_URI: postgres:5432/?sslmode=disable
@@ -51,6 +51,7 @@ services:
     command:
       - --accesslog=true
       - --entrypoints.web.address=:80
+      - --entrypoints.traefik.address=:81
       - --metrics.prometheus=true
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
