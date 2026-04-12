@@ -81,7 +81,6 @@ services:
       - traefik.http.routers.services.entrypoints=websecure
       - traefik.http.routers.services.rule=Host(`services.outsideworx.net`)
       - traefik.http.routers.services.tls.certresolver=letsencrypt
-      - traefik.http.services.services.loadbalancer.server.port=80
     restart: on-failure:4
   traefik:
     container_name: traefik
