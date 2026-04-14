@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /
+
+Sitemap: https://services.outsideworx.net/sitemap.xml
