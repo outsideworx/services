@@ -22,7 +22,13 @@ if [ "$1" == "--network" ]; then
     # 4789/udp      - overlay network traffic (configurable)
     docker swarm init --advertise-addr "$2"
     docker network create -d overlay --attachable outsideworx
-    docker service create --name keepalive --network outsideworx --mode global alpine:3.21 sleep infinity
+    docker service create \
+        --name keepalive \
+        --network outsideworx \
+        --mode global \
+        --restart-condition any \
+        --update-order start-first \
+        alpine:3.21 sleep infinity
     exit 0
 fi
 
