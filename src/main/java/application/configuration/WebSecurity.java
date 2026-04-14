@@ -19,7 +19,9 @@ class WebSecurity {
                                 "/grafana",
                                 "/img/**",
                                 "/login",
-                                "/ntfy")
+                                "/ntfy",
+                                "/robots.txt",
+                                "/sitemap.xml")
                         .permitAll()
                         .anyRequest()
                         .authenticated())
