@@ -107,6 +107,7 @@ services:
       - --certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web
       - --certificatesresolvers.letsencrypt.acme.email=info@outsideworx.net
       - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
+      - --cluster.swarm.networkdiscovery=true
       - --entrypoints.traefik.address=:81
       - --entrypoints.web.address=:80
       - --entrypoints.web.http.redirections.entrypoint.scheme=https

@@ -19,8 +19,7 @@ scrape_configs:
         "igli",
         "outsideworx",
         "soupart",
-        "soupkitchen",
-        "thegreen"
+        "soupkitchen"
       ]
   - job_name: services
     metrics_path: /actuator/prometheus
