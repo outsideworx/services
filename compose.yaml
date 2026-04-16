@@ -46,6 +46,7 @@ services:
         - traefik.http.routers.ntfy.entrypoints=websecure
         - traefik.http.routers.ntfy.rule=Host(`ntfy.outsideworx.net`)
         - traefik.http.routers.ntfy.tls.certresolver=letsencrypt
+        - traefik.http.services.ntfy.loadbalancer.server.port=80
     environment:
       NTFY_WEB_PUSH_PUBLIC_KEY: $NTFY_WEB_PUSH_PUBLIC_KEY
       NTFY_WEB_PUSH_PRIVATE_KEY: $NTFY_WEB_PUSH_PRIVATE_KEY
@@ -108,6 +109,7 @@ services:
         - traefik.http.routers.services.entrypoints=websecure
         - traefik.http.routers.services.rule=Host(`services.outsideworx.net`)
         - traefik.http.routers.services.tls.certresolver=letsencrypt
+        - traefik.http.services.services.loadbalancer.server.port=80
     environment:
       APP_CLIENTS_CIAFO_TOKEN: $APP_CLIENTS_CIAFO_TOKEN
       APP_CLIENTS_PEEPS_TOKEN: $APP_CLIENTS_PEEPS_TOKEN
