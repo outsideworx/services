@@ -3,6 +3,10 @@ read -p "Start? (y/n) " ans
 
 docker stack rm services
 docker stack rm sites
+
+echo "Sleep, to make sure everything is running."
+sleep 10
+
 docker rmi -f $(docker images -qa)
 docker system prune -af
 
