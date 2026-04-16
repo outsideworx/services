@@ -3,66 +3,78 @@ networks:
     external: true
 services:
   grafana:
-    container_name: grafana
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.grafana.entrypoints=websecure
+        - traefik.http.routers.grafana.rule=Host(`grafana.outsideworx.net`)
+        - traefik.http.routers.grafana.tls.certresolver=letsencrypt
+        - traefik.http.services.grafana.loadbalancer.server.port=80
     environment:
       GF_SECURITY_ADMIN_USER: $GF_SECURITY_ADMIN_USER
       GF_SECURITY_ADMIN_PASSWORD: $GF_SECURITY_ADMIN_PASSWORD
     image: grafana/grafana:12.3.0
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.grafana.entrypoints=websecure
-      - traefik.http.routers.grafana.rule=Host(`grafana.outsideworx.net`)
-      - traefik.http.routers.grafana.tls.certresolver=letsencrypt
-      - traefik.http.services.grafana.loadbalancer.server.port=80
     networks:
       - outsideworx
-    restart: unless-stopped
     user: root
     volumes:
       - /home/outsideworx/grafana:/var/lib/grafana
       - ./grafana.ini:/etc/grafana/grafana.ini
   loki:
-    container_name: loki
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
     image: grafana/loki:3.6.4
     networks:
       - outsideworx
-    restart: unless-stopped
     user: root
     volumes:
       - /home/outsideworx/loki:/loki
       - ./loki.yaml:/etc/loki/local-config.yaml
   ntfy:
     command: serve
-    container_name: ntfy
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.ntfy.entrypoints=websecure
+        - traefik.http.routers.ntfy.rule=Host(`ntfy.outsideworx.net`)
+        - traefik.http.routers.ntfy.tls.certresolver=letsencrypt
     environment:
       NTFY_WEB_PUSH_PUBLIC_KEY: $NTFY_WEB_PUSH_PUBLIC_KEY
       NTFY_WEB_PUSH_PRIVATE_KEY: $NTFY_WEB_PUSH_PRIVATE_KEY
     image: binwiederhier/ntfy:v2.16.0
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.ntfy.entrypoints=websecure
-      - traefik.http.routers.ntfy.rule=Host(`ntfy.outsideworx.net`)
-      - traefik.http.routers.ntfy.tls.certresolver=letsencrypt
     networks:
       - outsideworx
     volumes:
       - /home/outsideworx/ntfy:/etc/ntfy/data
       - ./ntfy.yaml:/etc/ntfy/server.yml
   postgres:
-    container_name: postgres
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
     environment:
       POSTGRES_USER: $SPRING_DATASOURCE_USERNAME
       POSTGRES_PASSWORD: $SPRING_DATASOURCE_PASSWORD
     image: postgres:16.2
     networks:
       - outsideworx
-    restart: unless-stopped
     volumes:
       - /home/outsideworx/data:/var/lib/postgresql/data
   postgres-exporter:
     command:
       - --web.listen-address=:81
-    container_name: postgres-exporter
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
     environment:
       DATA_SOURCE_URI: postgres:5432/?sslmode=disable
       DATA_SOURCE_USER: $SPRING_DATASOURCE_USERNAME
@@ -74,35 +86,39 @@ services:
     command:
       - --config.file=/etc/prometheus/prometheus.yml
       - --storage.tsdb.retention.time=365d
-    container_name: prometheus
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
     image: prom/prometheus:v3.9.1
     networks:
       - outsideworx
-    restart: unless-stopped
     user: root
     volumes:
       - /home/outsideworx/prometheus:/prometheus
       - ./prometheus.yaml:/etc/prometheus/prometheus.yml
   services:
     build: .
-    container_name: services
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.services.entrypoints=websecure
+        - traefik.http.routers.services.rule=Host(`services.outsideworx.net`)
+        - traefik.http.routers.services.tls.certresolver=letsencrypt
+    environment:
+      APP_CLIENTS_CIAFO_TOKEN: $APP_CLIENTS_CIAFO_TOKEN
+      APP_CLIENTS_PEEPS_TOKEN: $APP_CLIENTS_PEEPS_TOKEN
+      APP_CLIENTS_SOUP_TOKEN: $APP_CLIENTS_SOUP_TOKEN
+      MAILERSEND_SDK_TOKEN: $MAILERSEND_SDK_TOKEN
+      SPRING_DATASOURCE_USERNAME: $SPRING_DATASOURCE_USERNAME
+      SPRING_DATASOURCE_PASSWORD: $SPRING_DATASOURCE_PASSWORD
     image: outsideworx/services:latest
-    depends_on:
-      - loki
-      - postgres
-    env_file:
-      - .env
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.services.entrypoints=websecure
-      - traefik.http.routers.services.rule=Host(`services.outsideworx.net`)
-      - traefik.http.routers.services.tls.certresolver=letsencrypt
     networks:
       - outsideworx
-    restart: on-failure:4
   traefik:
-    container_name: traefik
-    image: traefik:v3.6.12
     command:
       - --certificatesresolvers.letsencrypt.acme.httpchallenge=true
       - --certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web
@@ -114,9 +130,14 @@ services:
       - --entrypoints.web.http.redirections.entrypoint.to=websecure
       - --entrypoints.websecure.address=:443
       - --metrics.prometheus=true
-      - --providers.docker=true
-      - --providers.docker.endpoint=unix:///var/run/docker.sock
-      - --providers.docker.exposedbydefault=false
+      - --providers.swarm=true
+      - --providers.swarm.endpoint=unix:///var/run/docker.sock
+      - --providers.swarm.exposedbydefault=false
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+    image: traefik:v3.6.12
     networks:
       - outsideworx
     ports:
@@ -133,7 +154,10 @@ services:
       for script in *.py;
       do python "$$script" & done;
       wait'
-    container_name: utils
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
     environment:
       DB_USERNAME: $SPRING_DATASOURCE_USERNAME
       DB_PASSWORD: $SPRING_DATASOURCE_PASSWORD
@@ -141,7 +165,6 @@ services:
     image: python:3.13-slim
     networks:
       - outsideworx
-    restart: unless-stopped
     volumes:
       - /home/outsideworx/utils:/utils
       - ./utils:/etc/utils

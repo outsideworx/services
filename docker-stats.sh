@@ -113,19 +113,19 @@ printf "  %-${C1}s  ${cpu_color}%${C2}s${RESET}  ${ram_color}%${C3}s${RESET}\n" 
     "" "${total_cpu}%" "${total_ram_mb} MB"
 
 
-stopped=$(docker ps --filter "status=exited" --filter "status=dead" --format "{{.Names}}\t{{.Status}}")
+stopped=$(docker service ls --format "{{.Name}}\t{{.Replicas}}" | awk -F'\t' '{split($2, a, "/"); if (a[1] != a[2]) print $1"\t"$2}')
 
 printf "${BOLD}  Checks${RESET}\n"
 printf "  %s\n" "$(printf '%.0s-' $(seq 1 $total))"
 
 
 if [ -n "$stopped" ]; then
-    printf "${BOLD}${RED}  ⚠  Stopped containers:${RESET}\n"
-    while IFS=$'\t' read -r name status; do
-        printf "  ${RED}%-30s${RESET}  %s\n" "$name" "$status"
+    printf "${BOLD}${RED}  ⚠  Degraded services:${RESET}\n"
+    while IFS=$'\t' read -r name replicas; do
+        printf "  ${RED}%-30s${RESET}  %s\n" "$name" "$replicas"
     done <<< "$stopped"
 else
-    printf "${GREEN}  ✔  All containers are running.${RESET}\n"
+    printf "${GREEN}  ✔  All services are running.${RESET}\n"
 fi
 
 printf "\n"
