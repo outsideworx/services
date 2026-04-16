@@ -22,13 +22,6 @@ if [ "$1" == "--network" ]; then
     # 4789/udp      - overlay network traffic (configurable)
     docker swarm init --advertise-addr "$2"
     docker network create -d overlay --attachable outsideworx
-    docker service create \
-        --name keepalive \
-        --network outsideworx \
-        --mode global \
-        --restart-condition any \
-        --update-order start-first \
-        alpine:3.21 sleep infinity
     exit 0
 fi
 
@@ -58,10 +51,10 @@ cp "$SCRIPT_DIR/.env" \
 
 echo "Container deployment starts."
 cd "$DEST"
+set -a && source .env && set +a
 docker login
 docker compose build --no-cache --pull
 docker compose push
-set -a && source .env && set +a
 docker stack deploy -c compose.yaml services --detach=false
 docker system prune -af
 docker service logs services_services -f
