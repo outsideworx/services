@@ -7,6 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.Optional;
@@ -25,11 +26,11 @@ class UserServiceTest {
 
     @Test
     void loadUserByUsername_whenUserExists_returnsUserDetails() {
-        var user = new UserEntity();
+        UserEntity user = new UserEntity();
         user.setUsername("testuser");
         when(userRepository.findById("testuser")).thenReturn(Optional.of(user));
 
-        var result = userService.loadUserByUsername("testuser");
+        UserDetails result = userService.loadUserByUsername("testuser");
 
         assertThat(result.getUsername()).isEqualTo("testuser");
     }

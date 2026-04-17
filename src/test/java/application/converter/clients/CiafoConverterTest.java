@@ -4,6 +4,7 @@ import application.model.clients.ciafo.CiafoEntity;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -47,5 +48,71 @@ class CiafoConverterTest {
                 entity(null, true)
         );
         assertThat(converter.filterIdsToDelete(items)).containsExactly(1L);
+    }
+
+    @Test
+    void processItems_whenEmptyParams_returnsEmptyList() {
+        assertThat(converter.processItems("Furniture", Map.of(), Map.of())).isEmpty();
+    }
+
+    @Test
+    void processItems_mapsFieldsCorrectly() {
+        Map<String, String> params = Map.of(
+                "items[0].id", "10",
+                "items[0].description", "A chair",
+                "items[0].delete", ""
+        );
+
+        List<CiafoEntity> result = converter.processItems("Furniture", params, Map.of());
+
+        assertThat(result).hasSize(1);
+        CiafoEntity item = result.getFirst();
+        assertThat(item.getId()).isEqualTo(10L);
+        assertThat(item.getCategory()).isEqualTo("Furniture");
+        assertThat(item.getDescription()).isEqualTo("A chair");
+        assertThat(item.getDelete()).isFalse();
+    }
+
+    @Test
+    void processItems_whenIdIsBlank_setsIdToNull() {
+        Map<String, String> params = Map.of("items[0].description", "desc");
+
+        CiafoEntity item = converter.processItems("Furniture", params, Map.of()).getFirst();
+
+        assertThat(item.getId()).isNull();
+    }
+
+    @Test
+    void processItems_whenDeleteIsOn_setsDeleteTrue() {
+        Map<String, String> params = Map.of(
+                "items[0].id", "5",
+                "items[0].delete", "on"
+        );
+
+        CiafoEntity item = converter.processItems("Furniture", params, Map.of()).getFirst();
+
+        assertThat(item.getDelete()).isTrue();
+    }
+
+    @Test
+    void processItems_whenDescriptionIsBlank_setsDescriptionToNull() {
+        Map<String, String> params = Map.of(
+                "items[0].id", "1",
+                "items[0].description", "   "
+        );
+
+        CiafoEntity item = converter.processItems("Furniture", params, Map.of()).getFirst();
+
+        assertThat(item.getDescription()).isNull();
+    }
+
+    @Test
+    void processItems_withMultipleIterators_returnsCorrectItemCount() {
+        Map<String, String> params = Map.of(
+                "items[0].description", "first",
+                "items[1].description", "second"
+        );
+
+        assertThat(converter.processItems("Furniture", params, Map.of())).hasSize(2);
     }
 }

@@ -21,11 +21,10 @@ class FilterConditionsTest {
     @InjectMocks
     private FilterConditions filterConditions;
 
-    private Properties.Client validClient;
+    private final Properties.Client validClient = new Properties.Client();
 
     @BeforeEach
     void setUp() {
-        validClient = new Properties.Client();
         validClient.setCaller("client1");
         validClient.setToken("secret");
     }
@@ -94,6 +93,15 @@ class FilterConditionsTest {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader("X-Caller-Id", "client1");
         request.addHeader("X-Auth-Token", "wrong");
+        assertThat(filterConditions.invalidCallerIdOrAuthToken(request)).isTrue();
+    }
+
+    @Test
+    void invalidCallerIdOrAuthToken_whenClientsMapIsEmpty_returnsTrue() {
+        when(properties.getClients()).thenReturn(Map.of());
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.addHeader("X-Caller-Id", "client1");
+        request.addHeader("X-Auth-Token", "secret");
         assertThat(filterConditions.invalidCallerIdOrAuthToken(request)).isTrue();
     }
 }

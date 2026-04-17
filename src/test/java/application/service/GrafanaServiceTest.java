@@ -2,20 +2,13 @@ package application.service;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class GrafanaServiceTest {
-    private SimpleMeterRegistry registry;
-    private GrafanaService grafanaService;
-
-    @BeforeEach
-    void setUp() {
-        registry = new SimpleMeterRegistry();
-        grafanaService = new GrafanaService(registry);
-    }
+    private final SimpleMeterRegistry registry = new SimpleMeterRegistry();
+    private final GrafanaService grafanaService = new GrafanaService(registry);
 
     @Test
     void registerException_incrementsExceptionCounter() {

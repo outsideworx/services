@@ -55,4 +55,14 @@ class LogbackFilterTest {
         assertThat(MDC.get("requestId")).isNotBlank().hasSize(26);
         verify(chain).doFilter(request, response);
     }
+
+    @Test
+    void doFilter_whenRequestIdHeaderMissing_generatedIdIsUrlSafeBase64() throws Exception {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        MockHttpServletResponse response = new MockHttpServletResponse();
+
+        logbackFilter.doFilter(request, response, chain);
+
+        assertThat(MDC.get("requestId")).matches("[A-Za-z0-9_-]{26}");
+    }
 }
