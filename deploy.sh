@@ -51,7 +51,6 @@ cp "$SCRIPT_DIR/.env" \
 
 echo "Container deployment starts."
 cd "$DEST"
-set -a && source .env && set +a
 docker login
 docker compose build --no-cache --pull
 docker compose push
