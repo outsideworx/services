@@ -1,6 +1,7 @@
-package it;
+package it.configuration;
 
 import application.SpringApplication;
+import it.IntegrationTestBase;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -49,6 +50,24 @@ class WebSecurityIT {
     @Test
     void sitemapXml_isPubliclyAccessible() throws Exception {
         mockMvc.perform(get("/sitemap.xml"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void grafana_isPubliclyAccessible() throws Exception {
+        mockMvc.perform(get("/grafana"))
+                .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    void ntfy_isPubliclyAccessible() throws Exception {
+        mockMvc.perform(get("/ntfy"))
+                .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    void imgPath_isPubliclyAccessible() throws Exception {
+        mockMvc.perform(get("/img/favicon.ico"))
                 .andExpect(status().isOk());
     }
 }

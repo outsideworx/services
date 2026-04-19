@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -26,7 +27,7 @@ class SoupConverterTest {
                 entity(1L, false)
         );
         assertThat(converter.filterItemsToInsert(items)).hasSize(1)
-                .allMatch(i -> i.getId() == null && !i.getDelete());
+                .allMatch(i -> Objects.isNull(i.getId()) && !i.getDelete());
     }
 
     @Test
@@ -37,7 +38,7 @@ class SoupConverterTest {
                 entity(null, false)
         );
         assertThat(converter.filterItemsToUpdate(items)).hasSize(1)
-                .allMatch(i -> i.getId() != null && !i.getDelete());
+                .allMatch(i -> Objects.nonNull(i.getId()) && !i.getDelete());
     }
 
     @Test

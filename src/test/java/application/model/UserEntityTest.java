@@ -11,4 +11,14 @@ class UserEntityTest {
                 .extracting(Object::toString)
                 .containsExactly("ROLE_USER");
     }
+
+    @Test
+    void userDetailsFlags_defaultToFalse() {
+        UserEntity user = new UserEntity();
+        assertThat(user.isAccountNonExpired()).isFalse();
+        assertThat(user.isAccountNonLocked()).isFalse();
+        assertThat(user.isCredentialsNonExpired()).isFalse();
+        assertThat(user.isEnabled()).isFalse();
+    }
+
 }

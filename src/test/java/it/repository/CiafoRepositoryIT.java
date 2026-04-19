@@ -41,7 +41,11 @@ class CiafoRepositoryIT {
 
         assertThat(ciafoRepository.getThumbnails("Furniture"))
                 .hasSize(1)
-                .allMatch(t -> "Furniture".equals(t.getCategory()));
+                .first()
+                .satisfies(t -> {
+                    assertThat(t.getCategory()).isEqualTo("Furniture");
+                    assertThat(t.getDescription()).isEqualTo("Chair");
+                });
     }
 
     @Test

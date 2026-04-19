@@ -40,7 +40,11 @@ class SoupRepositoryIT {
 
         assertThat(soupRepository.get("art"))
                 .hasSize(1)
-                .allMatch(s -> "art".equals(s.getCategory()));
+                .first()
+                .satisfies(s -> {
+                    assertThat(s.getCategory()).isEqualTo("art");
+                    assertThat(s.getDescription()).isEqualTo("Painting");
+                });
     }
 
     @Test

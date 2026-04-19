@@ -75,7 +75,9 @@ class PeepsControllerIT {
                         .header("X-Caller-Id", "gaiapeeps")
                         .header("X-Auth-Token", "test"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2));
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].title").value("Artist One"))
+                .andExpect(jsonPath("$[1].title").value("Artist Two"));
     }
 
     @Test

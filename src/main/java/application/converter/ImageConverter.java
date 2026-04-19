@@ -10,6 +10,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.Map;
+import java.util.Objects;
 
 public abstract class ImageConverter extends ItemsConverter {
     protected String getImage(Map<String, MultipartFile> files, Integer iterator, String field) {
@@ -40,6 +41,9 @@ public abstract class ImageConverter extends ItemsConverter {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try {
             BufferedImage image = ImageIO.read(new ByteArrayInputStream(bytes));
+            if (Objects.isNull(image)) {
+                throw new IllegalStateException("Image compression failed.");
+            }
             int width = image.getWidth();
             int height = image.getHeight();
             double scale = Math.min(desiredWidth / width, desiredHeight / height);

@@ -4,6 +4,7 @@ import application.SpringApplication;
 import application.model.CallbackEntity;
 import application.repository.CallbackRepository;
 import application.service.EmailService;
+import com.mailersend.sdk.exceptions.MailerSendException;
 import it.IntegrationTestBase;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,9 +16,13 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
+import java.util.stream.StreamSupport;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrlPattern;
@@ -83,10 +88,13 @@ class CallbackControllerIT {
                         .contentType("application/json")
                         .content(VALID_BODY));
 
-        CallbackEntity saved = callbackRepository.findAll().iterator().next();
-        assertThat(saved.getAddress()).isEqualTo("visitor@example.com");
-        assertThat(saved.getProduct()).isEqualTo("https://example.com/product");
-        assertThat(saved.getRecipient()).isEqualTo("come-in-and-find-out");
+        List<CallbackEntity> saved = StreamSupport
+                .stream(callbackRepository.findAll().spliterator(), false)
+                .toList();
+        assertThat(saved).hasSize(1);
+        assertThat(saved.getFirst().getAddress()).isEqualTo("visitor@example.com");
+        assertThat(saved.getFirst().getProduct()).isEqualTo("https://example.com/product");
+        assertThat(saved.getFirst().getRecipient()).isEqualTo("come-in-and-find-out");
     }
 
     @Test
@@ -98,5 +106,26 @@ class CallbackControllerIT {
                         .content(VALID_BODY));
 
         verify(emailService).send(eq("come-in-and-find-out"), any(), any());
+    }
+
+    @Test
+    void postCallback_whenEmailFails_stillPersistsEntity() throws Exception {
+        doThrow(new MailerSendException("send failed")).when(emailService).send(any(), any(), any());
+
+        try {
+            mockMvc.perform(post("/api/callback")
+                    .header("X-Caller-Id", "come-in-and-find-out")
+                    .header("X-Auth-Token", "test")
+                    .contentType("application/json")
+                    .content(VALID_BODY));
+        } catch (Exception ignored) {}
+
+        List<CallbackEntity> saved = StreamSupport
+                .stream(callbackRepository.findAll().spliterator(), false)
+                .toList();
+        assertThat(saved).hasSize(1);
+        assertThat(saved.getFirst().getAddress()).isEqualTo("visitor@example.com");
+        assertThat(saved.getFirst().getProduct()).isEqualTo("https://example.com/product");
+        assertThat(saved.getFirst().getRecipient()).isEqualTo("come-in-and-find-out");
     }
 }
