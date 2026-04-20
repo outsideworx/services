@@ -1,6 +1,9 @@
 global:
   scrape_interval: 5s
 scrape_configs:
+  - job_name: authelia
+    static_configs:
+      - targets: [ "authelia:81" ]
   - job_name: loki
     static_configs:
       - targets: [ "loki:3100" ]

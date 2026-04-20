@@ -63,4 +63,8 @@ storage:
   encryption_key: a_very_insecure_storage_key_for_local_dev_use
   local:
     path: /tmp/authelia.db
+telemetry:
+  metrics:
+    address: tcp://0.0.0.0:81
+    enabled: true
 theme: auto
