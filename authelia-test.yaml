@@ -54,6 +54,7 @@ notifier:
   filesystem:
     filename: /tmp/authelia-notifications.txt
 server:
+  asset_path: /config/assets
   port: 80
 session:
   domain: localhost

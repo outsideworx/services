@@ -1,3 +1,11 @@
+auth-default-access: "deny-all"
+auth-file: "/etc/ntfy/data/user.db"
+auth-tokens:
+  - "admin:tk_1q97m4n5o7ov1z7vse2lyrzf7e9ks:proxy"
+auth-users:
+  - "admin:$2b$10$6Y6p8ba5FbpHKjB8TjaJHeVnny3e/99StXP3aDWqt8g1iXa04IBZu:admin"
 base-url: "https://ntfy.localhost"
+enable-login: true
 enable-metrics: true
 metrics-listen-http: ":81"
+require-login: true

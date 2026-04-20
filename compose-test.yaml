@@ -11,6 +11,7 @@ services:
     volumes:
       - ./authelia-test.yaml:/config/configuration.yml
       - ./authelia-test-users.yaml:/config/users.yaml
+      - ./src/main/resources/static/img/logo.png:/config/assets/logo.png
   grafana:
     container_name: grafana
     image: grafana/grafana:12.3.0
@@ -31,17 +32,8 @@ services:
     command: serve
     container_name: ntfy
     image: binwiederhier/ntfy:v2.16.0
-    labels:
-      - traefik.enable=true
-      - traefik.http.middlewares.authelia.forwardauth.address=http://authelia/api/verify?rd=https://oauth.localhost
-      - traefik.http.middlewares.authelia.forwardauth.authResponseHeaders=Remote-User,Remote-Groups,Remote-Name,Remote-Email
-      - traefik.http.middlewares.authelia.forwardauth.trustForwardHeader=true
-      - traefik.http.routers.ntfy.entrypoints=websecure
-      - traefik.http.routers.ntfy.middlewares=authelia
-      - traefik.http.routers.ntfy.rule=Host(`ntfy.localhost`)
-      - traefik.http.routers.ntfy.tls=true
-      - traefik.http.services.ntfy.loadbalancer.server.port=80
     volumes:
+      - ntfy:/etc/ntfy/data
       - ./ntfy-test.yaml:/etc/ntfy/server.yml
   postgres:
     container_name: postgres
@@ -96,6 +88,21 @@ services:
       DB_USERNAME: postgres
       DB_PASSWORD: ""
       LOKI_PORT: 3100
+      NTFY_DB_PATH: /etc/ntfy/data/user.db
+      NTFY_URL: http://ntfy
     image: python:3.13-slim
+    labels:
+      - traefik.enable=true
+      - traefik.http.middlewares.authelia.forwardauth.address=http://authelia/api/verify?rd=https://oauth.localhost
+      - traefik.http.middlewares.authelia.forwardauth.authResponseHeaders=Remote-User,Remote-Groups,Remote-Name,Remote-Email
+      - traefik.http.middlewares.authelia.forwardauth.trustForwardHeader=true
+      - traefik.http.routers.ntfy.entrypoints=websecure
+      - traefik.http.routers.ntfy.middlewares=authelia
+      - traefik.http.routers.ntfy.rule=Host(`ntfy.localhost`)
+      - traefik.http.routers.ntfy.tls=true
+      - traefik.http.services.ntfy.loadbalancer.server.port=80
     volumes:
+      - ntfy:/etc/ntfy/data
       - ./utils:/etc/utils
+volumes:
+  ntfy:
