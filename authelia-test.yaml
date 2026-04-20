@@ -65,6 +65,6 @@ storage:
     path: /tmp/authelia.db
 telemetry:
   metrics:
-    address: tcp://:81
+    address: tcp://0.0.0.0:81
     enabled: true
 theme: auto
