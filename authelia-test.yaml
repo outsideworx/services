@@ -3,6 +3,8 @@ access_control:
 authentication_backend:
   file:
     path: /config/users.yaml
+  password_reset:
+    disable: true
 default_redirection_url: https://oauth.localhost
 identity_providers:
   oidc:

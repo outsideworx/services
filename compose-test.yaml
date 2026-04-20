@@ -4,9 +4,6 @@ services:
     image: authelia/authelia:4.37
     labels:
       - traefik.enable=true
-      - traefik.http.middlewares.authelia.forwardauth.address=http://authelia/api/verify?rd=https://oauth.localhost
-      - traefik.http.middlewares.authelia.forwardauth.authResponseHeaders=Remote-User,Remote-Groups,Remote-Name,Remote-Email
-      - traefik.http.middlewares.authelia.forwardauth.trustForwardHeader=true
       - traefik.http.routers.authelia.entrypoints=websecure
       - traefik.http.routers.authelia.rule=Host(`oauth.localhost`)
       - traefik.http.routers.authelia.tls=true
@@ -36,7 +33,11 @@ services:
     image: binwiederhier/ntfy:v2.16.0
     labels:
       - traefik.enable=true
+      - traefik.http.middlewares.authelia.forwardauth.address=http://authelia/api/verify?rd=https://oauth.localhost
+      - traefik.http.middlewares.authelia.forwardauth.authResponseHeaders=Remote-User,Remote-Groups,Remote-Name,Remote-Email
+      - traefik.http.middlewares.authelia.forwardauth.trustForwardHeader=true
       - traefik.http.routers.ntfy.entrypoints=websecure
+      - traefik.http.routers.ntfy.middlewares=authelia
       - traefik.http.routers.ntfy.rule=Host(`ntfy.localhost`)
       - traefik.http.routers.ntfy.tls=true
       - traefik.http.services.ntfy.loadbalancer.server.port=80
