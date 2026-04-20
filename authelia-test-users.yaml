@@ -1,0 +1,5 @@
+users:
+  admin:
+    displayname: Outside Worx
+    email: info@outsideworx.net
+    password: "$argon2id$v=19$m=65536,t=3,p=4$p5BkbYcINY8eh35TuGwEGQ$OeCrmEWUDsJn5w6xjgR2/+ituM9t1nyfgsAXzRiTmb4"

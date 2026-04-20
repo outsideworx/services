@@ -1,9 +1,21 @@
 services:
+  authelia:
+    container_name: authelia
+    image: authelia/authelia:4.37
+    labels:
+      - traefik.enable=true
+      - traefik.http.middlewares.authelia.forwardauth.address=http://authelia/api/verify?rd=https://oauth.localhost
+      - traefik.http.middlewares.authelia.forwardauth.authResponseHeaders=Remote-User,Remote-Groups,Remote-Name,Remote-Email
+      - traefik.http.middlewares.authelia.forwardauth.trustForwardHeader=true
+      - traefik.http.routers.authelia.entrypoints=websecure
+      - traefik.http.routers.authelia.rule=Host(`oauth.localhost`)
+      - traefik.http.routers.authelia.tls=true
+      - traefik.http.services.authelia.loadbalancer.server.port=80
+    volumes:
+      - ./authelia-test.yaml:/config/configuration.yml
+      - ./authelia-test-users.yaml:/config/users.yaml
   grafana:
     container_name: grafana
-    environment:
-      GF_AUTH_ANONYMOUS_ENABLED: true
-      GF_AUTH_ANONYMOUS_ORG_ROLE: Admin
     image: grafana/grafana:12.3.0
     labels:
       - traefik.enable=true
