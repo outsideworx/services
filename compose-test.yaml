@@ -82,8 +82,6 @@ services:
       do python "$$script" & done;
       wait'
     container_name: utils
-    depends_on:
-      - postgres
     environment:
       DB_USERNAME: postgres
       DB_PASSWORD: ""
