@@ -2,6 +2,7 @@ import asyncio
 import logging
 import os
 import sqlite3
+import time
 from aiohttp import web, ClientSession, WSMsgType
 
 from common.logging_config import setup_logging
@@ -9,8 +10,9 @@ from common.logging_config import setup_logging
 setup_logging("ntfy-proxy")
 logging.getLogger("aiohttp.access").setLevel(logging.WARNING)
 
-NTFY_URL = os.environ["NTFY_URL"]
 DB_PATH = os.environ["NTFY_DB_PATH"]
+NTFY_URL = os.environ["NTFY_URL"]
+INTERVAL = 60
 SKIP_REQUEST_HEADERS = {"host", "accept-encoding"}
 SKIP_RESPONSE_HEADERS = {"content-length", "transfer-encoding", "content-encoding"}
 SW_RESPONSE = web.Response(text="self.addEventListener('push', () => {});", content_type="application/javascript")
@@ -48,7 +50,15 @@ if (!localStorage.getItem('token')) {{
     return body.replace(b"<head>", b"<head>" + script)
 
 
-TOKENS = load_tokens()
+def load_tokens_with_retry():
+    while True:
+        tokens = load_tokens()
+        if tokens:
+            return tokens
+        time.sleep(INTERVAL)
+
+
+TOKENS = load_tokens_with_retry()
 
 
 async def handle_ws(request, session, token):

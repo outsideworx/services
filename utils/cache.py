@@ -2,6 +2,7 @@ import base64
 import logging
 import os
 import psycopg2
+import psycopg2.errors
 import time
 from datetime import datetime
 
@@ -9,18 +10,17 @@ from common.logging_config import setup_logging
 
 setup_logging("cache")
 
-OUTPUT_DIR = "/utils/cache"
-DB_HOST = "postgres"
-DB_PORT = "5432"
 DB_NAME = os.environ["DB_USERNAME"]
 DB_PASS = os.environ["DB_PASSWORD"]
 DB_USER = os.environ["DB_USERNAME"]
+DB_HOST = "postgres"
+DB_PORT = "5432"
 INTERVAL = 60
-
+OUTPUT_DIR = "/utils/cache"
 CIAFO_LABELS = ["image1", "image2", "image3", "image4", "thumbnail1", "thumbnail2", "thumbnail3", "thumbnail4"]
-SOUP_LABELS = ["image", "thumbnail"]
 HASH_FILE = f"{OUTPUT_DIR}/hashes.txt"
 SCAN_TIME_FILE = f"{OUTPUT_DIR}/last_scan.txt"
+SOUP_LABELS = ["image", "thumbnail"]
 
 os.makedirs(f"{OUTPUT_DIR}/ciafo", exist_ok=True)
 os.makedirs(f"{OUTPUT_DIR}/soup", exist_ok=True)
@@ -87,13 +87,19 @@ def sync():
         cur = conn.cursor()
         try:
             sync_images_to_disk(cur, "ciafo", CIAFO_LABELS, "ciafo", hashes)
+        except psycopg2.errors.UndefinedTable:
+            logging.error("CIAFO sync failed: table not found")
+            success = False
         except Exception as e:
-            logging.error(f"CIAFO sync failed: {e}")
+            logging.error(f"CIAFO sync failed: {str(e).strip()}")
             success = False
         try:
             sync_images_to_disk(cur, "soup", SOUP_LABELS, "soup", hashes)
+        except psycopg2.errors.UndefinedTable:
+            logging.error("SOUP sync failed: table not found")
+            success = False
         except Exception as e:
-            logging.error(f"SOUP sync failed: {e}")
+            logging.error(f"SOUP sync failed: {str(e).strip()}")
             success = False
         cur.close()
     finally:
@@ -108,5 +114,5 @@ while True:
     try:
         sync()
     except Exception as e:
-        logging.error(f"Sync failed: {e}")
+        logging.error(f"Sync failed: {str(e).strip()}")
     time.sleep(INTERVAL)
