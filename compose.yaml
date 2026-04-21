@@ -153,11 +153,13 @@ services:
   utils:
     command: >-
       bash -c '
-      cd /etc/utils &&
-      pip install -r requirements.txt -q &&
-      for script in *.py;
-      do python "$$script" & done;
-      wait'
+        cd /etc/utils;
+        pip install -r requirements.txt -q &&
+        for script in *.py; do
+          [[ "$$script" == *.draft.py ]] && continue;
+          python "$$script" &
+        done;
+        wait'
     deploy:
       placement:
         constraints:
