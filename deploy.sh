@@ -7,7 +7,7 @@ set -e
 
 if [ "$1" == "--install" ]; then
     apt update
-    apt install -y docker-compose-v2 openjdk-25-jdk maven
+    apt install -y docker-compose-v2
     exit 0
 fi
 
@@ -30,19 +30,14 @@ if [ -n "$1" ]; then
     exit 1
 fi
 
-echo "Packaging and installing project to: $DEST."
+echo "Copying project files to: $DEST"
 rm -rf "$DEST"
 mkdir -p "$DEST"
-mvn clean package -f "$SCRIPT_DIR/pom.xml"
-cp -r "$SCRIPT_DIR/target" "$DEST"
 cp -r "$SCRIPT_DIR/utils" "$DEST"
-
-echo "Copying standalone project files to: $DEST"
 cp "$SCRIPT_DIR/.env" \
    "$SCRIPT_DIR/compose.yaml" \
    "$SCRIPT_DIR/docker-stats.sh" \
    "$SCRIPT_DIR/docker-wipe.sh" \
-   "$SCRIPT_DIR/Dockerfile" \
    "$SCRIPT_DIR/grafana.ini" \
    "$SCRIPT_DIR/loki.yaml" \
    "$SCRIPT_DIR/ntfy.yaml" \
@@ -51,9 +46,6 @@ cp "$SCRIPT_DIR/.env" \
 
 echo "Container deployment starts."
 cd "$DEST"
-docker login
-docker compose build --no-cache --pull
-docker compose push
+docker login ghcr.io
 docker stack deploy -c compose.yaml services --detach=false
-docker system prune -af
 docker service logs services_services -f

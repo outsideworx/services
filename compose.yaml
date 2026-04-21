@@ -99,7 +99,6 @@ services:
       - /home/outsideworx/prometheus:/prometheus
       - ./prometheus.yaml:/etc/prometheus/prometheus.yml
   services:
-    build: .
     deploy:
       placement:
         constraints:
@@ -117,7 +116,7 @@ services:
       MAILERSEND_SDK_TOKEN: $MAILERSEND_SDK_TOKEN
       SPRING_DATASOURCE_USERNAME: $SPRING_DATASOURCE_USERNAME
       SPRING_DATASOURCE_PASSWORD: $SPRING_DATASOURCE_PASSWORD
-    image: outsideworx/services:latest
+    image: ghcr.io/outsideworx/services:latest
     networks:
       - outsideworx
   traefik:
