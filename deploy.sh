@@ -13,7 +13,7 @@ fi
 
 if [ "$1" == "--network" ]; then
     if [ -z "$2" ]; then
-        echo "Error: an IP address as 2nd parameter is required."
+        echo "Error: an IP address as 2nd parameter is required"
         exit 1
     fi
     # Required open ports:
@@ -26,7 +26,7 @@ if [ "$1" == "--network" ]; then
 fi
 
 if [ -n "$1" ]; then
-    echo "Error: Unknown parameter '$1'."
+    echo "Error: Unknown parameter: '$1'"
     exit 1
 fi
 
@@ -44,7 +44,7 @@ cp "$SCRIPT_DIR/.env" \
    "$SCRIPT_DIR/prometheus.yaml" \
    "$DEST"
 
-echo "Container deployment starts."
+echo "Container deployment starts"
 cd "$DEST"
 docker login ghcr.io
 docker stack deploy -c compose.yaml services --detach=false
