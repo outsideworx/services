@@ -47,4 +47,4 @@ cp "$SCRIPT_DIR/.env" \
 echo "Container deployment starts"
 cd "$DEST"
 set -a; source .env; set +a
-docker stack deploy -c compose.yaml services --detach=false
+docker stack deploy -c compose.yaml services --detach=false --resolve-image=always
