@@ -11,7 +11,7 @@ setup_logging("ntfy-proxy")
 logging.getLogger("aiohttp.access").setLevel(logging.WARNING)
 
 DB_PATH = os.environ["NTFY_DB_PATH"]
-NTFY_URL = os.environ["NTFY_URL"]
+NTFY_URL = "http://ntfy"
 INTERVAL = 60
 SKIP_REQUEST_HEADERS = {"host", "accept-encoding"}
 SKIP_RESPONSE_HEADERS = {"content-length", "transfer-encoding", "content-encoding"}
