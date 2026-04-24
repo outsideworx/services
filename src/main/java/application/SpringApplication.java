@@ -4,6 +4,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -19,6 +20,7 @@ public class SpringApplication {
     }
 
     @Bean
+    @Profile("test")
     CommandLineRunner trustAllSsl() {
         return _ -> {
             SSLContext sslContext = SSLContext.getInstance("TLS");
