@@ -21,22 +21,22 @@ SKIP_RESPONSE_HEADERS = {"content-length", "transfer-encoding", "content-encodin
 def load_tokens():
     try:
         conn = sqlite3.connect(f"file:{DB_PATH}?mode=ro", uri=True)
-        cur = conn.cursor()
-        cur.execute("""
+        cursor = conn.cursor()
+        cursor.execute("""
             SELECT u.user, tk.token FROM user u
             JOIN user_token tk ON u.id = tk.user_id
             WHERE (tk.expires = 0 OR tk.expires >= strftime('%s', 'now'))
             ORDER BY tk.last_access DESC
         """)
         tokens = {}
-        for username, token in cur.fetchall():
+        for username, token in cursor.fetchall():
             tokens.setdefault(username, token)
         conn.close()
         for username in tokens:
             logging.info(f"Loaded token for user {username}")
         return tokens
-    except Exception as e:
-        logging.error(f"Failed to load tokens: {e}")
+    except Exception as error:
+        logging.error(f"Failed to load tokens: {error}")
         return {}
 
 
@@ -65,13 +65,13 @@ async def handle_ws(request, session, token):
     ws_server = web.WebSocketResponse()
     await ws_server.prepare(request)
 
-    headers = {k: v for k, v in request.headers.items() if k.lower() not in SKIP_REQUEST_HEADERS | {"authorization"}}
+    headers = {key: value for key, value in request.headers.items() if key.lower() not in SKIP_REQUEST_HEADERS | {"authorization"}}
     if token:
         headers["Authorization"] = f"Bearer {token}"
 
     parsed = urlparse(request.path_qs)
-    qs = {k: v for k, v in parse_qs(parsed.query).items() if k != "auth"}
-    clean_path_qs = urlunparse(parsed._replace(query=urlencode(qs, doseq=True)))
+    query = {key: value for key, value in parse_qs(parsed.query).items() if key != "auth"}
+    clean_path_qs = urlunparse(parsed._replace(query=urlencode(query, doseq=True)))
     async with session.ws_connect(f"ws://ntfy{clean_path_qs}", headers=headers) as ws_client:
         async def forward_to_client():
             async for msg in ws_client:
@@ -125,7 +125,7 @@ async def handle_http(request):
     if request.headers.get("Upgrade", "").lower() == "websocket":
         return await handle_ws(request, session, token)
 
-    headers = {k: v for k, v in request.headers.items() if k.lower() not in SKIP_REQUEST_HEADERS}
+    headers = {key: value for key, value in request.headers.items() if key.lower() not in SKIP_REQUEST_HEADERS}
     if token:
         headers["Authorization"] = f"Bearer {token}"
 
@@ -135,13 +135,13 @@ async def handle_http(request):
             headers=headers,
             data=await request.read() or None,
             allow_redirects=False,
-    ) as resp:
-        body = await resp.read()
-        content_type = resp.headers.get("Content-Type", "")
+    ) as response:
+        body = await response.read()
+        content_type = response.headers.get("Content-Type", "")
         if token and "text/html" in content_type and b"<head>" in body:
             body = inject_autologin(body, user, token)
-        response_headers = {k: v for k, v in resp.headers.items() if k.lower() not in SKIP_RESPONSE_HEADERS}
-        return web.Response(status=resp.status, headers=response_headers, body=body)
+        response_headers = {key: value for key, value in response.headers.items() if key.lower() not in SKIP_RESPONSE_HEADERS}
+        return web.Response(status=response.status, headers=response_headers, body=body)
 
 
 async def on_startup(app):
