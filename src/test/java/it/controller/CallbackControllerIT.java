@@ -1,9 +1,9 @@
 package it.controller;
 
-import application.SpringApplication;
-import application.model.CallbackEntity;
-import application.repository.CallbackRepository;
-import application.service.EmailService;
+import net.outsideworx.services.SpringApplication;
+import net.outsideworx.services.model.CallbackEntity;
+import net.outsideworx.services.repository.CallbackRepository;
+import net.outsideworx.services.service.EmailService;
 import com.mailersend.sdk.exceptions.MailerSendException;
 import it.IntegrationTestBase;
 import lombok.RequiredArgsConstructor;

@@ -1,8 +1,8 @@
 package it.repository;
 
-import application.SpringApplication;
-import application.model.clients.soup.SoupEntity;
-import application.repository.clients.SoupRepository;
+import net.outsideworx.services.SpringApplication;
+import net.outsideworx.services.model.clients.soup.SoupEntity;
+import net.outsideworx.services.repository.clients.SoupRepository;
 import it.IntegrationTestBase;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;

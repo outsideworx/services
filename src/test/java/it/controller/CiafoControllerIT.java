@@ -1,8 +1,8 @@
 package it.controller;
 
-import application.SpringApplication;
-import application.model.clients.ciafo.CiafoEntity;
-import application.repository.clients.CiafoRepository;
+import net.outsideworx.services.SpringApplication;
+import net.outsideworx.services.model.clients.ciafo.CiafoEntity;
+import net.outsideworx.services.repository.clients.CiafoRepository;
 import it.IntegrationTestBase;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;

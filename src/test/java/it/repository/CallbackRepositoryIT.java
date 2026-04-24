@@ -1,8 +1,8 @@
 package it.repository;
 
-import application.SpringApplication;
-import application.model.CallbackEntity;
-import application.repository.CallbackRepository;
+import net.outsideworx.services.SpringApplication;
+import net.outsideworx.services.model.CallbackEntity;
+import net.outsideworx.services.repository.CallbackRepository;
 import it.IntegrationTestBase;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;

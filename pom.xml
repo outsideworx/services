@@ -166,7 +166,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>application.SpringApplication</mainClass>
+                    <mainClass>net.outsideworx.services.SpringApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>

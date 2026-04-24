@@ -1,6 +1,6 @@
 package it.configuration;
 
-import application.SpringApplication;
+import net.outsideworx.services.SpringApplication;
 import it.IntegrationTestBase;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
