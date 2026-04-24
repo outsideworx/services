@@ -4,6 +4,7 @@ import os
 import sqlite3
 import time
 from aiohttp import web, ClientSession, WSMsgType
+from urllib.parse import urlencode, urlparse, parse_qs, urlunparse
 
 from common.logging_config import setup_logging
 
@@ -15,7 +16,6 @@ NTFY_URL = "http://ntfy"
 INTERVAL = 60
 SKIP_REQUEST_HEADERS = {"host", "accept-encoding"}
 SKIP_RESPONSE_HEADERS = {"content-length", "transfer-encoding", "content-encoding"}
-SW_RESPONSE = web.Response(text="self.addEventListener('push', () => {});", content_type="application/javascript")
 
 
 def load_tokens():
@@ -69,7 +69,10 @@ async def handle_ws(request, session, token):
     if token:
         headers["Authorization"] = f"Bearer {token}"
 
-    async with session.ws_connect(f"ws://ntfy{request.path_qs}", headers=headers) as ws_client:
+    parsed = urlparse(request.path_qs)
+    qs = {k: v for k, v in parse_qs(parsed.query).items() if k != "auth"}
+    clean_path_qs = urlunparse(parsed._replace(query=urlencode(qs, doseq=True)))
+    async with session.ws_connect(f"ws://ntfy{clean_path_qs}", headers=headers) as ws_client:
         async def forward_to_client():
             async for msg in ws_client:
                 if msg.type == WSMsgType.TEXT:
@@ -115,7 +118,7 @@ async def handle_http(request):
         logging.warning(f"No token found for user {user}")
 
     if request.path == "/sw.js":
-        return SW_RESPONSE
+        return web.Response(text="self.addEventListener('push', () => {});", content_type="application/javascript")
 
     session = request.app["session"]
 
