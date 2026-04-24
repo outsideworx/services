@@ -16,7 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrlPattern;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ActiveProfiles("test")
@@ -45,23 +45,23 @@ class CiafoControllerIT {
     }
 
     @Test
-    void getPreviews_withMissingAuthHeaders_redirectsToLogin() throws Exception {
+    void getPreviews_withMissingAuthHeaders_redirectsToOAuth2Login() throws Exception {
         mockMvc.perform(get("/api/come-in-and-find-out")
                         .param("category", "Furniture")
                         .param("offset", "0"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrlPattern("**/login"));
+                .andExpect(redirectedUrl("http://localhost/oauth2/authorization/authelia"));
     }
 
     @Test
-    void getPreviews_withWrongToken_redirectsToLogin() throws Exception {
+    void getPreviews_withWrongToken_redirectsToOAuth2Login() throws Exception {
         mockMvc.perform(get("/api/come-in-and-find-out")
                         .param("category", "Furniture")
                         .param("offset", "0")
                         .header("X-Caller-Id", "come-in-and-find-out")
                         .header("X-Auth-Token", "wrong"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrlPattern("**/login"));
+                .andExpect(redirectedUrl("http://localhost/oauth2/authorization/authelia"));
     }
 
     @Test
@@ -118,21 +118,21 @@ class CiafoControllerIT {
     }
 
     @Test
-    void getPayload_withMissingAuthHeaders_redirectsToLogin() throws Exception {
+    void getPayload_withMissingAuthHeaders_redirectsToOAuth2Login() throws Exception {
         mockMvc.perform(get("/api/cached/come-in-and-find-out")
                         .param("id", "1"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrlPattern("**/login"));
+                .andExpect(redirectedUrl("http://localhost/oauth2/authorization/authelia"));
     }
 
     @Test
-    void getPayload_withWrongToken_redirectsToLogin() throws Exception {
+    void getPayload_withWrongToken_redirectsToOAuth2Login() throws Exception {
         mockMvc.perform(get("/api/cached/come-in-and-find-out")
                         .param("id", "1")
                         .header("X-Caller-Id", "come-in-and-find-out")
                         .header("X-Auth-Token", "wrong"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrlPattern("**/login"));
+                .andExpect(redirectedUrl("http://localhost/oauth2/authorization/authelia"));
     }
 
     @Test

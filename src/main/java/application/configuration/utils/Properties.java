@@ -11,6 +11,7 @@ import java.util.Map;
 @Data
 public class Properties {
     private final Map<String, Client> clients;
+
     private final Map<String, Service> services;
 
     @Data

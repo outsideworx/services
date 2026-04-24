@@ -8,6 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class GrafanaServiceTest {
     private final SimpleMeterRegistry registry = new SimpleMeterRegistry();
+
     private final GrafanaService grafanaService = new GrafanaService(registry);
 
     @Test

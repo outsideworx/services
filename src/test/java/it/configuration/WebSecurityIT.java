@@ -11,7 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrlPattern;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ActiveProfiles("test")
@@ -23,16 +23,10 @@ class WebSecurityIT {
     private final MockMvc mockMvc;
 
     @Test
-    void loginPage_isPubliclyAccessible() throws Exception {
-        mockMvc.perform(get("/login"))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    void rootPath_whenUnauthenticated_redirectsToLogin() throws Exception {
+    void rootPath_whenUnauthenticated_redirectsToOAuth2Login() throws Exception {
         mockMvc.perform(get("/"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrlPattern("**/login"));
+                .andExpect(redirectedUrl("http://localhost/oauth2/authorization/authelia"));
     }
 
     @Test

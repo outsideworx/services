@@ -25,3 +25,14 @@ spring:
     url: jdbc:postgresql://localhost:5432/
     username: postgres
     password:
+  logout:
+    url: https://oauth.localhost/logout
+  security:
+    oauth2:
+      client:
+        provider:
+          authelia:
+            authorization-uri: https://oauth.localhost/api/oidc/authorization
+            jwk-set-uri: https://oauth.localhost/jwks.json
+            token-uri: https://oauth.localhost/api/oidc/token
+            user-info-uri: https://oauth.localhost/api/oidc/userinfo

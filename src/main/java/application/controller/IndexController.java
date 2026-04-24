@@ -3,8 +3,8 @@ package application.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -23,9 +23,8 @@ final class IndexController {
     private final List<ModelVisitor> models;
 
     @GetMapping("/")
-    ModelAndView index() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
+    ModelAndView index(@AuthenticationPrincipal OidcUser user) {
+        String email = user.getEmail();
         Matcher matcher = domainPattern.matcher(email);
         if (matcher.find()) {
             log.info("Portal rendering starts: [{}]", email);

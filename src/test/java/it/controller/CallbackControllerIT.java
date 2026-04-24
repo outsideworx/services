@@ -25,7 +25,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrlPattern;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ActiveProfiles("test")
@@ -51,23 +51,23 @@ class CallbackControllerIT {
     }
 
     @Test
-    void postCallback_withMissingAuthHeaders_redirectsToLogin() throws Exception {
+    void postCallback_withMissingAuthHeaders_redirectsToOAuth2Login() throws Exception {
         mockMvc.perform(post("/api/callback")
                         .contentType("application/json")
                         .content(VALID_BODY))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrlPattern("**/login"));
+                .andExpect(redirectedUrl("http://localhost/oauth2/authorization/authelia"));
     }
 
     @Test
-    void postCallback_withWrongToken_redirectsToLogin() throws Exception {
+    void postCallback_withWrongToken_redirectsToOAuth2Login() throws Exception {
         mockMvc.perform(post("/api/callback")
                         .header("X-Caller-Id", "come-in-and-find-out")
                         .header("X-Auth-Token", "wrong")
                         .contentType("application/json")
                         .content(VALID_BODY))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrlPattern("**/login"));
+                .andExpect(redirectedUrl("http://localhost/oauth2/authorization/authelia"));
     }
 
     @Test

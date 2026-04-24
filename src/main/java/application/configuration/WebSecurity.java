@@ -1,13 +1,18 @@
 package application.configuration;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 class WebSecurity {
+    @Value("${spring.logout.url}")
+    private String logoutUrl;
+
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
@@ -18,19 +23,15 @@ class WebSecurity {
                                 "/clients/**",
                                 "/grafana",
                                 "/img/**",
-                                "/login",
                                 "/ntfy",
                                 "/robots.txt",
                                 "/sitemap.xml")
                         .permitAll()
                         .anyRequest()
                         .authenticated())
-                .formLogin(request -> request
-                        .loginPage("/login"))
-                .exceptionHandling(request -> request
-                        .accessDeniedPage("/login?error"))
-                .sessionManagement(request -> request
-                        .invalidSessionUrl("/login?expired"))
+                .oauth2Login(Customizer.withDefaults())
+                .logout(logout -> logout
+                        .logoutSuccessUrl(logoutUrl))
                 .csrf(AbstractHttpConfigurer::disable)
                 .build();
     }

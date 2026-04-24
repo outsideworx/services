@@ -5,7 +5,7 @@ authentication_backend:
     path: /config/users.yaml
   password_reset:
     disable: true
-default_redirection_url: https://oauth.localhost
+default_redirection_url: http://localhost:8080
 identity_providers:
   oidc:
     clients:
@@ -19,7 +19,18 @@ identity_providers:
           - groups
           - profile
           - email
-        secret: "$pbkdf2-sha512$310000$AE22n82WyXksP52Cwa4uYQ$zHYzRVlvqQefCkDd40s9ypZVSP70NZtGT4qHgdhjsN.kXLKDH.bfyblylCUwb9JAO8hVTZ7HzTKcUROT6qodZQ"
+        secret: "$pbkdf2-sha512$310000$NNaJy.5bp4jfw..YfyVUnA$9nnLuxwrkQIi6RzyS2LTy3TskY72u8cK4Yi15aZG18XkLHJDm44T4M5ebTjLBgYEtzqO97YNam6bE5SxYpP/PQ"
+      - authorization_policy: one_factor
+        consent_mode: implicit
+        id: services
+        redirect_uris:
+          - http://localhost:8080/login/oauth2/code/authelia
+        scopes:
+          - openid
+          - groups
+          - profile
+          - email
+        secret: "$pbkdf2-sha512$310000$qD2v/qVqphER2Y2QYa1asQ$INKnVdFBsNSMC9FjyYgwMaFdy6EpRGeMmUmLikGF9EVCZBUwvGBa6T1NOzUX7jdAXEhj3ZzqCDwCd81X0FQ4ww"
     hmac_secret: a_very_insecure_hmac_secret_for_local_dev
     issuer_private_key: |
       -----BEGIN PRIVATE KEY-----

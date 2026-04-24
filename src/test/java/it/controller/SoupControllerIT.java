@@ -16,7 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrlPattern;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ActiveProfiles("test")
@@ -44,23 +44,23 @@ class SoupControllerIT {
     }
 
     @Test
-    void getItems_withMissingAuthHeaders_redirectsToLogin() throws Exception {
+    void getItems_withMissingAuthHeaders_redirectsToOAuth2Login() throws Exception {
         mockMvc.perform(get("/api/cached/soupart")
                         .param("category", "art")
                         .param("offset", "0"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrlPattern("**/login"));
+                .andExpect(redirectedUrl("http://localhost/oauth2/authorization/authelia"));
     }
 
     @Test
-    void getItems_withWrongToken_redirectsToLogin() throws Exception {
+    void getItems_withWrongToken_redirectsToOAuth2Login() throws Exception {
         mockMvc.perform(get("/api/cached/soupart")
                         .param("category", "art")
                         .param("offset", "0")
                         .header("X-Caller-Id", "soupart")
                         .header("X-Auth-Token", "wrong"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrlPattern("**/login"));
+                .andExpect(redirectedUrl("http://localhost/oauth2/authorization/authelia"));
     }
 
     @Test
