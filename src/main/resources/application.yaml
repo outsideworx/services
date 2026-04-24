@@ -46,15 +46,14 @@ spring:
         provider:
           authelia:
             authorization-uri: https://oauth.outsideworx.net/api/oidc/authorization
-            jwk-set-uri: https://oauth.outsideworx.net/jwks.json
-            token-uri: https://oauth.outsideworx.net/api/oidc/token
-            user-info-uri: https://oauth.outsideworx.net/api/oidc/userinfo
+            jwk-set-uri: http://authelia/jwks.json
+            token-uri: http://authelia/api/oidc/token
+            user-info-uri: http://authelia/api/oidc/userinfo
             user-name-attribute: preferred_username
         registration:
           authelia:
             authorization-grant-type: authorization_code
             client-id: services
-            client-secret: services
             provider: authelia
             redirect-uri: "{baseUrl}/login/oauth2/code/authelia"
             scope: email,groups,openid,profile
