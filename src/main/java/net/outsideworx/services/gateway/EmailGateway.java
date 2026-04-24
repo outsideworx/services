@@ -1,4 +1,4 @@
-package net.outsideworx.services.service;
+package net.outsideworx.services.gateway;
 
 import com.mailersend.sdk.emails.Email;
 import com.mailersend.sdk.MailerSend;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
-public final class EmailService {
+public final class EmailGateway {
     @Value("${mailersend.sdk.token:#{null}}")
     private String token;
 

@@ -1,4 +1,4 @@
-package net.outsideworx.services.service;
+package net.outsideworx.services.gateway;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public final class GrafanaService {
+public final class GrafanaGateway {
     private final MeterRegistry registry;
 
     public void registerException(String type) {

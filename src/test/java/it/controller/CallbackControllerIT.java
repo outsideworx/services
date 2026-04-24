@@ -3,7 +3,7 @@ package it.controller;
 import net.outsideworx.services.SpringApplication;
 import net.outsideworx.services.model.CallbackEntity;
 import net.outsideworx.services.repository.CallbackRepository;
-import net.outsideworx.services.service.EmailService;
+import net.outsideworx.services.gateway.EmailGateway;
 import com.mailersend.sdk.exceptions.MailerSendException;
 import it.IntegrationTestBase;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +41,7 @@ class CallbackControllerIT {
     private final CallbackRepository callbackRepository;
 
     @MockitoBean
-    private EmailService emailService;
+    private EmailGateway emailGateway;
 
     private final MockMvc mockMvc;
 
@@ -105,12 +105,12 @@ class CallbackControllerIT {
                         .contentType("application/json")
                         .content(VALID_BODY));
 
-        verify(emailService).send(eq("come-in-and-find-out"), any(), any());
+        verify(emailGateway).send(eq("come-in-and-find-out"), any(), any());
     }
 
     @Test
     void postCallback_whenEmailFails_stillPersistsEntity() throws Exception {
-        doThrow(new MailerSendException("send failed")).when(emailService).send(any(), any(), any());
+        doThrow(new MailerSendException("send failed")).when(emailGateway).send(any(), any(), any());
 
         try {
             mockMvc.perform(post("/api/callback")

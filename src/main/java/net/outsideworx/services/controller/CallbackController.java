@@ -3,7 +3,7 @@ package net.outsideworx.services.controller;
 import net.outsideworx.services.model.Callback;
 import net.outsideworx.services.model.CallbackEntity;
 import net.outsideworx.services.repository.CallbackRepository;
-import net.outsideworx.services.service.EmailService;
+import net.outsideworx.services.gateway.EmailGateway;
 import com.mailersend.sdk.exceptions.MailerSendException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,13 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 final class CallbackController {
     private final CallbackRepository callbackRepository;
 
-    private final EmailService emailService;
+    private final EmailGateway emailGateway;
 
     @PostMapping("/api/callback")
     void callback(@RequestHeader("X-Caller-Id") String callerId, @RequestBody Callback callback) {
         log.info("Callback received for: [{}], with payload: [{}]", callerId, callback);
         try {
-            emailService.send(
+            emailGateway.send(
                     callerId,
                     "Someone is interested!",
                     String.format(

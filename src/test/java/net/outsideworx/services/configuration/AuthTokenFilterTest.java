@@ -1,7 +1,7 @@
 package net.outsideworx.services.configuration;
 
 import net.outsideworx.services.configuration.utils.FilterConditions;
-import net.outsideworx.services.service.GrafanaService;
+import net.outsideworx.services.gateway.GrafanaGateway;
 import jakarta.servlet.FilterChain;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,7 +25,7 @@ class AuthTokenFilterTest {
     private FilterConditions filterConditions;
 
     @Mock
-    private GrafanaService grafanaService;
+    private GrafanaGateway grafanaGateway;
 
     @Mock
     private FilterChain chain;
@@ -44,7 +44,7 @@ class AuthTokenFilterTest {
         authTokenFilter.doFilter(request, response, chain);
 
         verify(chain).doFilter(request, response);
-        verifyNoInteractions(grafanaService);
+        verifyNoInteractions(grafanaGateway);
     }
 
     @Test
@@ -58,7 +58,7 @@ class AuthTokenFilterTest {
         assertThatThrownBy(() -> authTokenFilter.doFilter(request, response, chain))
                 .isInstanceOf(BadCredentialsException.class)
                 .hasMessage("Invalid caller id or auth token.");
-        verify(grafanaService).registerException("bad_credentials");
+        verify(grafanaGateway).registerException("bad_credentials");
     }
 
     @Test

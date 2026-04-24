@@ -2,7 +2,7 @@ package net.outsideworx.services.controller.clients.peeps;
 
 import net.outsideworx.services.model.clients.peeps.PeepsEntity;
 import net.outsideworx.services.repository.clients.PeepsRepository;
-import net.outsideworx.services.service.GrafanaService;
+import net.outsideworx.services.gateway.GrafanaGateway;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -17,14 +17,14 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 final class PeepsApiController {
-    private final GrafanaService grafanaService;
+    private final GrafanaGateway grafanaGateway;
 
     private final PeepsRepository peepsRepository;
 
     @GetMapping("/api/gaiapeeps")
     List<PeepsEntity> getPeepsItems() {
         log.info("Incoming API request: gaiapeeps");
-        grafanaService.registerRequest("gaiapeeps", "all");
+        grafanaGateway.registerRequest("gaiapeeps", "all");
         List<PeepsEntity> peepsList = new ArrayList<>();
         peepsRepository.findAll().forEach(peepsList::add);
         return peepsList;
