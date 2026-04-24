@@ -10,6 +10,7 @@ identity_providers:
   oidc:
     clients:
       - authorization_policy: one_factor
+        consent_mode: implicit
         id: grafana
         redirect_uris:
           - https://grafana.localhost/login/generic_oauth
