@@ -57,7 +57,7 @@ spring:
             client-secret: services
             provider: authelia
             redirect-uri: "{baseUrl}/login/oauth2/code/authelia"
-            scope: openid,groups,profile,email
+            scope: email,groups,openid,profile
   servlet:
     multipart:
       max-file-size: 4MB

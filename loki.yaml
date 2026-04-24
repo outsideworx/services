@@ -1,11 +1,14 @@
 auth_enabled: false
-server:
-  http_listen_port: 80
 common:
   ring:
     kvstore:
       store: inmemory
   replication_factor: 1
+compactor:
+  retention_enabled: true
+  delete_request_store: filesystem
+limits_config:
+  retention_period: 365d
 schema_config:
   configs:
     - from: 2020-10-24
@@ -15,14 +18,11 @@ schema_config:
       index:
         prefix: index_
         period: 24h
+server:
+  http_listen_port: 80
 storage_config:
   tsdb_shipper:
     active_index_directory: /loki/index
     cache_location: /loki/index_cache
   filesystem:
     directory: /loki/chunks
-compactor:
-  retention_enabled: true
-  delete_request_store: filesystem
-limits_config:
-  retention_period: 365d

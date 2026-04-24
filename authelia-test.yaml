@@ -15,10 +15,10 @@ identity_providers:
         redirect_uris:
           - https://grafana.localhost/login/generic_oauth
         scopes:
-          - openid
-          - groups
-          - profile
           - email
+          - groups
+          - openid
+          - profile
         secret: "$pbkdf2-sha512$310000$NNaJy.5bp4jfw..YfyVUnA$9nnLuxwrkQIi6RzyS2LTy3TskY72u8cK4Yi15aZG18XkLHJDm44T4M5ebTjLBgYEtzqO97YNam6bE5SxYpP/PQ"
       - authorization_policy: one_factor
         consent_mode: implicit
@@ -26,10 +26,10 @@ identity_providers:
         redirect_uris:
           - http://localhost:8080/login/oauth2/code/authelia
         scopes:
-          - openid
-          - groups
-          - profile
           - email
+          - groups
+          - openid
+          - profile
         secret: "$pbkdf2-sha512$310000$qD2v/qVqphER2Y2QYa1asQ$INKnVdFBsNSMC9FjyYgwMaFdy6EpRGeMmUmLikGF9EVCZBUwvGBa6T1NOzUX7jdAXEhj3ZzqCDwCd81X0FQ4ww"
     hmac_secret: a_very_insecure_hmac_secret_for_local_dev
     issuer_private_key: |
