@@ -25,6 +25,11 @@ if [ "$1" == "--network" ]; then
     exit 0
 fi
 
+if [ "$1" == "--secrets" ]; then
+    openssl genrsa 4096 | docker secret create rsa_private_key -
+    exit 0
+fi
+
 if [ -n "$1" ]; then
     echo "Error: Unknown parameter: '$1'"
     exit 1

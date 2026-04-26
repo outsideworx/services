@@ -1,6 +1,9 @@
 global:
   scrape_interval: 1m
 scrape_configs:
+  - job_name: authelia
+    static_configs:
+      - targets: [ "authelia:81" ]
   - job_name: loki
     static_configs:
       - targets: [ "loki" ]
@@ -10,6 +13,10 @@ scrape_configs:
   - job_name: postgres-exporter
     static_configs:
       - targets: [ "postgres-exporter:81" ]
+  - job_name: services
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: [ "services:81" ]
   - job_name: sites
     static_configs:
       - targets: [
@@ -21,10 +28,6 @@ scrape_configs:
         "sites_soupart",
         "sites_soupkitchen"
       ]
-  - job_name: services
-    metrics_path: /actuator/prometheus
-    static_configs:
-      - targets: [ "services:81" ]
   - job_name: traefik
     static_configs:
       - targets: [ "traefik:81" ]

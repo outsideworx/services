@@ -1,7 +1,37 @@
 networks:
   outsideworx:
     external: true
+secrets:
+  rsa_private_key:
+    external: true
 services:
+  authelia:
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.authelia.entrypoints=websecure
+        - traefik.http.routers.authelia.rule=Host(`oauth.outsideworx.net`)
+        - traefik.http.routers.grafana.tls.certresolver=letsencrypt
+        - traefik.http.services.authelia.loadbalancer.server.port=80
+    image: authelia/authelia:4.37
+    environment:
+      AUTHELIA_HMAC_SECRET: $AUTHELIA_HMAC_SECRET
+      AUTHELIA_JWT_SECRET: $AUTHELIA_JWT_SECRET
+      AUTHELIA_SESSION_SECRET: $AUTHELIA_SESSION_SECRET
+      AUTHELIA_SMTP_PASSWORD: $AUTHELIA_SMTP_PASSWORD
+      AUTHELIA_SMTP_USERNAME: $AUTHELIA_SMTP_USERNAME
+      AUTHELIA_STORAGE_ENCRYPTION_KEY: $AUTHELIA_STORAGE_ENCRYPTION_KEY
+    networks:
+      - outsideworx
+    secrets:
+      - rsa_private_key
+    volumes:
+      - ./authelia.yaml:/config/configuration.yml
+      - ./authelia-users.yaml:/config/users.yaml
+      - ./logo.png:/config/assets/logo.png
   grafana:
     deploy:
       placement:
@@ -14,8 +44,9 @@ services:
         - traefik.http.routers.grafana.tls.certresolver=letsencrypt
         - traefik.http.services.grafana.loadbalancer.server.port=80
     environment:
-      GF_SECURITY_ADMIN_USER: $GF_SECURITY_ADMIN_USER
+      GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET: $GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET
       GF_SECURITY_ADMIN_PASSWORD: $GF_SECURITY_ADMIN_PASSWORD
+      GF_SECURITY_ADMIN_USER: $GF_SECURITY_ADMIN_USER
     image: grafana/grafana:12.3.0
     networks:
       - outsideworx
@@ -48,8 +79,8 @@ services:
         - traefik.http.routers.ntfy.tls.certresolver=letsencrypt
         - traefik.http.services.ntfy.loadbalancer.server.port=80
     environment:
-      NTFY_WEB_PUSH_PUBLIC_KEY: $NTFY_WEB_PUSH_PUBLIC_KEY
       NTFY_WEB_PUSH_PRIVATE_KEY: $NTFY_WEB_PUSH_PRIVATE_KEY
+      NTFY_WEB_PUSH_PUBLIC_KEY: $NTFY_WEB_PUSH_PUBLIC_KEY
     image: binwiederhier/ntfy:v2.16.0
     networks:
       - outsideworx
@@ -62,8 +93,8 @@ services:
         constraints:
           - node.role == manager
     environment:
-      POSTGRES_USER: $SPRING_DATASOURCE_USERNAME
       POSTGRES_PASSWORD: $SPRING_DATASOURCE_PASSWORD
+      POSTGRES_USER: $SPRING_DATASOURCE_USERNAME
     image: postgres:16.2
     networks:
       - outsideworx
@@ -114,8 +145,8 @@ services:
       APP_CLIENTS_PEEPS_TOKEN: $APP_CLIENTS_PEEPS_TOKEN
       APP_CLIENTS_SOUP_TOKEN: $APP_CLIENTS_SOUP_TOKEN
       MAILERSEND_SDK_TOKEN: $MAILERSEND_SDK_TOKEN
-      SPRING_DATASOURCE_USERNAME: $SPRING_DATASOURCE_USERNAME
       SPRING_DATASOURCE_PASSWORD: $SPRING_DATASOURCE_PASSWORD
+      SPRING_DATASOURCE_USERNAME: $SPRING_DATASOURCE_USERNAME
     image: ghcr.io/outsideworx/services:latest
     networks:
       - outsideworx
@@ -164,13 +195,25 @@ services:
       placement:
         constraints:
           - node.role == manager
+      labels:
+        - traefik.enable=true
+        - traefik.http.middlewares.authelia.forwardauth.address=http://authelia/api/verify?rd=https://oauth.outsideworx.net
+        - traefik.http.middlewares.authelia.forwardauth.authResponseHeaders=Remote-User,Remote-Groups,Remote-Name,Remote-Email
+        - traefik.http.middlewares.authelia.forwardauth.trustForwardHeader=true
+        - traefik.http.routers.ntfy.entrypoints=websecure
+        - traefik.http.routers.ntfy.middlewares=authelia
+        - traefik.http.routers.ntfy.rule=Host(`ntfy.outsideworx.net`)
+        - traefik.http.routers.ntfy.tls=true
+        - traefik.http.services.ntfy.loadbalancer.server.port=80
     environment:
-      DB_USERNAME: $SPRING_DATASOURCE_USERNAME
       DB_PASSWORD: $SPRING_DATASOURCE_PASSWORD
+      DB_USERNAME: $SPRING_DATASOURCE_USERNAME
       LOKI_PORT: 80
+      NTFY_DB_PATH: /etc/ntfy/data/user.db
     image: python:3.13-slim
     networks:
       - outsideworx
     volumes:
+      - /home/outsideworx/ntfy:/etc/ntfy/data
       - /home/outsideworx/utils:/utils
       - ./utils:/etc/utils

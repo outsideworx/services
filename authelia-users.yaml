@@ -1,0 +1,19 @@
+users:
+  admin:
+    displayname: Outside Worx
+    email: info@outsideworx.net
+    groups:
+      - admin
+    password: "$argon2id$v=19$m=65536,t=3,p=4$vsohcVgBJZirfHDQ1MNe+g$MzNRHnLemqSV74xDr/xe41I1rxQOCmGx9/cAyn56wcY"
+  info@come-in-and-find-out.ch:
+    displayname: CIAFO
+    email: info@come-in-and-find-out.ch
+    password: "$argon2id$v=19$m=65536,t=3,p=4$5ywtYPdw8Epo/AAxF8Jc2A$frHvixOVFGcbYdUjA4ftX+aVRJIMhhydE1dTLw4nx68"
+  info@gaiapeeps.com:
+    displayname: PEEPS
+    email: info@gaiapeeps.com
+    password: "$argon2id$v=19$m=65536,t=3,p=4$9y5I8INlJBt/ImR6TnDo2Q$evXB0y/SsfvkwrURhJg5MMQb7wIv0iguoWk1e8v8d6o"
+  info@soupart.net:
+    displayname: SOUP
+    email: info@soupart.net
+    password: "$argon2id$v=19$m=65536,t=3,p=4$DYkPxQbN2W/A0EqOph/QAA$f5vOufVMHTlqQ3dnczqROlwxm09MwqVWGpPrf8QhvW0"

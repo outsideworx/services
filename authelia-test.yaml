@@ -31,7 +31,7 @@ identity_providers:
           - openid
           - profile
         secret: "$pbkdf2-sha512$310000$qD2v/qVqphER2Y2QYa1asQ$INKnVdFBsNSMC9FjyYgwMaFdy6EpRGeMmUmLikGF9EVCZBUwvGBa6T1NOzUX7jdAXEhj3ZzqCDwCd81X0FQ4ww"
-    hmac_secret: a_very_insecure_hmac_secret_for_local_dev
+    hmac_secret: hmac_secret
     issuer_private_key: |
       -----BEGIN PRIVATE KEY-----
       MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDfGmGmXaFbYr1D
@@ -61,20 +61,20 @@ identity_providers:
       MKeP8Bi29XyM5nF6YSH0CtfQT+O75GimqWY/vmc+Y3BsMEkZBaeMDzwnOzfHSWI7
       4+wZCoL/6nhXjG5sPbt9lVI=
       -----END PRIVATE KEY-----
-jwt_secret: a_very_insecure_jwt_secret_for_local_dev
+jwt_secret: jwt_secret
 notifier:
   filesystem:
-    filename: /tmp/authelia-notifications.txt
+    filename: /tmp/authelia-notifier.txt
 server:
   asset_path: /config/assets
   port: 80
 session:
   domain: localhost
-  secret: a_very_insecure_session_secret_for_local_dev
+  secret: session_secret
 storage:
-  encryption_key: a_very_insecure_storage_key_for_local_dev_use
+  encryption_key: storage_encryption_key
   local:
-    path: /tmp/authelia.db
+    path: /tmp/authelia-storage.db
 telemetry:
   metrics:
     address: tcp://0.0.0.0:81
