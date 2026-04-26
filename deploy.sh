@@ -40,11 +40,14 @@ rm -rf "$DEST"
 mkdir -p "$DEST"
 cp -r "$SCRIPT_DIR/utils" "$DEST"
 cp "$SCRIPT_DIR/.env" \
+   "$SCRIPT_DIR/authelia.yaml" \
+   "$SCRIPT_DIR/authelia-users.yaml" \
    "$SCRIPT_DIR/compose.yaml" \
    "$SCRIPT_DIR/docker-stats.sh" \
    "$SCRIPT_DIR/docker-wipe.sh" \
    "$SCRIPT_DIR/grafana.ini" \
    "$SCRIPT_DIR/loki.yaml" \
+   "$SCRIPT_DIR/logo.png" \
    "$SCRIPT_DIR/ntfy.yaml" \
    "$SCRIPT_DIR/prometheus.yaml" \
    "$DEST"
