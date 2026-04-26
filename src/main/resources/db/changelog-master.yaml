@@ -8,8 +8,6 @@ databaseChangeLog:
   - include:
       file: db/changelog/000-create-callback.yaml
   - include:
-      file: db/changelog/000-create-users.yaml
-  - include:
       file: db/changelog/001-hash-trigger-ciafo.yaml
   - include:
       file: db/changelog/001-hash-trigger-soup.yaml
