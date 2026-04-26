@@ -5,6 +5,11 @@ DEST="/home/outsideworx/services"
 
 set -e
 
+if [ "$1" == "--authelia" ]; then
+    scp "$SCRIPT_DIR/authelia-users.yaml" outsideworx:/home/outsideworx/authelia-users.yaml
+    exit 0
+fi
+
 if [ "$1" == "--install" ]; then
     apt update
     apt install -y docker-compose-v2
@@ -41,7 +46,6 @@ mkdir -p "$DEST"
 cp -r "$SCRIPT_DIR/utils" "$DEST"
 cp "$SCRIPT_DIR/.env" \
    "$SCRIPT_DIR/authelia.yaml" \
-   "$SCRIPT_DIR/authelia-users.yaml" \
    "$SCRIPT_DIR/compose.yaml" \
    "$SCRIPT_DIR/docker-stats.sh" \
    "$SCRIPT_DIR/docker-wipe.sh" \
