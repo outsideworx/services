@@ -6,7 +6,7 @@ DEST="/home/outsideworx/services"
 set -e
 
 if [ "$1" == "--authelia" ]; then
-    scp "$SCRIPT_DIR/authelia-users.yaml" outsideworx:/home/outsideworx/authelia-users.yaml
+    cp "$SCRIPT_DIR/authelia-users.yaml" /home/outsideworx
     exit 0
 fi
 
