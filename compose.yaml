@@ -29,8 +29,8 @@ services:
     secrets:
       - rsa_private_key
     volumes:
-      - ./authelia.yaml:/config/configuration.yml
       - /home/outsideworx/authelia-users.yaml:/config/users.yaml
+      - ./authelia.yaml:/config/configuration.yml
       - ./logo.png:/config/assets/logo.png
   grafana:
     deploy:
