@@ -40,7 +40,7 @@ spring:
   liquibase:
     change-log: classpath:db/changelog-master.yaml
   logout:
-    url: https://oauth.outsideworx.net/logout
+    url: https://oauth.outsideworx.net/logout?rd=https://services.outsideworx.net
   security:
     oauth2:
       client:

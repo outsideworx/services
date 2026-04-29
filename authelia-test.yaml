@@ -5,7 +5,6 @@ authentication_backend:
     path: /config/users.yaml
   password_reset:
     disable: true
-default_redirection_url: http://localhost:8080
 identity_providers:
   oidc:
     clients:

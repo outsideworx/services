@@ -26,7 +26,7 @@ spring:
     username: postgres
     password:
   logout:
-    url: https://oauth.localhost/logout
+    url: https://oauth.localhost/logout?rd=http://localhost:8080
   security:
     oauth2:
       client:
