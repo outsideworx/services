@@ -8,6 +8,7 @@ echo "Sleep, to make sure everything stopped."
 sleep 10
 
 docker rmi -f $(docker images -qa)
+docker secret rm $(docker secret ls -q)
 docker system prune -af
 
 rm -rf /home/outsideworx/services

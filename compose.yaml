@@ -14,23 +14,22 @@ services:
         - traefik.enable=true
         - traefik.http.routers.authelia.entrypoints=websecure
         - traefik.http.routers.authelia.rule=Host(`oauth.outsideworx.net`)
-        - traefik.http.routers.grafana.tls.certresolver=letsencrypt
+        - traefik.http.routers.authelia.tls.certresolver=letsencrypt
         - traefik.http.services.authelia.loadbalancer.server.port=80
-    image: authelia/authelia:4.37
     environment:
-      AUTHELIA_HMAC_SECRET: $AUTHELIA_HMAC_SECRET
+      AUTHELIA_IDENTITY_PROVIDERS_OIDC_HMAC_SECRET: $AUTHELIA_IDENTITY_PROVIDERS_OIDC_HMAC_SECRET
+      AUTHELIA_IDENTITY_PROVIDERS_OIDC_ISSUER_PRIVATE_KEY_FILE: /run/secrets/rsa_private_key
       AUTHELIA_JWT_SECRET: $AUTHELIA_JWT_SECRET
       AUTHELIA_SESSION_SECRET: $AUTHELIA_SESSION_SECRET
-      AUTHELIA_SMTP_PASSWORD: $AUTHELIA_SMTP_PASSWORD
-      AUTHELIA_SMTP_USERNAME: $AUTHELIA_SMTP_USERNAME
       AUTHELIA_STORAGE_ENCRYPTION_KEY: $AUTHELIA_STORAGE_ENCRYPTION_KEY
+    image: authelia/authelia:4.37
     networks:
       - outsideworx
     secrets:
       - rsa_private_key
     volumes:
-      - /home/outsideworx/authelia-users.yaml:/config/users.yaml
       - ./authelia.yaml:/config/configuration.yml
+      - ./authelia-users.yaml:/config/users.yaml
       - ./logo.png:/config/assets/logo.png
   grafana:
     deploy:
@@ -72,12 +71,6 @@ services:
       placement:
         constraints:
           - node.role == manager
-      labels:
-        - traefik.enable=true
-        - traefik.http.routers.ntfy.entrypoints=websecure
-        - traefik.http.routers.ntfy.rule=Host(`ntfy.outsideworx.net`)
-        - traefik.http.routers.ntfy.tls.certresolver=letsencrypt
-        - traefik.http.services.ntfy.loadbalancer.server.port=80
     environment:
       NTFY_WEB_PUSH_PRIVATE_KEY: $NTFY_WEB_PUSH_PRIVATE_KEY
       NTFY_WEB_PUSH_PUBLIC_KEY: $NTFY_WEB_PUSH_PUBLIC_KEY

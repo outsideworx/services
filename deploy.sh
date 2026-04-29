@@ -5,11 +5,6 @@ DEST="/home/outsideworx/services"
 
 set -e
 
-if [ "$1" == "--authelia" ]; then
-    cp "$SCRIPT_DIR/authelia-users.yaml" /home/outsideworx
-    exit 0
-fi
-
 if [ "$1" == "--install" ]; then
     apt update
     apt install -y docker-compose-v2
@@ -17,15 +12,15 @@ if [ "$1" == "--install" ]; then
 fi
 
 if [ "$1" == "--network" ]; then
-    if [ -z "$2" ]; then
-        echo "Error: an IP address as 2nd parameter is required"
-        exit 1
+    if [ -n "$2" ]; then
+        # Required open ports:
+        # 2377/tcp      - communication with and between manager nodes
+        # 7946/tcp+udp  - overlay network node discovery
+        # 4789/udp      - overlay network traffic (configurable)
+        docker swarm init --advertise-addr "$2"
+    else
+        echo "Warning: no IP address provided, skipping swarm init"
     fi
-    # Required open ports:
-    # 2377/tcp      - communication with and between manager nodes
-    # 7946/tcp+udp  - overlay network node discovery
-    # 4789/udp      - overlay network traffic (configurable)
-    docker swarm init --advertise-addr "$2"
     docker network create -d overlay --attachable outsideworx
     exit 0
 fi
@@ -45,6 +40,7 @@ mkdir -p "$DEST"
 cp -r "$SCRIPT_DIR/utils" "$DEST"
 cp "$SCRIPT_DIR/.env" \
    "$SCRIPT_DIR/authelia.yaml" \
+   "$SCRIPT_DIR/authelia-users.yaml" \
    "$SCRIPT_DIR/compose.yaml" \
    "$SCRIPT_DIR/docker-stats.sh" \
    "$SCRIPT_DIR/docker-wipe.sh" \
