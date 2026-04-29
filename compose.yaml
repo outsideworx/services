@@ -71,6 +71,12 @@ services:
       placement:
         constraints:
           - node.role == manager
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.ntfy.entrypoints=websecure
+        - traefik.http.routers.ntfy.rule=Host(`ntfy.outsideworx.net`)
+        - traefik.http.routers.ntfy.tls.certresolver=letsencrypt
+        - traefik.http.services.ntfy.loadbalancer.server.port=80
     environment:
       NTFY_WEB_PUSH_PRIVATE_KEY: $NTFY_WEB_PUSH_PRIVATE_KEY
       NTFY_WEB_PUSH_PUBLIC_KEY: $NTFY_WEB_PUSH_PUBLIC_KEY
@@ -189,16 +195,6 @@ services:
       placement:
         constraints:
           - node.role == manager
-      labels:
-        - traefik.enable=true
-        - traefik.http.middlewares.authelia.forwardauth.address=http://authelia/api/verify?rd=https://oauth.outsideworx.net
-        - traefik.http.middlewares.authelia.forwardauth.authResponseHeaders=Remote-User,Remote-Groups,Remote-Name,Remote-Email
-        - traefik.http.middlewares.authelia.forwardauth.trustForwardHeader=true
-        - traefik.http.routers.ntfy.entrypoints=websecure
-        - traefik.http.routers.ntfy.middlewares=authelia
-        - traefik.http.routers.ntfy.rule=Host(`ntfy.outsideworx.net`)
-        - traefik.http.routers.ntfy.tls=true
-        - traefik.http.services.ntfy.loadbalancer.server.port=80
     environment:
       DB_PASSWORD: $SPRING_DATASOURCE_PASSWORD
       DB_USERNAME: $SPRING_DATASOURCE_USERNAME
