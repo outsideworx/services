@@ -168,7 +168,7 @@ services:
       placement:
         constraints:
           - node.role == manager
-    image: traefik:v3.6.12
+    image: traefik:v3.6.14
     networks:
       - outsideworx
     ports:
