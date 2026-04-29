@@ -24,6 +24,7 @@ management:
   server:
     port: 81
 server:
+  forward-headers-strategy: native
   port: 80
   tomcat:
     max-part-count: 50
