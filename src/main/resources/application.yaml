@@ -16,6 +16,10 @@ app:
       url: "http://loki"
     ntfy:
       url: "https://ntfy.outsideworx.net"
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.web: DEBUG
 management:
   endpoints:
     web:
