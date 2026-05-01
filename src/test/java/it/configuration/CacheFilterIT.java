@@ -30,7 +30,7 @@ class CacheFilterIT {
                         .param("offset", "0")
                         .header("X-Caller-Id", "soupart")
                         .header("X-Auth-Token", "test"))
-                .andExpect(header().exists("Cache-Control"));
+                .andExpect(header().string("Cache-Control", "public, max-age=86400"));
     }
 
     @Test

@@ -1,6 +1,7 @@
 package net.outsideworx.services.configuration;
 
 import jakarta.servlet.FilterChain;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,6 +21,11 @@ class LogbackFilterTest {
 
     @InjectMocks
     private LogbackFilter logbackFilter;
+
+    @AfterEach
+    void tearDown() {
+        MDC.clear();
+    }
 
     @Test
     void doFilter_whenRequestIdHeaderPresent_usesThatRequestId() throws Exception {
