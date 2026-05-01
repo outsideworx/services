@@ -183,10 +183,4 @@
             </plugin>
         </plugins>
     </build>
-    <distributionManagement>
-        <repository>
-            <id>github</id>
-            <url>https://maven.pkg.github.com/outsideworx/services</url>
-        </repository>
-    </distributionManagement>
 </project>
