@@ -12,7 +12,10 @@ scrape_configs:
       - targets: [ "ntfy:81" ]
   - job_name: postgres-exporter
     static_configs:
-      - targets: [ "postgres-exporter:81" ]
+      - targets: [ "postgres-exporter" ]
+  - job_name: promtail
+    static_configs:
+      - targets: [ "promtail" ]
   - job_name: services
     metrics_path: /actuator/prometheus
     static_configs:

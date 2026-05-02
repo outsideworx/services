@@ -35,6 +35,7 @@ notifier:
     filename: /tmp/authelia-notifier.txt
 server:
   asset_path: /config/assets
+  disable_healthcheck: true
   port: 80
 session:
   domain: outsideworx.net

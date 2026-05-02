@@ -78,12 +78,6 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <artifactId>loki-logback-appender</artifactId>
-            <groupId>com.github.loki4j</groupId>
-            <scope>runtime</scope>
-            <version>2.0.3</version>
-        </dependency>
-        <dependency>
             <artifactId>gson</artifactId>
             <groupId>com.google.code.gson</groupId>
             <scope>runtime</scope>
@@ -110,12 +104,6 @@
             <groupId>io.micrometer</groupId>
             <scope>runtime</scope>
         </dependency>
-        <!--  Image processor  -->
-        <dependency>
-            <artifactId>thumbnailator</artifactId>
-            <groupId>net.coobird</groupId>
-            <version>0.4.21</version>
-        </dependency>
         <!--  Utilities  -->
         <dependency>
             <artifactId>opencsv</artifactId>
@@ -129,6 +117,11 @@
                     <groupId>org.apache.commons</groupId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <artifactId>thumbnailator</artifactId>
+            <groupId>net.coobird</groupId>
+            <version>0.4.21</version>
         </dependency>
         <dependency>
             <artifactId>liquibase-core</artifactId>

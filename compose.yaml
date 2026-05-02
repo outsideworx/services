@@ -101,7 +101,7 @@ services:
       - /home/outsideworx/data:/var/lib/postgresql/data
   postgres-exporter:
     command:
-      - --web.listen-address=:81
+      - --web.listen-address=:80
     deploy:
       placement:
         constraints:
@@ -115,7 +115,6 @@ services:
       - outsideworx
   prometheus:
     command:
-      - --config.file=/etc/prometheus/prometheus.yml
       - --storage.tsdb.retention.time=365d
     deploy:
       placement:
@@ -128,6 +127,16 @@ services:
     volumes:
       - /home/outsideworx/prometheus:/prometheus
       - ./prometheus.yaml:/etc/prometheus/prometheus.yml
+  promtail:
+    deploy:
+      mode: global
+    image: grafana/promtail:3.6.4
+    networks:
+      - outsideworx
+    volumes:
+      - /home/outsideworx/promtail:/promtail
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./promtail.yaml:/etc/promtail/config.yml
   services:
     deploy:
       placement:
@@ -198,7 +207,6 @@ services:
     environment:
       DB_PASSWORD: $SPRING_DATASOURCE_PASSWORD
       DB_USERNAME: $SPRING_DATASOURCE_USERNAME
-      LOKI_PORT: 80
       NTFY_DB_PATH: /etc/ntfy/data/user.db
     image: python:3.13-slim
     networks:

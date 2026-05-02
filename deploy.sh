@@ -49,6 +49,7 @@ cp "$SCRIPT_DIR/.env" \
    "$SCRIPT_DIR/logo.png" \
    "$SCRIPT_DIR/ntfy.yaml" \
    "$SCRIPT_DIR/prometheus.yaml" \
+   "$SCRIPT_DIR/promtail.yaml" \
    "$DEST"
 
 cd "$DEST"
