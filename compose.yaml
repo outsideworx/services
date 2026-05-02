@@ -115,6 +115,7 @@ services:
       - outsideworx
   prometheus:
     command:
+      - --config.file=/etc/prometheus/prometheus.yml
       - --storage.tsdb.retention.time=365d
     deploy:
       placement:
