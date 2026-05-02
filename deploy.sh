@@ -37,6 +37,14 @@ fi
 
 rm -rf "$DEST"
 mkdir -p "$DEST"
+mkdir -p /home/outsideworx/data
+mkdir -p /home/outsideworx/grafana
+mkdir -p /home/outsideworx/letsencrypt
+mkdir -p /home/outsideworx/loki
+mkdir -p /home/outsideworx/ntfy
+mkdir -p /home/outsideworx/prometheus
+mkdir -p /home/outsideworx/promtail
+mkdir -p /home/outsideworx/utils
 cp -r "$SCRIPT_DIR/utils" "$DEST"
 cp "$SCRIPT_DIR/.env" \
    "$SCRIPT_DIR/authelia.yaml" \
