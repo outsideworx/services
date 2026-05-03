@@ -1,4 +1,4 @@
 <configuration>
-    <property name="CONSOLE_LOG_PATTERN" value="%logger{36} --- requestId=%X{requestId:-unknown}: %msg%n"/>
+    <property name="CONSOLE_LOG_PATTERN" value="%level %logger{36} --- requestId=%X{requestId:-unknown}: %msg%n"/>
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
 </configuration>
