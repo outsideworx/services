@@ -24,7 +24,7 @@ scrape_configs:
           replace: ''
       - replace:
           expression: ( {2,})
-          replace: ''
+          replace: ' '
       - replace:
           expression: ^( )
           replace: ''
