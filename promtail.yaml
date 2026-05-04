@@ -15,6 +15,9 @@ scrape_configs:
           expression: ^(?P<level>TRACE|DEBUG|INFO|WARN|WARNING|ERR|ERROR)
       - labels:
           level:
+      - replace:
+          expression: ^(TRACE|DEBUG|INFO|WARN|WARNING|ERR|ERROR)
+          replace: ''
     relabel_configs:
       - source_labels: [__meta_docker_container_label_com_docker_swarm_service_name]
         regex: (.+)_.+
