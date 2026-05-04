@@ -9,7 +9,7 @@ scrape_configs:
         refresh_interval: 1m
     pipeline_stages:
       - regex:
-          expression: (?P<level>debug|DEBUG|info|INFO|warn|WARN|warning|WARNING|err|ERR|error|ERROR)
+          expression: (?P<level>debug|DEBUG|info|INFO|warning|WARNING|warn|WARN|error|ERROR|err|ERR)
       - labels:
           level:
       - replace:
@@ -22,7 +22,7 @@ scrape_configs:
           expression: (\d{4}[-/]\d{2}[-/]\d{2}[T ]\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2})?( UTC)?)
           replace: ''
       - replace:
-          expression: (DEBUG|INFO|WARN|WARNING|ERR|ERROR)
+          expression: (DEBUG|INFO|WARNING|WARN|ERROR|ERR)
           replace: ''
       - replace:
           expression: ( {2,})
