@@ -9,7 +9,7 @@ scrape_configs:
         refresh_interval: 1m
     pipeline_stages:
       - replace:
-          expression: '^(\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2})?\s+)'
+          expression: '^\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2})?\s+(UTC\s+)?'
           replace: ''
       - regex:
           expression: '^(?P<level>TRACE|DEBUG|INFO|WARN|WARNING|ERR|ERROR)'
