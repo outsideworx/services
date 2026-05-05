@@ -5,3 +5,15 @@ users:
     groups:
       - admin
     password: "$argon2id$v=19$m=65536,t=3,p=4$p5BkbYcINY8eh35TuGwEGQ$OeCrmEWUDsJn5w6xjgR2/+ituM9t1nyfgsAXzRiTmb4"
+  info@come-in-and-find-out.ch:
+    displayname: CIAFO
+    email: info@come-in-and-find-out.ch
+    password: "$argon2id$v=19$m=65536,t=3,p=4$vSWXSYTyISnsOUqnNw6PQA$FvOvwV2ASM4Ii5ax2pt+lMAY+01DpZEtX+50IjPFhBw"
+  info@gaiapeeps.com:
+    displayname: PEEPS
+    email: info@gaiapeeps.com
+    password: "$argon2id$v=19$m=65536,t=3,p=4$vSWXSYTyISnsOUqnNw6PQA$FvOvwV2ASM4Ii5ax2pt+lMAY+01DpZEtX+50IjPFhBw"
+  info@soupart.net:
+    displayname: SOUP
+    email: info@soupart.net
+    password: "$argon2id$v=19$m=65536,t=3,p=4$vSWXSYTyISnsOUqnNw6PQA$FvOvwV2ASM4Ii5ax2pt+lMAY+01DpZEtX+50IjPFhBw"
