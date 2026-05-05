@@ -14,6 +14,11 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
+                <artifactId>java-sdk</artifactId>
+                <groupId>com.mailersend</groupId>
+                <version>1.4.1</version>
+            </dependency>
+            <dependency>
                 <artifactId>nimbus-jose-jwt</artifactId>
                 <groupId>com.nimbusds</groupId>
                 <version>9.37.4</version>
@@ -23,6 +28,11 @@
                 <groupId>com.opencsv</groupId>
                 <!--  Should match the version required by liquibase-core  -->
                 <version>5.9</version>
+            </dependency>
+            <dependency>
+                <artifactId>thumbnailator</artifactId>
+                <groupId>net.coobird</groupId>
+                <version>0.4.21</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -100,7 +110,6 @@
         <dependency>
             <artifactId>java-sdk</artifactId>
             <groupId>com.mailersend</groupId>
-            <version>1.4.1</version>
         </dependency>
         <dependency>
             <artifactId>postgresql</artifactId>
@@ -128,7 +137,6 @@
         <dependency>
             <artifactId>thumbnailator</artifactId>
             <groupId>net.coobird</groupId>
-            <version>0.4.21</version>
         </dependency>
         <dependency>
             <artifactId>liquibase-core</artifactId>
