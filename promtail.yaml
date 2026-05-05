@@ -12,6 +12,11 @@ scrape_configs:
           expression: (?P<level>debug|DEBUG|info|INFO|warning|WARNING|warn|WARN|error|ERROR|err|ERR)
       - labels:
           level:
+      - template:
+          source: level
+          template: '{{ if or (eq .Value "ERR") (eq .Value "err") }}ERROR{{ else }}{{ .Value }}{{ end }}'
+      - labels:
+          level:
       - replace:
           expression: ((time|ts)=[^ ]+)
           replace: ''
@@ -25,7 +30,7 @@ scrape_configs:
           expression: (DEBUG|INFO|WARNING|WARN|ERROR|ERR)
           replace: ''
       - replace:
-          expression: ( {2,})
+          expression: (  +)
           replace: ' '
       - replace:
           expression: ^( )
