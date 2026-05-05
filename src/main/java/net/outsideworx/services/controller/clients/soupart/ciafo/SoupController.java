@@ -28,7 +28,7 @@ class SoupController implements ModelVisitor {
 
     @CacheEvict(value = "soupItems", allEntries = true)
     @PostMapping("/soupart")
-    public String submit(@RequestParam String category, @RequestParam Map<String, String> params, @RequestParam Map<String, MultipartFile> files) {
+    String submit(@RequestParam String category, @RequestParam Map<String, String> params, @RequestParam Map<String, MultipartFile> files) {
         log.info("Upload processor starts: soupart");
         List<SoupEntity> items = soupConverter.processItems(category, params, files);
         soupRepository.saveAll(soupConverter.filterItemsToInsert(items));

@@ -12,10 +12,10 @@ app:
   services:
     grafana:
       url: "https://grafana.localhost"
-    loki:
-      url: "http://localhost:3100"
     ntfy:
       url: "https://ntfy.localhost"
+    oauth:
+      url: "https://oauth.localhost"
 server:
   port: 8080
 spring:

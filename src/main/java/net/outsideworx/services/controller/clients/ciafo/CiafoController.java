@@ -29,7 +29,7 @@ class CiafoController implements ModelVisitor {
 
     @CacheEvict(value = "ciafoItems", allEntries = true)
     @PostMapping("/come-in-and-find-out")
-    public String submit(@RequestParam String category, @RequestParam Map<String, String> params, @RequestParam Map<String, MultipartFile> files) {
+    String submit(@RequestParam String category, @RequestParam Map<String, String> params, @RequestParam Map<String, MultipartFile> files) {
         log.info("Upload processor starts: come-in-and-find-out");
         List<CiafoEntity> items = ciafoConverter.processItems(category, params, files);
         ciafoRepository.saveAll(ciafoConverter.filterItemsToInsert(items));

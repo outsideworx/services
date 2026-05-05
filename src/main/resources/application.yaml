@@ -14,6 +14,8 @@ app:
       url: "https://grafana.outsideworx.net"
     ntfy:
       url: "https://ntfy.outsideworx.net"
+    oauth:
+      url: "https://oauth.outsideworx.net"
 management:
   endpoints:
     web:

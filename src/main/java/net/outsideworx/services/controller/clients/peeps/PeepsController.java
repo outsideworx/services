@@ -23,7 +23,7 @@ class PeepsController implements ModelVisitor {
     private final PeepsRepository peepsRepository;
 
     @PostMapping("/gaiapeeps")
-    public String submit(@RequestParam Map<String, String> params) {
+    String submit(@RequestParam Map<String, String> params) {
         log.info("Upload processor starts: gaiapeeps");
         List<PeepsEntity> items = peepsConverter.processItems(params);
         peepsRepository.saveAll(items);
