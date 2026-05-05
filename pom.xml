@@ -9,8 +9,23 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.13</version>
+        <version>3.5.14</version>
     </parent>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <artifactId>nimbus-jose-jwt</artifactId>
+                <groupId>com.nimbusds</groupId>
+                <version>9.37.4</version>
+            </dependency>
+            <dependency>
+                <artifactId>opencsv</artifactId>
+                <groupId>com.opencsv</groupId>
+                <!--  Should match the version required by liquibase-core  -->
+                <version>5.9</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <properties>
         <java.version>25</java.version>
     </properties>
@@ -31,12 +46,6 @@
         <dependency>
             <artifactId>spring-boot-starter-oauth2-client</artifactId>
             <groupId>org.springframework.boot</groupId>
-            <exclusions>
-                <exclusion>
-                    <artifactId>nimbus-jose-jwt</artifactId>
-                    <groupId>com.nimbusds</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <artifactId>spring-boot-starter-security</artifactId>
@@ -109,8 +118,6 @@
             <artifactId>opencsv</artifactId>
             <groupId>com.opencsv</groupId>
             <scope>runtime</scope>
-            <!--  Should match the version required by liquibase-core  -->
-            <version>5.9</version>
             <exclusions>
                 <exclusion>
                     <artifactId>commons-text</artifactId>
