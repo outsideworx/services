@@ -170,6 +170,7 @@ services:
       - --entrypoints.web.address=:80
       - --entrypoints.web.http.redirections.entrypoint.to=websecure
       - --entrypoints.websecure.address=:443
+      - --log.noColor=true
       - --metrics.prometheus=true
       - --providers.swarm=true
       - --providers.swarm.endpoint=unix:///var/run/docker.sock

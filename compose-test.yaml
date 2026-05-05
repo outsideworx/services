@@ -77,6 +77,7 @@ services:
       - --entrypoints.web.address=:80
       - --entrypoints.web.http.redirections.entrypoint.to=websecure
       - --entrypoints.websecure.address=:443
+      - --log.noColor=true
       - --metrics.prometheus=true
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
