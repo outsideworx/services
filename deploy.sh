@@ -50,8 +50,6 @@ cp "$SCRIPT_DIR/.env" \
    "$SCRIPT_DIR/authelia.yaml" \
    "$SCRIPT_DIR/authelia-users.yaml" \
    "$SCRIPT_DIR/compose.yaml" \
-   "$SCRIPT_DIR/docker-stats.sh" \
-   "$SCRIPT_DIR/docker-wipe.sh" \
    "$SCRIPT_DIR/grafana.ini" \
    "$SCRIPT_DIR/loki.yaml" \
    "$SCRIPT_DIR/logo.png" \
@@ -62,5 +60,6 @@ cp "$SCRIPT_DIR/.env" \
 
 cd "$DEST"
 set -a; source .env; set +a
+docker compose pull
 docker stack deploy -c compose.yaml services --detach=false --resolve-image=always
 docker stack services services --format '{{.Name}}' | xargs -I{} docker service update --force {}

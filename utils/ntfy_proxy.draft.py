@@ -6,7 +6,7 @@ import time
 from aiohttp import web, ClientSession, WSMsgType
 from urllib.parse import urlencode, urlparse, parse_qs, urlunparse
 
-from common.logging_config import setup_logging
+from commons.logging_config import setup_logging
 
 setup_logging("ntfy-proxy")
 logging.getLogger("aiohttp.access").setLevel(logging.WARNING)

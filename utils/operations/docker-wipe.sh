@@ -1,3 +1,5 @@
+#!/bin/bash
+
 read -p "Start? (y/n) " ans
 [[ $ans =~ ^[Yy]$ ]] || { echo "Aborted."; return; }
 

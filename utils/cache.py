@@ -6,7 +6,7 @@ import psycopg2.errors
 import time
 from datetime import datetime
 
-from common.logging_config import setup_logging
+from commons.logging_config import setup_logging
 
 setup_logging("cache")
 
