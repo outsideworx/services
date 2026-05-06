@@ -1,7 +1,7 @@
 package net.outsideworx.services.configuration;
 
 import net.outsideworx.services.configuration.utils.FilterConditions;
-import net.outsideworx.services.gateway.GrafanaGateway;
+import net.outsideworx.services.gateways.GrafanaGateway;
 import jakarta.servlet.FilterChain;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

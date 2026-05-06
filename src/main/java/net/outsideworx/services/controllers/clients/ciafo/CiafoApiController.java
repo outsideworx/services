@@ -1,0 +1,38 @@
+package net.outsideworx.services.controllers.clients.ciafo;
+
+import net.outsideworx.services.models.clients.ciafo.mapping.CiafoPreview;
+import net.outsideworx.services.models.clients.ciafo.mapping.CiafoPayload;
+import net.outsideworx.services.repositories.clients.CiafoRepository;
+import net.outsideworx.services.gateways.GrafanaGateway;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
+@CrossOrigin("${app.clients.ciafo.origin}")
+@RestController
+@RequiredArgsConstructor
+@Slf4j
+final class CiafoApiController {
+    private final CiafoRepository ciafoRepository;
+
+    private final GrafanaGateway grafanaGateway;
+
+    @GetMapping("/api/come-in-and-find-out")
+    List<CiafoPreview> getCiafoPreviews(@RequestParam String category, @RequestParam int offset) {
+        log.info("Incoming API request for category: [{}], with offset: [{}]", category, offset);
+        grafanaGateway.registerRequest("come-in-and-find-out", category);
+        return ciafoRepository.getPreviews(category, offset);
+    }
+
+    @GetMapping("/api/cached/come-in-and-find-out")
+    CiafoPayload getCiafoPayload(@RequestParam Long id) {
+        log.info("Incoming API request for ID: [{}]", id);
+        grafanaGateway.registerRequest("come-in-and-find-out", "details");
+        return ciafoRepository.get(id);
+    }
+}
