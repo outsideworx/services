@@ -1,3 +1,6 @@
+configs:
+  promtail:
+    file: ./promtail.yaml
 networks:
   outsideworx:
     external: true
@@ -129,15 +132,17 @@ services:
       - /home/outsideworx/prometheus:/prometheus
       - ./prometheus.yaml:/etc/prometheus/prometheus.yml
   promtail:
+    configs:
+      - source: promtail
+        target: /etc/promtail/config.yml
     deploy:
       mode: global
     image: grafana/promtail:3.6.4
     networks:
       - outsideworx
     volumes:
-      - /home/outsideworx/promtail:/promtail
+      - promtail:/promtail
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./promtail.yaml:/etc/promtail/config.yml
   services:
     deploy:
       placement:
@@ -217,3 +222,5 @@ services:
       - /home/outsideworx/ntfy:/etc/ntfy/data
       - /home/outsideworx/utils:/utils
       - ./utils:/etc/utils
+volumes:
+  promtail:
