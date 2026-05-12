@@ -13,7 +13,7 @@ setup_logging("cache")
 DB_NAME = os.environ["DB_USERNAME"]
 DB_PASS = os.environ["DB_PASSWORD"]
 DB_USER = os.environ["DB_USERNAME"]
-DB_HOST = "postgres"
+DB_HOST = "services_postgres"
 DB_PORT = "5432"
 INTERVAL = 60
 OUTPUT_DIR = "/utils/cache"

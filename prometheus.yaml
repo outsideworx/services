@@ -3,23 +3,23 @@ global:
 scrape_configs:
   - job_name: authelia
     static_configs:
-      - targets: [ "authelia:81" ]
+      - targets: [ "services_authelia:81" ]
   - job_name: loki
     static_configs:
-      - targets: [ "loki" ]
+      - targets: [ "services_loki" ]
   - job_name: ntfy
     static_configs:
-      - targets: [ "ntfy:81" ]
+      - targets: [ "services_ntfy:81" ]
   - job_name: postgres-exporter
     static_configs:
-      - targets: [ "postgres-exporter" ]
+      - targets: [ "services_postgres-exporter" ]
   - job_name: promtail
     static_configs:
-      - targets: [ "promtail" ]
+      - targets: [ "services_promtail" ]
   - job_name: services
     metrics_path: /actuator/prometheus
     static_configs:
-      - targets: [ "services:81" ]
+      - targets: [ "services_services:81" ]
   - job_name: sites
     static_configs:
       - targets: [
@@ -33,4 +33,4 @@ scrape_configs:
       ]
   - job_name: traefik
     static_configs:
-      - targets: [ "traefik:81" ]
+      - targets: [ "services_traefik:81" ]
