@@ -1,6 +1,8 @@
 services:
   authelia:
     container_name: authelia
+    healthcheck:
+      disable: true
     image: authelia/authelia:4.37
     labels:
       - traefik.enable=true
