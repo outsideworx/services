@@ -56,7 +56,9 @@ services:
       AUTHELIA_STORAGE_ENCRYPTION_KEY: $AUTHELIA_STORAGE_ENCRYPTION_KEY
     image: authelia/authelia:4.37
     networks:
-      - outsideworx
+      outsideworx:
+        aliases:
+          - services-authelia
     secrets:
       - rsa_private_key
   grafana:
@@ -79,7 +81,9 @@ services:
       GF_SECURITY_ADMIN_USER: $GF_SECURITY_ADMIN_USER
     image: grafana/grafana:12.3.0
     networks:
-      - outsideworx
+      outsideworx:
+        aliases:
+          - services-grafana
     user: root
     volumes:
       - grafana:/var/lib/grafana
@@ -93,7 +97,9 @@ services:
           - node.role == manager
     image: grafana/loki:3.6.4
     networks:
-      - outsideworx
+      outsideworx:
+        aliases:
+          - services-loki
     user: root
     volumes:
       - loki:/loki
@@ -117,7 +123,9 @@ services:
       NTFY_WEB_PUSH_PUBLIC_KEY: $NTFY_WEB_PUSH_PUBLIC_KEY
     image: binwiederhier/ntfy:v2.16.0
     networks:
-      - outsideworx
+      outsideworx:
+        aliases:
+          - services-ntfy
     volumes:
       - ntfy:/etc/ntfy/data
   postgres:
@@ -130,7 +138,9 @@ services:
       POSTGRES_USER: $SPRING_DATASOURCE_USERNAME
     image: postgres:16.2
     networks:
-      - outsideworx
+      outsideworx:
+        aliases:
+          - services-postgres
     volumes:
       - postgres:/var/lib/postgresql/data
   postgres-exporter:
@@ -142,11 +152,13 @@ services:
           - node.role == manager
     environment:
       DATA_SOURCE_PASS: $SPRING_DATASOURCE_PASSWORD
-      DATA_SOURCE_URI: services_postgres:5432/?sslmode=disable
+      DATA_SOURCE_URI: services-postgres:5432/?sslmode=disable
       DATA_SOURCE_USER: $SPRING_DATASOURCE_USERNAME
     image: quay.io/prometheuscommunity/postgres-exporter:v0.18.1
     networks:
-      - outsideworx
+      outsideworx:
+        aliases:
+          - services-postgres-exporter
   prometheus:
     command:
       - --config.file=/etc/prometheus/prometheus.yml
@@ -160,7 +172,9 @@ services:
           - node.role == manager
     image: prom/prometheus:v3.9.1
     networks:
-      - outsideworx
+      outsideworx:
+        aliases:
+          - services-prometheus
     user: root
     volumes:
       - prometheus:/prometheus
@@ -172,7 +186,9 @@ services:
       mode: global
     image: grafana/promtail:3.6.4
     networks:
-      - outsideworx
+      outsideworx:
+        aliases:
+          - services-promtail
     volumes:
       - promtail:/promtail
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -197,7 +213,9 @@ services:
       SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_AUTHELIA_CLIENT_SECRET: $SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_AUTHELIA_CLIENT_SECRET
     image: ghcr.io/outsideworx/services:latest
     networks:
-      - outsideworx
+      outsideworx:
+        aliases:
+          - services-services
   traefik:
     command:
       - --certificatesresolvers.letsencrypt.acme.httpchallenge=true
@@ -219,7 +237,9 @@ services:
           - node.role == manager
     image: traefik:v3.6.14
     networks:
-      - outsideworx
+      outsideworx:
+        aliases:
+          - services-traefik
     ports:
       - target: 80
         published: 80
@@ -250,7 +270,9 @@ services:
       NTFY_DB_PATH: /etc/ntfy/data/user.db
     image: python:3.13-slim
     networks:
-      - outsideworx
+      outsideworx:
+        aliases:
+          - services-utils
     volumes:
       - ntfy:/etc/ntfy/data
       - /home/outsideworx/utils:/utils

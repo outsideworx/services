@@ -34,7 +34,7 @@ spring:
       spec: maximumSize=76
     type: caffeine
   datasource:
-    url: jdbc:postgresql://services_postgres:5432/
+    url: jdbc:postgresql://services-postgres:5432/
   jackson:
     default-property-inclusion: NON_EMPTY
   liquibase:
@@ -47,9 +47,9 @@ spring:
         provider:
           authelia:
             authorization-uri: https://oauth.outsideworx.net/api/oidc/authorization
-            jwk-set-uri: http://services_authelia/jwks.json
-            token-uri: http://services_authelia/api/oidc/token
-            user-info-uri: http://services_authelia/api/oidc/userinfo
+            jwk-set-uri: http://services-authelia/jwks.json
+            token-uri: http://services-authelia/api/oidc/token
+            user-info-uri: http://services-authelia/api/oidc/userinfo
             user-name-attribute: preferred_username
         registration:
           authelia:
