@@ -1,4 +1,18 @@
 configs:
+  authelia:
+    file: ./authelia.yaml
+  authelia-users:
+    file: ./authelia-users.yaml
+  grafana:
+    file: ./grafana.ini
+  logo:
+    file: ./logo.png
+  loki:
+    file: ./loki.yaml
+  ntfy:
+    file: ./ntfy.yaml
+  prometheus:
+    file: ./prometheus.yaml
   promtail:
     file: ./promtail.yaml
 networks:
@@ -9,6 +23,13 @@ secrets:
     external: true
 services:
   authelia:
+    configs:
+      - source: authelia
+        target: /config/configuration.yml
+      - source: authelia-users
+        target: /config/users.yaml
+      - source: logo
+        target: /config/assets/logo.png
     deploy:
       placement:
         constraints:
@@ -30,11 +51,10 @@ services:
       - outsideworx
     secrets:
       - rsa_private_key
-    volumes:
-      - ./authelia.yaml:/config/configuration.yml
-      - ./authelia-users.yaml:/config/users.yaml
-      - ./logo.png:/config/assets/logo.png
   grafana:
+    configs:
+      - source: grafana
+        target: /etc/grafana/grafana.ini
     deploy:
       placement:
         constraints:
@@ -54,9 +74,11 @@ services:
       - outsideworx
     user: root
     volumes:
-      - /home/outsideworx/grafana:/var/lib/grafana
-      - ./grafana.ini:/etc/grafana/grafana.ini
+      - grafana:/var/lib/grafana
   loki:
+    configs:
+      - source: loki
+        target: /etc/loki/local-config.yaml
     deploy:
       placement:
         constraints:
@@ -66,10 +88,12 @@ services:
       - outsideworx
     user: root
     volumes:
-      - /home/outsideworx/loki:/loki
-      - ./loki.yaml:/etc/loki/local-config.yaml
+      - loki:/loki
   ntfy:
     command: serve
+    configs:
+      - source: ntfy
+        target: /etc/ntfy/server.yml
     deploy:
       placement:
         constraints:
@@ -87,8 +111,7 @@ services:
     networks:
       - outsideworx
     volumes:
-      - /home/outsideworx/ntfy:/etc/ntfy/data
-      - ./ntfy.yaml:/etc/ntfy/server.yml
+      - ntfy:/etc/ntfy/data
   postgres:
     deploy:
       placement:
@@ -101,7 +124,7 @@ services:
     networks:
       - outsideworx
     volumes:
-      - /home/outsideworx/data:/var/lib/postgresql/data
+      - postgres:/var/lib/postgresql/data
   postgres-exporter:
     command:
       - --web.listen-address=:80
@@ -120,6 +143,9 @@ services:
     command:
       - --config.file=/etc/prometheus/prometheus.yml
       - --storage.tsdb.retention.time=365d
+    configs:
+      - source: prometheus
+        target: /etc/prometheus/prometheus.yml
     deploy:
       placement:
         constraints:
@@ -129,8 +155,7 @@ services:
       - outsideworx
     user: root
     volumes:
-      - /home/outsideworx/prometheus:/prometheus
-      - ./prometheus.yaml:/etc/prometheus/prometheus.yml
+      - prometheus:/prometheus
   promtail:
     configs:
       - source: promtail
@@ -195,7 +220,7 @@ services:
         published: 443
         mode: host
     volumes:
-      - /home/outsideworx/letsencrypt:/letsencrypt
+      - letsencrypt:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock:ro
   utils:
     command: >-
@@ -219,8 +244,14 @@ services:
     networks:
       - outsideworx
     volumes:
-      - /home/outsideworx/ntfy:/etc/ntfy/data
+      - ntfy:/etc/ntfy/data
       - /home/outsideworx/utils:/utils
       - ./utils:/etc/utils
 volumes:
+  grafana:
+  letsencrypt:
+  loki:
+  ntfy:
+  postgres:
+  prometheus:
   promtail:
