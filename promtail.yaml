@@ -1,5 +1,5 @@
 clients:
-  - url: http://services-loki/loki/api/v1/push
+  - url: http://services_loki/loki/api/v1/push
 positions:
   filename: /promtail/positions.yaml
 scrape_configs:

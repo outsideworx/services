@@ -12,7 +12,7 @@ setup_logging("ntfy-proxy")
 logging.getLogger("aiohttp.access").setLevel(logging.WARNING)
 
 DB_PATH = os.environ["NTFY_DB_PATH"]
-NTFY_URL = "http://services-ntfy"
+NTFY_URL = "http://services_ntfy"
 INTERVAL = 60
 SKIP_REQUEST_HEADERS = {"host", "accept-encoding"}
 SKIP_RESPONSE_HEADERS = {"content-length", "transfer-encoding", "content-encoding"}
@@ -72,7 +72,7 @@ async def handle_ws(request, session, token):
     parsed = urlparse(request.path_qs)
     query = {key: value for key, value in parse_qs(parsed.query).items() if key != "auth"}
     clean_path_qs = urlunparse(parsed._replace(query=urlencode(query, doseq=True)))
-    async with session.ws_connect(f"ws://services-ntfy{clean_path_qs}", headers=headers) as ws_client:
+    async with session.ws_connect(f"ws://services_ntfy{clean_path_qs}", headers=headers) as ws_client:
         async def forward_to_client():
             async for msg in ws_client:
                 if msg.type == WSMsgType.TEXT:
