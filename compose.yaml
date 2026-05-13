@@ -1,20 +1,28 @@
 configs:
   authelia:
     file: ./authelia.yaml
+    name: authelia-${HASH_AUTHELIA}
   authelia-users:
     file: ./authelia-users.yaml
+    name: authelia-users-${HASH_AUTHELIA_USERS}
   grafana:
     file: ./grafana.ini
+    name: grafana-${HASH_GRAFANA}
   logo:
     file: ./logo.png
+    name: logo-${HASH_LOGO}
   loki:
     file: ./loki.yaml
+    name: loki-${HASH_LOKI}
   ntfy:
     file: ./ntfy.yaml
+    name: ntfy-${HASH_NTFY}
   prometheus:
     file: ./prometheus.yaml
+    name: prometheus-${HASH_PROMETHEUS}
   promtail:
     file: ./promtail.yaml
+    name: promtail-${HASH_PROMTAIL}
 networks:
   outsideworx:
     external: true

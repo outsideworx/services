@@ -53,6 +53,15 @@ cp "$SCRIPT_DIR/.env" \
 
 cd "$DEST"
 set -a; source .env; set +a
+export HASH_AUTHELIA=$(sha256sum authelia.yaml | cut -c1-8)
+export HASH_AUTHELIA_USERS=$(sha256sum authelia-users.yaml | cut -c1-8)
+export HASH_GRAFANA=$(sha256sum grafana.ini | cut -c1-8)
+export HASH_LOGO=$(sha256sum logo.png | cut -c1-8)
+export HASH_LOKI=$(sha256sum loki.yaml | cut -c1-8)
+export HASH_NTFY=$(sha256sum ntfy.yaml | cut -c1-8)
+export HASH_PROMETHEUS=$(sha256sum prometheus.yaml | cut -c1-8)
+export HASH_PROMTAIL=$(sha256sum promtail.yaml | cut -c1-8)
+
 docker compose pull
 docker stack deploy -c compose.yaml services --detach=false --resolve-image=always
 docker stack services services --format '{{.Name}}' | xargs -I{} docker service update --force {}
