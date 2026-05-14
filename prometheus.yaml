@@ -19,7 +19,7 @@ scrape_configs:
   - job_name: services
     metrics_path: /actuator/prometheus
     static_configs:
-      - targets: [ "services_services:81" ]
+      - targets: [ "services-services:81" ]
   - job_name: sites
     static_configs:
       - targets: [
