@@ -1,5 +1,5 @@
 clients:
-  - url: http://loki:3100/loki/api/v1/push
+  - url: http://loki/loki/api/v1/push
 scrape_configs:
   - job_name: docker
     docker_sd_configs:
@@ -8,6 +8,11 @@ scrape_configs:
     pipeline_stages:
       - regex:
           expression: (?P<level>debug|DEBUG|info|INFO|warning|WARNING|warn|WARN|error|ERROR|err|ERR)
+      - labels:
+          level:
+      - template:
+          source: level
+          template: '{{ if or (eq .Value "ERR") (eq .Value "err") }}ERROR{{ else }}{{ .Value }}{{ end }}'
       - labels:
           level:
       - replace:
@@ -23,7 +28,7 @@ scrape_configs:
           expression: (DEBUG|INFO|WARNING|WARN|ERROR|ERR)
           replace: ''
       - replace:
-          expression: ( {2,})
+          expression: (  +)
           replace: ' '
       - replace:
           expression: ^( )

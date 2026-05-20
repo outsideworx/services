@@ -6,7 +6,7 @@ scrape_configs:
       - targets: [ "authelia:81" ]
   - job_name: loki
     static_configs:
-      - targets: [ "loki:3100" ]
+      - targets: [ "loki" ]
   - job_name: ntfy
     static_configs:
       - targets: [ "ntfy:81" ]

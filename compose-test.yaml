@@ -1,6 +1,13 @@
+x-healthcheck: &healthcheck
+  interval: 5s
+  retries: 3
+  timeout: 3s
 services:
   authelia:
     container_name: authelia
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/api/health"]
+      <<: *healthcheck
     image: authelia/authelia:4.37
     labels:
       - traefik.enable=true
@@ -14,6 +21,9 @@ services:
       - ./logo.png:/config/assets/logo.png
   grafana:
     container_name: grafana
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/api/health"]
+      <<: *healthcheck
     image: grafana/grafana:12.3.0
     labels:
       - traefik.enable=true
@@ -26,11 +36,14 @@ services:
   loki:
     container_name: loki
     image: grafana/loki:3.6.4
-    ports:
-      - "3100:3100"
+    volumes:
+      - ./loki.yaml:/etc/loki/local-config.yaml
   ntfy:
     command: serve
     container_name: ntfy
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/v1/health"]
+      <<: *healthcheck
     image: binwiederhier/ntfy:v2.16.0
     labels:
       - traefik.enable=true
@@ -45,6 +58,9 @@ services:
     container_name: postgres
     environment:
       POSTGRES_HOST_AUTH_METHOD: trust
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      <<: *healthcheck
     image: postgres:16.2
     ports:
       - "5432:5432"
@@ -52,25 +68,35 @@ services:
     command:
       - --web.listen-address=:80
     container_name: postgres-exporter
+    depends_on:
+      postgres:
+        condition: service_healthy
     environment:
       DATA_SOURCE_PASS:
       DATA_SOURCE_URI: postgres:5432/?sslmode=disable
       DATA_SOURCE_USER: postgres
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/metrics"]
+      <<: *healthcheck
     image: quay.io/prometheuscommunity/postgres-exporter:v0.18.1
   prometheus:
     container_name: prometheus
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9090/-/healthy"]
+      <<: *healthcheck
     image: prom/prometheus:v3.9.1
     volumes:
       - ./prometheus-test.yaml:/etc/prometheus/prometheus.yml
   promtail:
     container_name: promtail
+    healthcheck:
+      test: ["CMD-SHELL", "echo -e 'GET /ready HTTP/1.0\\r\\n\\r\\n' > /dev/tcp/localhost/80"]
+      <<: *healthcheck
     image: grafana/promtail:3.6.4
     volumes:
       - $HOME/.docker/run/docker.sock:/var/run/docker.sock:ro
       - ./promtail-test.yaml:/etc/promtail/config.yml
   traefik:
-    container_name: traefik
-    image: traefik:v3.6.14
     command:
       - --accesslog=true
       - --entrypoints.traefik.address=:81
@@ -79,8 +105,14 @@ services:
       - --entrypoints.websecure.address=:443
       - --log.noColor=true
       - --metrics.prometheus=true
+      - --ping=true
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
+    container_name: traefik
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:81/ping"]
+      <<: *healthcheck
+    image: traefik:v3.6.14
     ports:
       - "80:80"
       - "443:443"
@@ -96,6 +128,9 @@ services:
         done;
         wait'
     container_name: utils
+    depends_on:
+      postgres:
+        condition: service_healthy
     environment:
       DB_PASSWORD: ""
       DB_USERNAME: postgres
