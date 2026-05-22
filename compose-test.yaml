@@ -1,13 +1,11 @@
-x-healthcheck: &healthcheck
-  interval: 5s
-  retries: 3
-  timeout: 3s
 services:
   authelia:
     container_name: authelia
     healthcheck:
+      interval: 5s
+      retries: 3
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/api/health"]
-      <<: *healthcheck
+      timeout: 3s
     image: authelia/authelia:4.37
     labels:
       - traefik.enable=true
@@ -22,8 +20,10 @@ services:
   grafana:
     container_name: grafana
     healthcheck:
+      interval: 5s
+      retries: 3
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/api/health"]
-      <<: *healthcheck
+      timeout: 3s
     image: grafana/grafana:12.3.0
     labels:
       - traefik.enable=true
@@ -43,8 +43,10 @@ services:
     command: serve
     container_name: ntfy
     healthcheck:
+      interval: 5s
+      retries: 3
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/v1/health"]
-      <<: *healthcheck
+      timeout: 3s
     image: binwiederhier/ntfy:v2.16.0
     labels:
       - traefik.enable=true
@@ -60,8 +62,10 @@ services:
     environment:
       POSTGRES_HOST_AUTH_METHOD: trust
     healthcheck:
+      interval: 5s
+      retries: 3
       test: ["CMD-SHELL", "pg_isready -U postgres"]
-      <<: *healthcheck
+      timeout: 3s
     image: postgres:16.2
     ports:
       - "5432:5432"
@@ -77,22 +81,28 @@ services:
       DATA_SOURCE_URI: postgres:5432/?sslmode=disable
       DATA_SOURCE_USER: postgres
     healthcheck:
+      interval: 5s
+      retries: 3
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/metrics"]
-      <<: *healthcheck
+      timeout: 3s
     image: quay.io/prometheuscommunity/postgres-exporter:v0.18.1
   prometheus:
     container_name: prometheus
     healthcheck:
+      interval: 5s
+      retries: 3
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9090/-/healthy"]
-      <<: *healthcheck
+      timeout: 3s
     image: prom/prometheus:v3.9.1
     volumes:
       - ./prometheus-test.yaml:/etc/prometheus/prometheus.yml
   promtail:
     container_name: promtail
     healthcheck:
+      interval: 5s
+      retries: 3
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/ready"]
-      <<: *healthcheck
+      timeout: 3s
     image: grafana/promtail:3.6.4
     volumes:
       - $HOME/.docker/run/docker.sock:/var/run/docker.sock:ro
@@ -111,8 +121,10 @@ services:
       - --providers.docker.exposedbydefault=false
     container_name: traefik
     healthcheck:
+      interval: 5s
+      retries: 3
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:81/ping"]
-      <<: *healthcheck
+      timeout: 3s
     image: traefik:v3.6.14
     ports:
       - "80:80"
