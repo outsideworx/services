@@ -91,7 +91,7 @@ services:
   promtail:
     container_name: promtail
     healthcheck:
-      test: ["CMD-SHELL", "echo -e 'GET /ready HTTP/1.0\\r\\n\\r\\n' > /dev/tcp/localhost/80"]
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/ready"]
       <<: *healthcheck
     image: grafana/promtail:3.6.4
     volumes:
