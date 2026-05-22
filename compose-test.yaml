@@ -36,9 +36,8 @@ services:
   loki:
     container_name: loki
     image: grafana/loki:3.6.4
-    user: root
     volumes:
-      - ./loki.yaml:/etc/loki/local-config.yaml
+      - ./loki-test.yaml:/etc/loki/local-config.yaml
   ntfy:
     command: serve
     container_name: ntfy
