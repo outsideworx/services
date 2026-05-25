@@ -1,2 +1,26 @@
+auth_enabled: false
+common:
+  path_prefix: /tmp/loki
+  ring:
+    kvstore:
+      store: inmemory
+  replication_factor: 1
+compactor:
+  delete_request_store: filesystem
+  retention_enabled: true
+limits_config:
+  retention_period: 7d
+schema_config:
+  configs:
+    - from: 2020-10-24
+      object_store: filesystem
+      schema: v13
+      store: tsdb
+      index:
+        prefix: index_
+        period: 24h
 server:
   http_listen_port: 80
+storage_config:
+  filesystem:
+    directory: /tmp/loki/chunks
