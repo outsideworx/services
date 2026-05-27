@@ -1,6 +1,5 @@
 auth_enabled: false
 common:
-  path_prefix: /loki
   ring:
     kvstore:
       store: inmemory
@@ -25,4 +24,6 @@ server:
 storage_config:
   filesystem:
     directory: /loki/chunks
-target: all
+  tsdb_shipper:
+    active_index_directory: /loki/index
+    cache_location: /loki/index_cache
