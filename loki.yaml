@@ -25,3 +25,4 @@ server:
 storage_config:
   filesystem:
     directory: /loki/chunks
+target: all
