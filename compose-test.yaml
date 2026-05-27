@@ -4,6 +4,7 @@ services:
     healthcheck:
       interval: 5s
       retries: 3
+      start_period: 5s
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/api/health"]
       timeout: 3s
     image: authelia/authelia:4.37
@@ -22,6 +23,7 @@ services:
     healthcheck:
       interval: 5s
       retries: 3
+      start_period: 5s
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/api/health"]
       timeout: 3s
     image: grafana/grafana:12.3.0
@@ -38,6 +40,7 @@ services:
     healthcheck:
       interval: 5s
       retries: 3
+      start_period: 5s
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/ready"]
       timeout: 3s
     image: grafana/loki:3.6.4
@@ -49,6 +52,7 @@ services:
     healthcheck:
       interval: 5s
       retries: 3
+      start_period: 5s
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/v1/health"]
       timeout: 3s
     image: binwiederhier/ntfy:v2.16.0
@@ -68,6 +72,7 @@ services:
     healthcheck:
       interval: 5s
       retries: 3
+      start_period: 5s
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       timeout: 3s
     image: postgres:16.2
@@ -87,6 +92,7 @@ services:
     healthcheck:
       interval: 5s
       retries: 3
+      start_period: 5s
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/metrics"]
       timeout: 3s
     image: quay.io/prometheuscommunity/postgres-exporter:v0.18.1
@@ -95,6 +101,7 @@ services:
     healthcheck:
       interval: 5s
       retries: 3
+      start_period: 5s
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9090/-/healthy"]
       timeout: 3s
     image: prom/prometheus:v3.9.1
@@ -105,6 +112,7 @@ services:
     healthcheck:
       interval: 5s
       retries: 3
+      start_period: 5s
       test: ["CMD-SHELL", "bash -c 'echo -e \"GET /ready HTTP/1.0\\r\\n\\r\\n\" > /dev/tcp/localhost/80'"]
       timeout: 3s
     image: grafana/promtail:3.6.4
@@ -127,6 +135,7 @@ services:
     healthcheck:
       interval: 5s
       retries: 3
+      start_period: 5s
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:81/ping"]
       timeout: 3s
     image: traefik:v3.6.14
