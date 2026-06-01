@@ -18,7 +18,7 @@ DB_PORT = "5432"
 INTERVAL = 60
 OUTPUT_DIR = "/utils/cache"
 CIAFO_LABELS = ["image1", "image2", "image3", "image4", "thumbnail1", "thumbnail2", "thumbnail3", "thumbnail4"]
-HASH_FILE = f"{OUTPUT_DIR}/hashes.txt"
+HASH_FILE = f"{OUTPUT_DIR}/hashes.properties"
 SCAN_TIME_FILE = f"{OUTPUT_DIR}/last_scan.txt"
 SOUP_LABELS = ["image", "thumbnail"]
 
@@ -43,38 +43,56 @@ def save_hashes(hashes):
             f.write(f"{key}={value}\n")
 
 
-def sync_images_to_disk(cur, table, labels, subdir, hashes):
-    cur.execute(f"SELECT id, hash FROM {table}")
+def sync_categories(cur, table, subdir):
+    cur.execute(f"SELECT id, category FROM {table} ORDER BY id")
+    categories = {}
+    for id_, category in cur.fetchall():
+        categories.setdefault(category, []).append(id_)
+    cat_props_path = f"{OUTPUT_DIR}/{subdir}/categories.properties"
+    with open(cat_props_path, "w") as f:
+        for idx, category in enumerate(sorted(categories.keys()), 1):
+            ids = ",".join(str(id_) for id_ in categories[category])
+            f.write(f"{idx}={category}\n")
+            f.write(f"{idx}.ids={ids}\n")
+    cat_lookup = {category: idx for idx, category in enumerate(sorted(categories.keys()), 1)}
+    logging.info(f"Written category index for {subdir}: {list(categories.keys())}")
+    return cat_lookup
+
+
+def sync_images_to_disk(cur, table, labels, subdir, hashes, cat_lookup):
+    cur.execute(f"SELECT id, category, hash FROM {table}")
     db_rows = cur.fetchall()
 
-    changed_ids = {id_ for id_, hash_ in db_rows if hash_ and hashes.get(f"{subdir}:{id_}") != hash_}
-    current_ids = {id_ for id_, _ in db_rows}
+    changed_ids = {id_ for id_, _, hash_ in db_rows if hash_ and hashes.get(f"{subdir}.{id_}") != hash_}
+    current_ids = {id_ for id_, _, _ in db_rows}
+    cat_by_id = {id_: cat_lookup.get(cat, 0) for id_, cat, _ in db_rows}
 
     if changed_ids:
         cols = ", ".join(labels)
         cur.execute(f"SELECT id, {cols} FROM {table} WHERE id = ANY(%s)", (list(changed_ids),))
         for row in cur.fetchall():
             id_, *images = row
+            cat_id = cat_by_id.get(id_, 0)
             for label, encoded_image in zip(labels, images):
                 if not encoded_image:
                     continue
-                path = f"{OUTPUT_DIR}/{subdir}/{id_}_{label}.jpg"
+                path = f"{OUTPUT_DIR}/{subdir}/{cat_id}_{id_}_{label}.jpg"
                 base64_data = encoded_image.split(",", 1)[1] if "," in encoded_image else encoded_image
                 with open(path, "wb") as f:
                     f.write(base64.b64decode(base64_data))
                 logging.info(f"Written {path}")
 
-    for id_, hash_ in db_rows:
-        hashes[f"{subdir}:{id_}"] = hash_
+    for id_, _, hash_ in db_rows:
+        hashes[f"{subdir}.{id_}"] = hash_
 
     for hash_key in list(hashes):
-        if not hash_key.startswith(f"{subdir}:"):
+        if not hash_key.startswith(f"{subdir}."):
             continue
-        id_ = hash_key.split(":")[1]
+        id_ = hash_key.split(".")[1]
         if int(id_) not in current_ids:
             del hashes[hash_key]
             for fname in os.listdir(f"{OUTPUT_DIR}/{subdir}"):
-                if fname.startswith(f"{id_}_"):
+                if fname.split("_", 1)[1].startswith(f"{id_}_") if "_" in fname else False:
                     os.remove(f"{OUTPUT_DIR}/{subdir}/{fname}")
                     logging.info(f"Removed {fname}")
 
@@ -86,7 +104,8 @@ def sync():
     try:
         cur = conn.cursor()
         try:
-            sync_images_to_disk(cur, "ciafo", CIAFO_LABELS, "ciafo", hashes)
+            cat_lookup = sync_categories(cur, "ciafo", "ciafo")
+            sync_images_to_disk(cur, "ciafo", CIAFO_LABELS, "ciafo", hashes, cat_lookup)
         except psycopg2.errors.UndefinedTable:
             logging.error("CIAFO sync failed: table not found")
             success = False
@@ -94,7 +113,8 @@ def sync():
             logging.error(f"CIAFO sync failed: {str(e).strip()}")
             success = False
         try:
-            sync_images_to_disk(cur, "soup", SOUP_LABELS, "soup", hashes)
+            cat_lookup = sync_categories(cur, "soup", "soup")
+            sync_images_to_disk(cur, "soup", SOUP_LABELS, "soup", hashes, cat_lookup)
         except psycopg2.errors.UndefinedTable:
             logging.error("SOUP sync failed: table not found")
             success = False
@@ -106,8 +126,13 @@ def sync():
         conn.close()
     save_hashes(hashes)
     if success:
+        timestamp = datetime.now().isoformat()
         with open(SCAN_TIME_FILE, "w") as f:
-            f.write(datetime.now().isoformat())
+            f.write(timestamp)
+        with open(f"{OUTPUT_DIR}/ciafo/last_scan.txt", "w") as f:
+            f.write(timestamp)
+        with open(f"{OUTPUT_DIR}/soup/last_scan.txt", "w") as f:
+            f.write(timestamp)
 
 
 while True:

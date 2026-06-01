@@ -15,6 +15,7 @@ docker system prune -af
 
 rm -rf /home/outsideworx/services
 rm -rf /home/outsideworx/sites
+rm -rf /home/outsideworx/utils
 
 apt update
 apt upgrade -y

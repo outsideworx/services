@@ -35,7 +35,6 @@ if [ -n "$1" ]; then
     exit 1
 fi
 
-rm -rf "$DEST"
 mkdir -p "$DEST"
 mkdir -p /home/outsideworx/utils
 cp -r "$SCRIPT_DIR/utils" "$DEST"

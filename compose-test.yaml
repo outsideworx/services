@@ -58,7 +58,6 @@ services:
       - traefik.http.routers.ntfy.tls=true
       - traefik.http.services.ntfy.loadbalancer.server.port=80
     volumes:
-      - ntfy:/etc/ntfy/data
       - ./ntfy-test.yaml:/etc/ntfy/server.yml
   postgres:
     container_name: postgres
@@ -155,10 +154,9 @@ services:
     environment:
       DB_PASSWORD: ""
       DB_USERNAME: postgres
-      NTFY_DB_PATH: /etc/ntfy/data/user.db
     image: python:3.13-slim
     volumes:
-      - ntfy:/etc/ntfy/data
+      - cache:/utils/cache
       - ./utils:/etc/utils
 volumes:
-  ntfy:
+  cache:
