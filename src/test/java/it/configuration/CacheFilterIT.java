@@ -25,7 +25,7 @@ class CacheFilterIT {
 
     @Test
     void cachedEndpoint_setsCacheControlHeader() throws Exception {
-        mockMvc.perform(get("/api/cached/soupart")
+        mockMvc.perform(get("/api/cache/soupart")
                         .param("category", "art")
                         .param("offset", "0")
                         .header("X-Caller-Id", "soupart")
@@ -43,7 +43,7 @@ class CacheFilterIT {
 
     @Test
     void preflightRequest_doesNotSetPublicCacheControlHeader() throws Exception {
-        mockMvc.perform(get("/api/cached/soupart")
+        mockMvc.perform(get("/api/cache/soupart")
                         .param("category", "art")
                         .param("offset", "0")
                         .with(request -> {

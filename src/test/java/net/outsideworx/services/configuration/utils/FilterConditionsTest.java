@@ -46,7 +46,7 @@ class FilterConditionsTest {
     @Test
     void cachedApiRequest_whenUriStartsWithApiCached_returnsTrue() {
         MockHttpServletRequest request = new MockHttpServletRequest();
-        request.setRequestURI("/api/cached/something");
+        request.setRequestURI("/api/cache/something");
         assertThat(filterConditions.cachedApiRequest(request)).isTrue();
     }
 

@@ -21,7 +21,7 @@ final class SoupApiController {
 
     private final SoupRepository soupRepository;
 
-    @GetMapping("/api/cached/soupart")
+    @GetMapping("/api/cache/soupart")
     List<SoupEntity> getSoupItems(@RequestParam String category, @RequestParam int offset) {
         log.info("Incoming API request for category: [{}], with offset: [{}]", category, offset);
         grafanaGateway.registerRequest("soupart", category);

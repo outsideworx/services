@@ -3,7 +3,7 @@ users:
     displayname: Outside Worx
     email: info@outsideworx.net
     groups:
-      - admin
+      - admins
     password: "$argon2id$v=19$m=65536,t=3,p=4$vsohcVgBJZirfHDQ1MNe+g$MzNRHnLemqSV74xDr/xe41I1rxQOCmGx9/cAyn56wcY"
   info@come-in-and-find-out.ch:
     displayname: CIAFO

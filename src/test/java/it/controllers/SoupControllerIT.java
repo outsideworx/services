@@ -45,7 +45,7 @@ class SoupControllerIT {
 
     @Test
     void getItems_withMissingAuthHeaders_redirectsToOAuth2Login() throws Exception {
-        mockMvc.perform(get("/api/cached/soupart")
+        mockMvc.perform(get("/api/cache/soupart")
                         .param("category", "art")
                         .param("offset", "0"))
                 .andExpect(status().is3xxRedirection())
@@ -54,7 +54,7 @@ class SoupControllerIT {
 
     @Test
     void getItems_withWrongToken_redirectsToOAuth2Login() throws Exception {
-        mockMvc.perform(get("/api/cached/soupart")
+        mockMvc.perform(get("/api/cache/soupart")
                         .param("category", "art")
                         .param("offset", "0")
                         .header("X-Caller-Id", "soupart")
@@ -65,7 +65,7 @@ class SoupControllerIT {
 
     @Test
     void getItems_withValidCredentials_returnsOk() throws Exception {
-        mockMvc.perform(get("/api/cached/soupart")
+        mockMvc.perform(get("/api/cache/soupart")
                         .param("category", "art")
                         .param("offset", "0")
                         .header("X-Caller-Id", "soupart")
@@ -79,7 +79,7 @@ class SoupControllerIT {
         soupRepository.save(entity("art", "Painting", "img1", "https://example.com/1"));
         soupRepository.save(entity("design", "Poster", "img2", "https://example.com/2"));
 
-        mockMvc.perform(get("/api/cached/soupart")
+        mockMvc.perform(get("/api/cache/soupart")
                         .param("category", "art")
                         .param("offset", "0")
                         .header("X-Caller-Id", "soupart")
@@ -97,7 +97,7 @@ class SoupControllerIT {
             soupRepository.save(entity("art", "Item " + i, "img" + i, null));
         }
 
-        mockMvc.perform(get("/api/cached/soupart")
+        mockMvc.perform(get("/api/cache/soupart")
                         .param("category", "art")
                         .param("offset", "9")
                         .header("X-Caller-Id", "soupart")
@@ -108,7 +108,7 @@ class SoupControllerIT {
 
     @Test
     void getItems_whenNoneMatch_returnsEmptyArray() throws Exception {
-        mockMvc.perform(get("/api/cached/soupart")
+        mockMvc.perform(get("/api/cache/soupart")
                         .param("category", "art")
                         .param("offset", "0")
                         .header("X-Caller-Id", "soupart")

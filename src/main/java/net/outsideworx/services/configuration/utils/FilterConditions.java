@@ -14,7 +14,7 @@ public final class FilterConditions {
     }
 
     public boolean cachedApiRequest(HttpServletRequest request) {
-        return request.getRequestURI().startsWith("/api/cached");
+        return request.getRequestURI().startsWith("/api/cache");
     }
 
     public boolean invalidCallerIdOrAuthToken(HttpServletRequest request) {

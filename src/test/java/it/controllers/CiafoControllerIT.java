@@ -119,7 +119,7 @@ class CiafoControllerIT {
 
     @Test
     void getPayload_withMissingAuthHeaders_redirectsToOAuth2Login() throws Exception {
-        mockMvc.perform(get("/api/cached/come-in-and-find-out")
+        mockMvc.perform(get("/api/cache/come-in-and-find-out")
                         .param("id", "1"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("http://localhost/oauth2/authorization/authelia"));
@@ -127,7 +127,7 @@ class CiafoControllerIT {
 
     @Test
     void getPayload_withWrongToken_redirectsToOAuth2Login() throws Exception {
-        mockMvc.perform(get("/api/cached/come-in-and-find-out")
+        mockMvc.perform(get("/api/cache/come-in-and-find-out")
                         .param("id", "1")
                         .header("X-Caller-Id", "come-in-and-find-out")
                         .header("X-Auth-Token", "wrong"))
@@ -139,7 +139,7 @@ class CiafoControllerIT {
     void getPayload_withValidCredentials_returnsOk() throws Exception {
         CiafoEntity saved = ciafoRepository.save(entity("Furniture", "Chair", "img1", null, null));
 
-        mockMvc.perform(get("/api/cached/come-in-and-find-out")
+        mockMvc.perform(get("/api/cache/come-in-and-find-out")
                         .param("id", saved.getId().toString())
                         .header("X-Caller-Id", "come-in-and-find-out")
                         .header("X-Auth-Token", "test"))
@@ -151,7 +151,7 @@ class CiafoControllerIT {
     void getPayload_returnsAllImageFields() throws Exception {
         CiafoEntity saved = ciafoRepository.save(entity("Furniture", "Chair", "img1", "img2", null));
 
-        mockMvc.perform(get("/api/cached/come-in-and-find-out")
+        mockMvc.perform(get("/api/cache/come-in-and-find-out")
                         .param("id", saved.getId().toString())
                         .header("X-Caller-Id", "come-in-and-find-out")
                         .header("X-Auth-Token", "test"))
@@ -163,7 +163,7 @@ class CiafoControllerIT {
 
     @Test
     void getPayload_whenIdDoesNotExist_returnsNull() throws Exception {
-        mockMvc.perform(get("/api/cached/come-in-and-find-out")
+        mockMvc.perform(get("/api/cache/come-in-and-find-out")
                         .param("id", "999")
                         .header("X-Caller-Id", "come-in-and-find-out")
                         .header("X-Auth-Token", "test"))

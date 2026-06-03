@@ -29,7 +29,7 @@ final class CiafoApiController {
         return ciafoRepository.getPreviews(category, offset);
     }
 
-    @GetMapping("/api/cached/come-in-and-find-out")
+    @GetMapping("/api/cache/come-in-and-find-out")
     CiafoPayload getCiafoPayload(@RequestParam Long id) {
         log.info("Incoming API request for ID: [{}]", id);
         grafanaGateway.registerRequest("come-in-and-find-out", "details");
