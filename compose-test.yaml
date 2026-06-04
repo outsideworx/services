@@ -76,9 +76,6 @@ services:
     command:
       - --web.listen-address=:80
     container_name: postgres-exporter
-    depends_on:
-      postgres:
-        condition: service_healthy
     environment:
       DATA_SOURCE_PASS:
       DATA_SOURCE_URI: postgres:5432/?sslmode=disable
@@ -148,9 +145,6 @@ services:
         done;
         wait'
     container_name: utils
-    depends_on:
-      postgres:
-        condition: service_healthy
     environment:
       DB_PASSWORD: ""
       DB_USERNAME: postgres
