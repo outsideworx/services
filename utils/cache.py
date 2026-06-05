@@ -56,9 +56,7 @@ def sync_categories(cur, table, subdir):
             f.write(f"{index}={category}\n")
             f.write(f"{index}.ids={ids}\n")
 
-    category_index = {category: index for index, category in enumerate(sorted(categories.keys()), 1)}
-    logging.info(f"Written category index for {subdir}: {list(categories.keys())}")
-    return category_index
+    return {category: index for index, category in enumerate(sorted(categories.keys()), 1)}
 
 
 def remove_files_for_item(subdir, id_):
@@ -66,7 +64,7 @@ def remove_files_for_item(subdir, id_):
         parts = filename.split("_")
         if len(parts) >= 3 and parts[1] == str(id_):
             os.remove(f"{OUTPUT_DIR}/{subdir}/{filename}")
-            logging.info(f"Removed {filename}")
+            logging.info(f"Deleted {filename}")
 
 
 def sync_images_to_disk(cur, table, labels, subdir, hashes, category_index):
@@ -91,7 +89,7 @@ def sync_images_to_disk(cur, table, labels, subdir, hashes, category_index):
                 base64_data = encoded_image.split(",", 1)[1] if "," in encoded_image else encoded_image
                 with open(path, "wb") as f:
                     f.write(base64.b64decode(base64_data))
-                logging.info(f"Written {path}")
+                logging.info(f"Created {path}")
 
     for id_, _, hash_ in rows:
         hashes[f"{subdir}.{id_}"] = hash_
