@@ -308,12 +308,10 @@ services:
     environment:
       DB_PASSWORD: $SPRING_DATASOURCE_PASSWORD
       DB_USERNAME: $SPRING_DATASOURCE_USERNAME
-      NTFY_DB_PATH: /etc/ntfy/data/user.db
     image: python:3.13-slim
     networks:
       - outsideworx
     volumes:
-      - ntfy:/etc/ntfy/data
       - /home/outsideworx/utils:/utils
       - ./utils:/etc/utils
 volumes:

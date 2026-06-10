@@ -1,5 +1,4 @@
 auth-default-access: "deny-all"
-auth-file: "/etc/ntfy/data/user.db"
 auth-tokens:
   - "admin:tk_1q97m4n5o7ov1z7vse2lyrzf7e9ks:proxy"
 auth-users:
