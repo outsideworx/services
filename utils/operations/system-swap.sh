@@ -35,19 +35,19 @@ else
 fi
 
 echo "--- tuning kernel parameters"
-sysctl vm.swappiness=10
-sysctl vm.vfs_cache_pressure=50
+sysctl vm.swappiness=60
+sysctl vm.vfs_cache_pressure=100
 
 if grep -q 'vm.swappiness' /etc/sysctl.conf; then
   echo "vm.swappiness already in /etc/sysctl.conf — skipping"
 else
-  echo 'vm.swappiness=10' | tee -a /etc/sysctl.conf
+  echo 'vm.swappiness=60' | tee -a /etc/sysctl.conf
 fi
 
 if grep -q 'vm.vfs_cache_pressure' /etc/sysctl.conf; then
   echo "vm.vfs_cache_pressure already in /etc/sysctl.conf — skipping"
 else
-  echo 'vm.vfs_cache_pressure=50' | tee -a /etc/sysctl.conf
+  echo 'vm.vfs_cache_pressure=100' | tee -a /etc/sysctl.conf
 fi
 
 echo "--- verification"

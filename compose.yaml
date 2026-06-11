@@ -306,6 +306,7 @@ services:
         constraints:
           - node.role == manager
     environment:
+      DB_HOST: services_postgres
       DB_PASSWORD: $SPRING_DATASOURCE_PASSWORD
       DB_USERNAME: $SPRING_DATASOURCE_USERNAME
     image: python:3.13-slim
