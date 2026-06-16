@@ -1,3 +1,12 @@
+x-healthcheck: &healthcheck
+  interval: 1m
+  retries: 3
+  start_period: 1m
+  timeout: 3s
+x-placement: &placement
+  placement:
+    constraints:
+      - node.role == manager
 configs:
   authelia:
     file: ./authelia.yaml
@@ -39,9 +48,7 @@ services:
       - source: logo
         target: /config/assets/logo.png
     deploy:
-      placement:
-        constraints:
-          - node.role == manager
+      <<: *placement
       labels:
         - traefik.enable=true
         - traefik.http.routers.authelia.entrypoints=websecure
@@ -55,11 +62,8 @@ services:
       AUTHELIA_SESSION_SECRET: $AUTHELIA_SESSION_SECRET
       AUTHELIA_STORAGE_ENCRYPTION_KEY: $AUTHELIA_STORAGE_ENCRYPTION_KEY
     healthcheck:
-      interval: 1m
-      retries: 3
-      start_period: 1m
+      <<: *healthcheck
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/api/health"]
-      timeout: 3s
     image: authelia/authelia:4.37
     networks:
       outsideworx:
@@ -72,9 +76,7 @@ services:
       - source: grafana
         target: /etc/grafana/grafana.ini
     deploy:
-      placement:
-        constraints:
-          - node.role == manager
+      <<: *placement
       labels:
         - traefik.enable=true
         - traefik.http.routers.grafana.entrypoints=websecure
@@ -86,11 +88,8 @@ services:
       GF_SECURITY_ADMIN_PASSWORD: $GF_SECURITY_ADMIN_PASSWORD
       GF_SECURITY_ADMIN_USER: $GF_SECURITY_ADMIN_USER
     healthcheck:
-      interval: 1m
-      retries: 3
-      start_period: 1m
+      <<: *healthcheck
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/api/health"]
-      timeout: 3s
     image: grafana/grafana:12.3.0
     networks:
       - outsideworx
@@ -102,9 +101,7 @@ services:
       - source: loki
         target: /etc/loki/local-config.yaml
     deploy:
-      placement:
-        constraints:
-          - node.role == manager
+      <<: *placement
     image: grafana/loki:3.6.4
     networks:
       - outsideworx
@@ -117,9 +114,7 @@ services:
       - source: ntfy
         target: /etc/ntfy/server.yml
     deploy:
-      placement:
-        constraints:
-          - node.role == manager
+      <<: *placement
       labels:
         - traefik.enable=true
         - traefik.http.routers.ntfy.entrypoints=websecure
@@ -130,11 +125,8 @@ services:
       NTFY_WEB_PUSH_PRIVATE_KEY: $NTFY_WEB_PUSH_PRIVATE_KEY
       NTFY_WEB_PUSH_PUBLIC_KEY: $NTFY_WEB_PUSH_PUBLIC_KEY
     healthcheck:
-      interval: 1m
-      retries: 3
-      start_period: 1m
+      <<: *healthcheck
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/v1/health"]
-      timeout: 3s
     image: binwiederhier/ntfy:v2.16.0
     networks:
       - outsideworx
@@ -142,18 +134,13 @@ services:
       - ntfy:/etc/ntfy/data
   postgres:
     deploy:
-      placement:
-        constraints:
-          - node.role == manager
+      <<: *placement
     environment:
       POSTGRES_PASSWORD: $SPRING_DATASOURCE_PASSWORD
       POSTGRES_USER: $SPRING_DATASOURCE_USERNAME
     healthcheck:
-      interval: 1m
-      retries: 3
-      start_period: 1m
+      <<: *healthcheck
       test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
-      timeout: 3s
     image: postgres:16.2
     networks:
       outsideworx:
@@ -165,19 +152,14 @@ services:
     command:
       - --web.listen-address=:80
     deploy:
-      placement:
-        constraints:
-          - node.role == manager
+      <<: *placement
     environment:
       DATA_SOURCE_PASS: $SPRING_DATASOURCE_PASSWORD
       DATA_SOURCE_URI: services_postgres:5432/?sslmode=disable
       DATA_SOURCE_USER: $SPRING_DATASOURCE_USERNAME
     healthcheck:
-      interval: 1m
-      retries: 3
-      start_period: 1m
+      <<: *healthcheck
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/metrics"]
-      timeout: 3s
     image: quay.io/prometheuscommunity/postgres-exporter:v0.18.1
     networks:
       - outsideworx
@@ -189,15 +171,10 @@ services:
       - source: prometheus
         target: /etc/prometheus/prometheus.yml
     deploy:
-      placement:
-        constraints:
-          - node.role == manager
+      <<: *placement
     healthcheck:
-      interval: 1m
-      retries: 3
-      start_period: 1m
+      <<: *healthcheck
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9090/-/healthy"]
-      timeout: 3s
     image: prom/prometheus:v3.9.1
     networks:
       - outsideworx
@@ -211,11 +188,8 @@ services:
     deploy:
       mode: global
     healthcheck:
-      interval: 1m
-      retries: 3
-      start_period: 1m
+      <<: *healthcheck
       test: ["CMD-SHELL", "bash -c 'echo -e \"GET /ready HTTP/1.0\\r\\n\\r\\n\" > /dev/tcp/localhost/80'"]
-      timeout: 3s
     image: grafana/promtail:3.6.4
     networks:
       - outsideworx
@@ -224,9 +198,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
   services:
     deploy:
-      placement:
-        constraints:
-          - node.role == manager
+      <<: *placement
       labels:
         - traefik.enable=true
         - traefik.http.routers.services.entrypoints=websecure
@@ -242,11 +214,8 @@ services:
       SPRING_DATASOURCE_USERNAME: $SPRING_DATASOURCE_USERNAME
       SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_AUTHELIA_CLIENT_SECRET: $SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_AUTHELIA_CLIENT_SECRET
     healthcheck:
-      interval: 1m
-      retries: 3
-      start_period: 1m
+      <<: *healthcheck
       test: ["CMD", "curl", "-f", "http://localhost:81/actuator/health"]
-      timeout: 3s
     image: ghcr.io/outsideworx/services:latest
     networks:
       outsideworx:
@@ -269,15 +238,10 @@ services:
       - --providers.swarm.endpoint=unix:///var/run/docker.sock
       - --providers.swarm.exposedbydefault=false
     deploy:
-      placement:
-        constraints:
-          - node.role == manager
+      <<: *placement
     healthcheck:
-      interval: 1m
-      retries: 3
-      start_period: 1m
+      <<: *healthcheck
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:81/ping"]
-      timeout: 3s
     image: traefik:v3.6.14
     networks:
       - outsideworx
@@ -302,9 +266,7 @@ services:
         done;
         wait'
     deploy:
-      placement:
-        constraints:
-          - node.role == manager
+      <<: *placement
     environment:
       DB_HOST: services_postgres
       DB_PASSWORD: $SPRING_DATASOURCE_PASSWORD
