@@ -1,8 +1,8 @@
 x-healthcheck: &healthcheck
   interval: 1m
-  retries: 3
+  retries: 2
   start_period: 1m
-  timeout: 3s
+  timeout: 30s
 x-placement: &placement
   placement:
     constraints:
