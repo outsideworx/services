@@ -92,7 +92,7 @@ services:
       test: ["CMD-SHELL", "bash -c 'echo -e \"GET /ready HTTP/1.0\\r\\n\\r\\n\" > /dev/tcp/localhost/80'"]
     image: grafana/promtail:3.6.4
     volumes:
-      - $HOME/.docker/run/docker.sock:/var/run/docker.sock:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./promtail-test.yaml:/etc/promtail/config.yml
   traefik:
     command:
@@ -115,7 +115,7 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - $HOME/.docker/run/docker.sock:/var/run/docker.sock:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
   utils:
     command: >-
       bash -c '
