@@ -68,7 +68,7 @@ server:
   asset_path: /config/assets
   port: 80
 session:
-  domain: localhost
+  domain: oauth.localhost
   secret: session_secret
 storage:
   encryption_key: storage_encryption_key
