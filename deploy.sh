@@ -7,7 +7,7 @@ set -e
 
 if [ "$1" == "--install" ]; then
     apt update
-    apt install -y docker-compose-v2
+    apt install -y docker-compose-v2 git maven openjdk-25-jdk
     exit 0
 fi
 
