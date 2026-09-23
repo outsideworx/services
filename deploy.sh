@@ -36,7 +36,6 @@ if [ -n "$1" ]; then
 fi
 
 mkdir -p "$DEST"
-mkdir -p /home/outsideworx/utils
 cp -r "$SCRIPT_DIR/utils" "$DEST"
 cp "$SCRIPT_DIR/.env" \
    "$SCRIPT_DIR/authelia.yaml" \

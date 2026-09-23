@@ -110,18 +110,18 @@ def sync():
     try:
         cur = conn.cursor()
         try:
-            category_index = sync_categories(cur, "ciafo", "ciafo")
-            sync_images_to_disk(cur, "ciafo", CIAFO_LABELS, "ciafo", hashes, category_index)
-            with open(f"{OUTPUT_DIR}/ciafo/last_scan.txt", "w") as f:
+            category_index = sync_categories(cur, "ciafo", "come-in-and-find-out")
+            sync_images_to_disk(cur, "ciafo", CIAFO_LABELS, "come-in-and-find-out", hashes, category_index)
+            with open(f"{OUTPUT_DIR}/come-in-and-find-out/last_scan.txt", "w") as f:
                 f.write(datetime.now().isoformat())
         except psycopg2.errors.UndefinedTable:
             logging.error("CIAFO sync failed: table not found")
         except Exception as e:
             logging.error(f"CIAFO sync failed: {str(e).strip()}")
         try:
-            category_index = sync_categories(cur, "soup", "soup")
-            sync_images_to_disk(cur, "soup", SOUP_LABELS, "soup", hashes, category_index)
-            with open(f"{OUTPUT_DIR}/soup/last_scan.txt", "w") as f:
+            category_index = sync_categories(cur, "soup", "soupart")
+            sync_images_to_disk(cur, "soup", SOUP_LABELS, "soupart", hashes, category_index)
+            with open(f"{OUTPUT_DIR}/soupart/last_scan.txt", "w") as f:
                 f.write(datetime.now().isoformat())
         except psycopg2.errors.UndefinedTable:
             logging.error("SOUP sync failed: table not found")

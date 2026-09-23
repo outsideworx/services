@@ -279,7 +279,6 @@ services:
       - ./utils:/etc/utils
 volumes:
   cache:
-    external: true
   grafana:
   letsencrypt:
   loki:
