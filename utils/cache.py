@@ -22,8 +22,8 @@ HASH_FILE = f"{OUTPUT_DIR}/hashes.properties"
 INTERVAL = 60
 SOUP_LABELS = ["image", "thumbnail"]
 
-os.makedirs(f"{OUTPUT_DIR}/ciafo", exist_ok=True)
-os.makedirs(f"{OUTPUT_DIR}/soup", exist_ok=True)
+os.makedirs(f"{OUTPUT_DIR}/come-in-and-find-out", exist_ok=True)
+os.makedirs(f"{OUTPUT_DIR}/soupart", exist_ok=True)
 
 
 def load_hashes():

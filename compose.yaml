@@ -275,9 +275,11 @@ services:
     networks:
       - outsideworx
     volumes:
-      - /home/outsideworx/utils:/utils
+      - cache:/utils/cache
       - ./utils:/etc/utils
 volumes:
+  cache:
+    external: true
   grafana:
   letsencrypt:
   loki:
