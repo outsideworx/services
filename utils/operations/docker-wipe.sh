@@ -1,7 +1,7 @@
 #!/bin/bash
 
 read -p "Start? (y/n) " ans
-[[ $ans =~ ^[Yy]$ ]] || { echo "Aborted."; return; }
+[[ $ans =~ ^[Yy]$ ]] || { echo "Aborted."; exit 1; }
 
 docker stack rm services
 docker stack rm sites
