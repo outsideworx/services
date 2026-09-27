@@ -29,7 +29,8 @@ scrape_configs:
         "sites_igli",
         "sites_outsideworx",
         "sites_soupart",
-        "sites_soupkitchen"
+        "sites_soupkitchen",
+        "sites_tunde-divat"
       ]
   - job_name: traefik
     static_configs:
