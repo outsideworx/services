@@ -3,6 +3,9 @@ app:
     ciafo:
       caller: "come-in-and-find-out"
       origin: "https://come-in-and-find-out.ch"
+    outsideworx:
+      caller: "outsideworx"
+      origin: "https://outsideworx.net"
     peeps:
       caller: "gaiapeeps"
       origin: "https://gaiapeeps.com"

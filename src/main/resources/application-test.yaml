@@ -3,6 +3,9 @@ app:
     ciafo:
       origin: "*"
       token: "test"
+    outsideworx:
+      origin: "*"
+      token: "test"
     peeps:
       origin: "*"
       token: "test"
