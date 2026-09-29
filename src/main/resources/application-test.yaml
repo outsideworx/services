@@ -3,13 +3,13 @@ app:
     ciafo:
       origin: "*"
       token: "test"
-    outsideworx:
-      origin: "*"
-      token: "test"
     peeps:
       origin: "*"
       token: "test"
     soup:
+      origin: "*"
+      token: "test"
+    worx:
       origin: "*"
       token: "test"
   services:

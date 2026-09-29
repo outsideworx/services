@@ -22,14 +22,11 @@ class FilterConditionsTest {
     private FilterConditions filterConditions;
 
     private final Properties.Client validClient = new Properties.Client();
-    private final Properties.Client outsideworx = new Properties.Client();
 
     @BeforeEach
     void setUp() {
         validClient.setCaller("client1");
         validClient.setToken("secret");
-        outsideworx.setCaller("outsideworx");
-        outsideworx.setToken("secret");
     }
 
     @Test
@@ -83,7 +80,7 @@ class FilterConditionsTest {
 
     @Test
     void invalidCallerIdOrAuthToken_whenCallerIdDoesNotMatch_returnsTrue() {
-        when(properties.getClients()).thenReturn(Map.of("client1", validClient, "outsideworx", outsideworx));
+        when(properties.getClients()).thenReturn(Map.of("client1", validClient));
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader("X-Caller-Id", "wrong");
         request.addHeader("X-Auth-Token", "secret");
@@ -92,7 +89,7 @@ class FilterConditionsTest {
 
     @Test
     void invalidCallerIdOrAuthToken_whenTokenDoesNotMatch_returnsTrue() {
-        when(properties.getClients()).thenReturn(Map.of("client1", validClient, "outsideworx", outsideworx));
+        when(properties.getClients()).thenReturn(Map.of("client1", validClient));
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader("X-Caller-Id", "client1");
         request.addHeader("X-Auth-Token", "wrong");
