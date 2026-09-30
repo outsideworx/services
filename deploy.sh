@@ -1,8 +1,5 @@
 #!/bin/bash
 
-SCRIPT_DIR=$(dirname "$(realpath "$0")")
-DEST="/home/outsideworx/services"
-
 set -e
 
 if [ "$1" == "--install" ]; then
@@ -35,21 +32,6 @@ if [ -n "$1" ]; then
     exit 1
 fi
 
-mkdir -p "$DEST"
-cp -r "$SCRIPT_DIR/utils" "$DEST"
-cp "$SCRIPT_DIR/.env" \
-   "$SCRIPT_DIR/authelia.yaml" \
-   "$SCRIPT_DIR/authelia-users.yaml" \
-   "$SCRIPT_DIR/compose.yaml" \
-   "$SCRIPT_DIR/grafana.ini" \
-   "$SCRIPT_DIR/loki.yaml" \
-   "$SCRIPT_DIR/logo.png" \
-   "$SCRIPT_DIR/ntfy.yaml" \
-   "$SCRIPT_DIR/prometheus.yaml" \
-   "$SCRIPT_DIR/promtail.yaml" \
-   "$DEST"
-
-cd "$DEST"
 set -a; source .env; set +a
 export HASH_AUTHELIA=$(sha256sum authelia.yaml | cut -c1-8)
 export HASH_AUTHELIA_USERS=$(sha256sum authelia-users.yaml | cut -c1-8)
