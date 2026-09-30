@@ -13,9 +13,6 @@ docker secret rm "$(docker secret ls -q)"
 docker rmi -f "$(docker images -qa)"
 docker system prune -af
 
-rm -rf /home/outsideworx/services
-rm -rf /home/outsideworx/sites
-
 apt update
 apt upgrade -y
 htop
