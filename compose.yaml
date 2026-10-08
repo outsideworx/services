@@ -296,7 +296,7 @@ services:
       OAUTH_AUTO_LAUNCH: "oidc"
       OAUTH_OIDC_CLIENT_ID: "wg-easy"
       OAUTH_OIDC_CLIENT_SECRET: $WG_OAUTH_OIDC_CLIENT_SECRET
-      OAUTH_OIDC_SERVER: "https://vpn.outsideworx.net"
+      OAUTH_OIDC_SERVER: "https://oauth.outsideworx.net"
       OAUTH_PROVIDERS: "oidc"
     healthcheck:
       <<: *healthcheck
