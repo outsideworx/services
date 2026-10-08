@@ -22,6 +22,8 @@ if [ "$1" == "--network" ]; then
     cat <<-EOF > /etc/modules-load.d/wg-easy.conf
 		ip_tables
 		iptable_nat
+		ip6_tables
+		ip6table_nat
 	EOF
     systemctl restart systemd-modules-load.service
     exit 0

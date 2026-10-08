@@ -293,10 +293,14 @@ services:
     environment:
       DISABLE_VERSION_CHECK: "true"
       INIT_ENABLED: "true"
-      INSECURE: "true"
+      OAUTH_AUTO_LAUNCH: "oidc"
+      OAUTH_OIDC_CLIENT_ID: "wg-easy"
+      OAUTH_OIDC_CLIENT_SECRET: $WG_OAUTH_OIDC_CLIENT_SECRET
+      OAUTH_OIDC_SERVER: "https://vpn.outsideworx.net"
+      OAUTH_PROVIDERS: "oidc"
     healthcheck:
       <<: *healthcheck
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:51821"]
+      test: ["CMD", "node", "-e", "require('net').connect(51821,'127.0.0.1').on('connect',()=>process.exit()).on('error',()=>process.exit(1))"]
     image: ghcr.io/wg-easy/wg-easy:15
     networks:
       - outsideworx

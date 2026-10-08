@@ -30,6 +30,17 @@ identity_providers:
           - openid
           - profile
         secret: "$pbkdf2-sha512$310000$qD2v/qVqphER2Y2QYa1asQ$INKnVdFBsNSMC9FjyYgwMaFdy6EpRGeMmUmLikGF9EVCZBUwvGBa6T1NOzUX7jdAXEhj3ZzqCDwCd81X0FQ4ww"
+      - authorization_policy: one_factor
+        consent_mode: implicit
+        id: wg-easy
+        redirect_uris:
+          - https://vpn.outsideworx.net/api/auth/oidc/callback
+          - https://vpn.outsideworx.net/api/auth/oidc/link
+        scopes:
+          - email
+          - openid
+          - profile
+        secret: "$pbkdf2-sha512$310000$pBx.ze2V0bQr1RchA7stIA$eXjcfk/AG1XZF5bxAWa3JrcUez4frzt/gMbtZ4SqM5D9cvBNalnbLISjeTRO.uYQz91hn9PDOzw69mFGv/Dg/A"
 notifier:
   filesystem:
     filename: /tmp/authelia-notifier.txt

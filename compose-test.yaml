@@ -140,19 +140,19 @@ services:
       - SYS_MODULE
     container_name: wg-easy
     environment:
-      DISABLE_IPV6: true
-      DISABLE_PASSWORD_AUTH: true
       DISABLE_VERSION_CHECK: true
       INIT_ENABLED: true
-      INSECURE: true
+      NODE_TLS_REJECT_UNAUTHORIZED: 0
       OAUTH_AUTO_LAUNCH: oidc
       OAUTH_OIDC_CLIENT_ID: wg-easy
       OAUTH_OIDC_CLIENT_SECRET: wg-easy
-      OAUTH_OIDC_SERVER: https://oauth.localhost/api/oidc/authorization
+      OAUTH_OIDC_SERVER: https://oauth.localhost
       OAUTH_PROVIDERS: oidc
+    extra_hosts:
+      - "oauth.localhost:host-gateway"
     healthcheck:
       <<: *healthcheck
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:51821"]
+      test: ["CMD", "node", "-e", "require('net').connect(51821,'127.0.0.1').on('connect',()=>process.exit()).on('error',()=>process.exit(1))"]
     image: ghcr.io/wg-easy/wg-easy:15
     labels:
       - traefik.enable=true
