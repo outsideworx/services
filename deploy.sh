@@ -30,10 +30,10 @@ if [ "$1" == "--network" ]; then
 fi
 
 if [ "$1" == "--secrets" ]; then
-    openssl genrsa 4096 | docker secret create rsa_private_key -
     wg_metrics_token=$(openssl rand -base64 32)
     echo "wg_metrics_token: $wg_metrics_token"
     echo "$wg_metrics_token" | docker secret create wg_metrics_token -
+    openssl genrsa 4096 | docker secret create rsa_private_key -
     exit 0
 fi
 
@@ -54,4 +54,4 @@ export HASH_PROMTAIL=$(sha256sum promtail.yaml | cut -c1-8)
 
 docker compose pull
 docker stack deploy -c compose.yaml services --detach=false --resolve-image=always
-docker stack services services --format '{{.Name}}' | xargs -I{} docker service update --force {}
+docker stack services services --format '{{.Name}}' | xargs -rn1 docker service update --force
