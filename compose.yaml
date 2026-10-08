@@ -278,6 +278,38 @@ services:
     volumes:
       - cache:/utils/cache
       - ./utils:/etc/utils
+  wg-easy:
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    deploy:
+      <<: *placement
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.wg-easy.entrypoints=websecure
+        - traefik.http.routers.wg-easy.rule=Host(`vpn.outsideworx.net`)
+        - traefik.http.routers.wg-easy.tls.certresolver=letsencrypt
+        - traefik.http.services.wg-easy.loadbalancer.server.port=51821
+    environment:
+      DISABLE_IPV6: true
+      INIT_ENABLED: true
+      INSECURE: true
+    healthcheck:
+      <<: *healthcheck
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:51821"]
+    image: ghcr.io/wg-easy/wg-easy:15
+    networks:
+      - outsideworx
+    ports:
+      - target: 51820
+        published: 51820
+        protocol: udp
+        mode: host
+    sysctls:
+      net.ipv4.conf.all.src_valid_mark: 1
+      net.ipv4.ip_forward: 1
+    volumes:
+      - wireguard:/etc/wireguard
 volumes:
   cache:
   grafana:
@@ -287,3 +319,4 @@ volumes:
   postgres:
   prometheus:
   promtail:
+  wireguard:

@@ -30,6 +30,17 @@ identity_providers:
           - openid
           - profile
         secret: "$pbkdf2-sha512$310000$qD2v/qVqphER2Y2QYa1asQ$INKnVdFBsNSMC9FjyYgwMaFdy6EpRGeMmUmLikGF9EVCZBUwvGBa6T1NOzUX7jdAXEhj3ZzqCDwCd81X0FQ4ww"
+      - authorization_policy: one_factor
+        consent_mode: implicit
+        id: wg-easy
+        redirect_uris:
+          - https://vpn.localhost/api/auth/oidc/callback
+          - https://vpn.localhost/api/auth/oidc/link
+        scopes:
+          - email
+          - openid
+          - profile
+        secret: "$pbkdf2-sha512$310000$NNaJy.5bp4jfw..YfyVUnA$9nnLuxwrkQIi6RzyS2LTy3TskY72u8cK4Yi15aZG18XkLHJDm44T4M5ebTjLBgYEtzqO97YNam6bE5SxYpP/PQ"
     hmac_secret: hmac_secret
     issuer_private_key: |
       -----BEGIN PRIVATE KEY-----
