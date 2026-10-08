@@ -40,7 +40,7 @@ identity_providers:
           - email
           - openid
           - profile
-        secret: "$pbkdf2-sha512$310000$NNaJy.5bp4jfw..YfyVUnA$9nnLuxwrkQIi6RzyS2LTy3TskY72u8cK4Yi15aZG18XkLHJDm44T4M5ebTjLBgYEtzqO97YNam6bE5SxYpP/PQ"
+        secret: "$pbkdf2-sha512$310000$pBx.ze2V0bQr1RchA7stIA$eXjcfk/AG1XZF5bxAWa3JrcUez4frzt/gMbtZ4SqM5D9cvBNalnbLISjeTRO.uYQz91hn9PDOzw69mFGv/Dg/A"
     hmac_secret: hmac_secret
     issuer_private_key: |
       -----BEGIN PRIVATE KEY-----

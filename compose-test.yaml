@@ -142,12 +142,13 @@ services:
     environment:
       DISABLE_IPV6: true
       DISABLE_PASSWORD_AUTH: true
+      DISABLE_VERSION_CHECK: true
       INIT_ENABLED: true
       INSECURE: true
       OAUTH_AUTO_LAUNCH: oidc
       OAUTH_OIDC_CLIENT_ID: wg-easy
-      OAUTH_OIDC_CLIENT_SECRET: grafana
-      OAUTH_OIDC_SERVER: https://oauth.localhost
+      OAUTH_OIDC_CLIENT_SECRET: wg-easy
+      OAUTH_OIDC_SERVER: https://oauth.localhost/api/oidc/authorization
       OAUTH_PROVIDERS: oidc
     healthcheck:
       <<: *healthcheck

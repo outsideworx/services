@@ -291,9 +291,10 @@ services:
         - traefik.http.routers.wg-easy.tls.certresolver=letsencrypt
         - traefik.http.services.wg-easy.loadbalancer.server.port=51821
     environment:
-      DISABLE_IPV6: true
-      INIT_ENABLED: true
-      INSECURE: true
+      DISABLE_IPV6: "true"
+      DISABLE_VERSION_CHECK: "true"
+      INIT_ENABLED: "true"
+      INSECURE: "true"
     healthcheck:
       <<: *healthcheck
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:51821"]
