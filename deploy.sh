@@ -31,6 +31,9 @@ fi
 
 if [ "$1" == "--secrets" ]; then
     openssl genrsa 4096 | docker secret create rsa_private_key -
+    wg_metrics_token=$(openssl rand -base64 32)
+    echo "wg_metrics_token: $wg_metrics_token"
+    echo "$wg_metrics_token" | docker secret create wg_metrics_token -
     exit 0
 fi
 
