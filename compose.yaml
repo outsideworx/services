@@ -298,6 +298,8 @@ services:
       OAUTH_OIDC_CLIENT_SECRET: $WG_OAUTH_OIDC_CLIENT_SECRET
       OAUTH_OIDC_SERVER: "https://oauth.outsideworx.net"
       OAUTH_PROVIDERS: "oidc"
+    extra_hosts:
+      - "oauth.outsideworx.net:host-gateway"
     healthcheck:
       <<: *healthcheck
       test: ["CMD", "node", "-e", "require('net').connect(51821,'127.0.0.1').on('connect',()=>process.exit()).on('error',()=>process.exit(1))"]
