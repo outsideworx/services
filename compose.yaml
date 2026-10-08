@@ -290,8 +290,6 @@ services:
         - traefik.http.routers.wg-easy.rule=Host(`vpn.outsideworx.net`)
         - traefik.http.routers.wg-easy.tls.certresolver=letsencrypt
         - traefik.http.services.wg-easy.loadbalancer.server.port=51821
-    devices:
-      - /dev/net/tun:/dev/net/tun
     environment:
       DISABLE_IPV6: "true"
       DISABLE_VERSION_CHECK: "true"

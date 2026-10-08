@@ -19,6 +19,7 @@ if [ "$1" == "--network" ]; then
         echo "Warning: no IP address provided, skipping swarm init"
     fi
     docker network create -d overlay --attachable outsideworx
+    modprobe ip_tables iptable_nat
     exit 0
 fi
 
