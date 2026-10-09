@@ -19,6 +19,8 @@ app:
       url: "https://ntfy.outsideworx.net"
     oauth:
       url: "https://oauth.outsideworx.net"
+    vpn:
+      url: "https://vpn.outsideworx.net"
 management:
   endpoints:
     web:

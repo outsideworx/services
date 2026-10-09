@@ -19,6 +19,8 @@ app:
       url: "https://ntfy.localhost"
     oauth:
       url: "https://oauth.localhost"
+    vpn:
+      url: "https://vpn.localhost"
 management:
   server:
     port: 8081
