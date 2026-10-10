@@ -120,7 +120,7 @@ services:
       - source: ntfy
         target: /etc/ntfy/server.yml
     deploy:
-      <<: *plac ement
+      <<: *placement
       labels:
         - traefik.enable=true
         - traefik.http.routers.ntfy.entrypoints=websecure
