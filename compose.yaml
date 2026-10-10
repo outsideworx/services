@@ -181,7 +181,7 @@ services:
     image: prom/prometheus:v3.9.1
     networks:
       edge:
-      outsidewrx:
+      outsideworx:
     secrets:
       - wg_metrics_token
     user: root
