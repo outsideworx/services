@@ -3,6 +3,9 @@ x-healthcheck: &healthcheck
   retries: 2
   start_period: 1m
   timeout: 30s
+x-networks: &networks
+  networks:
+    outsideworx:
 x-placement: &placement
   placement:
     constraints:
@@ -33,6 +36,8 @@ configs:
     file: ./promtail.yaml
     name: promtail-${HASH_PROMTAIL}
 networks:
+  edge:
+    external: true
   outsideworx:
     external: true
 secrets:
@@ -74,6 +79,7 @@ services:
     secrets:
       - rsa_private_key
   grafana:
+    <<: *networks
     configs:
       - source: grafana
         target: /etc/grafana/grafana.ini
@@ -93,30 +99,28 @@ services:
       <<: *healthcheck
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/api/health"]
     image: grafana/grafana:12.3.0
-    networks:
-      - outsideworx
     user: root
     volumes:
       - grafana:/var/lib/grafana
   loki:
+    <<: *networks
     configs:
       - source: loki
         target: /etc/loki/local-config.yaml
     deploy:
       <<: *placement
     image: grafana/loki:3.6.4
-    networks:
-      - outsideworx
     user: root
     volumes:
       - loki:/loki
   ntfy:
+    <<: *networks
     command: serve
     configs:
       - source: ntfy
         target: /etc/ntfy/server.yml
     deploy:
-      <<: *placement
+      <<: *plac ement
       labels:
         - traefik.enable=true
         - traefik.http.routers.ntfy.entrypoints=websecure
@@ -130,8 +134,6 @@ services:
       <<: *healthcheck
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/v1/health"]
     image: binwiederhier/ntfy:v2.16.0
-    networks:
-      - outsideworx
     volumes:
       - ntfy:/etc/ntfy/data
   postgres:
@@ -151,6 +153,7 @@ services:
     volumes:
       - postgres:/var/lib/postgresql/data
   postgres-exporter:
+    <<: *networks
     command:
       - --web.listen-address=:80
     deploy:
@@ -163,9 +166,8 @@ services:
       <<: *healthcheck
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/metrics"]
     image: quay.io/prometheuscommunity/postgres-exporter:v0.18.1
-    networks:
-      - outsideworx
   prometheus:
+    <<: *networks
     command:
       - --config.file=/etc/prometheus/prometheus.yml
       - --storage.tsdb.retention.time=365d
@@ -178,14 +180,13 @@ services:
       <<: *healthcheck
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9090/-/healthy"]
     image: prom/prometheus:v3.9.1
-    networks:
-      - outsideworx
     secrets:
       - wg_metrics_token
     user: root
     volumes:
       - prometheus:/prometheus
   promtail:
+    <<: *networks
     configs:
       - source: promtail
         target: /etc/promtail/config.yml
@@ -195,8 +196,6 @@ services:
       <<: *healthcheck
       test: ["CMD-SHELL", "bash -c 'echo -e \"GET /ready HTTP/1.0\\r\\n\\r\\n\" > /dev/tcp/localhost/80'"]
     image: grafana/promtail:3.6.4
-    networks:
-      - outsideworx
     volumes:
       - promtail:/promtail
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -249,18 +248,20 @@ services:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:81/ping"]
     image: traefik:v3.6.14
     networks:
-      - outsideworx
+      edge:
+      outsideworx:
     ports:
-      - target: 80
+      - mode: host
         published: 80
-        mode: host
-      - target: 443
+        target: 80
+      - mode: host
         published: 443
-        mode: host
+        target: 443
     volumes:
       - letsencrypt:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock:ro
   utils:
+    <<: *networks
     command: >-
       bash -c '
         cd /etc/utils;
@@ -277,18 +278,16 @@ services:
       DB_PASSWORD: $SPRING_DATASOURCE_PASSWORD
       DB_USERNAME: $SPRING_DATASOURCE_USERNAME
     image: python:3.13-slim
-    networks:
-      - outsideworx
     volumes:
       - cache:/utils/cache
       - ./utils:/etc/utils
   wg-easy:
     cap_add:
       - NET_ADMIN
-      - SYS_MODULE
     deploy:
       <<: *placement
       labels:
+        - traefik.docker.network=edge
         - traefik.enable=true
         - traefik.http.routers.wg-easy.entrypoints=websecure
         - traefik.http.routers.wg-easy.rule=Host(`vpn.outsideworx.net`)
@@ -309,12 +308,12 @@ services:
       test: ["CMD", "node", "-e", "require('net').connect(51821,'127.0.0.1').on('connect',()=>process.exit()).on('error',()=>process.exit(1))"]
     image: ghcr.io/wg-easy/wg-easy:15
     networks:
-      - outsideworx
+      edge:
     ports:
-      - target: 51820
-        published: 51820
+      - mode: host
         protocol: udp
-        mode: host
+        published: 51820
+        target: 51820
     sysctls:
       net.ipv4.conf.all.src_valid_mark: 1
       net.ipv4.ip_forward: 1

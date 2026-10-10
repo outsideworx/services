@@ -18,13 +18,14 @@ if [ "$1" == "--network" ]; then
     else
         echo "Warning: no IP address provided, skipping swarm init"
     fi
+    docker network create -d overlay --attachable edge
     docker network create -d overlay --attachable outsideworx
     cat <<-EOF > /etc/modules-load.d/wg-easy.conf
-		ip_tables
-		iptable_nat
-		ip6_tables
-		ip6table_nat
-	EOF
+			ip_tables
+			iptable_nat
+			ip6_tables
+			ip6table_nat
+		EOF
     systemctl restart systemd-modules-load.service
     exit 0
 fi

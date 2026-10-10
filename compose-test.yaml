@@ -137,7 +137,6 @@ services:
   wg-easy:
     cap_add:
       - NET_ADMIN
-      - SYS_MODULE
     container_name: wg-easy
     environment:
       DISABLE_VERSION_CHECK: true
