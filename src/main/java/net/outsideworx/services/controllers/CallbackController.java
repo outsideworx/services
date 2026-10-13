@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.HtmlUtils;
+
+import java.util.Objects;
 
 @CrossOrigin({"${app.clients.ciafo.origin}"})
 @RestController
@@ -30,9 +33,9 @@ final class CallbackController {
                     callerId,
                     "Someone is interested!",
                     String.format(
-                            "A visitor left the following contact: %s.<br>The product he was interested in is: <a href=%s>this</a>.",
-                            callback.getAddress(),
-                            callback.getProduct()));
+                            "A visitor left the following contact: %s.<br>The product he was interested in is: <a href=\"%s\">this</a>.",
+                            escape(callback.getAddress()),
+                            escape(callback.getProduct())));
         } catch (MailerSendException | NullPointerException e) {
             throw new IllegalStateException("Email sending failed.", e);
         } finally {
@@ -43,5 +46,9 @@ final class CallbackController {
             callbackRepository.save(callbackEntity);
             log.info("Callback saved with id: [{}]", callbackEntity.getId());
         }
+    }
+
+    private String escape(String value) {
+        return HtmlUtils.htmlEscape(Objects.toString(value, ""));
     }
 }

@@ -25,7 +25,8 @@ scrape_configs:
       - targets: [
         "come-in-and-find-out",
         "gaiapeeps",
-        "soupart"
+        "soupart",
+        "tunde-divat"
       ]
   - job_name: traefik
     static_configs:

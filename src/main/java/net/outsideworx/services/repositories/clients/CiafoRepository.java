@@ -14,7 +14,7 @@ import java.util.List;
 
 @Transactional
 public interface CiafoRepository extends CrudRepository<CiafoEntity, Long> {
-    @Cacheable(value = "ciafoItems", key = "#category")
+    @Cacheable(value = "ciafoItems", key = "{'thumbnails', #category}")
     @Query(value = """
             SELECT id, category, description, hash, thumbnail1, thumbnail2, thumbnail3, thumbnail4
                     FROM CIAFO
@@ -23,7 +23,7 @@ public interface CiafoRepository extends CrudRepository<CiafoEntity, Long> {
             """, nativeQuery = true)
     List<CiafoThumbnails> getThumbnails(String category);
 
-    @Cacheable(value = "ciafoItems", key = "#id")
+    @Cacheable(value = "ciafoItems", key = "{'payload', #id}")
     @Query(value = """
             SELECT id, category, description, hash, image1, image2, image3, image4
                     FROM CIAFO
@@ -31,7 +31,7 @@ public interface CiafoRepository extends CrudRepository<CiafoEntity, Long> {
             """, nativeQuery = true)
     CiafoPayload get(Long id);
 
-    @Cacheable(value = "ciafoItems", key = "#category + #offset")
+    @Cacheable(value = "ciafoItems", key = "{'previews', #category, #offset}")
     @Query(value = """
             SELECT id, category, description, hash, image1
                     FROM CIAFO

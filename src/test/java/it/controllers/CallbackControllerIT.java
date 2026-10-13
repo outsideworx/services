@@ -9,6 +9,7 @@ import it.IntegrationTestBase;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
@@ -106,6 +107,25 @@ class CallbackControllerIT {
                         .content(VALID_BODY));
 
         verify(emailGateway).send(eq("come-in-and-find-out"), any(), any());
+    }
+
+    @Test
+    void postCallback_withHtmlInPayload_escapesEmailBody() throws Exception {
+        mockMvc.perform(post("/api/callback")
+                .header("X-Caller-Id", "come-in-and-find-out")
+                .header("X-Auth-Token", "test")
+                .contentType("application/json")
+                .content("""
+                        {"address":"<b>visitor</b>","product":"\\"><script>alert(1)</script>"}
+                        """));
+
+        ArgumentCaptor<String> text = ArgumentCaptor.forClass(String.class);
+        verify(emailGateway).send(eq("come-in-and-find-out"), any(), text.capture());
+        assertThat(text.getValue())
+                .contains("&lt;b&gt;visitor&lt;/b&gt;")
+                .contains("href=\"&quot;&gt;&lt;script&gt;alert(1)&lt;/script&gt;\"")
+                .doesNotContain("<b>visitor")
+                .doesNotContain("<script>");
     }
 
     @Test

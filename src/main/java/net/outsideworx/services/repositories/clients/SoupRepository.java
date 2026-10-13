@@ -11,7 +11,7 @@ import java.util.List;
 
 @Transactional
 public interface SoupRepository extends CrudRepository<SoupEntity, Long> {
-    @Cacheable(value = "soupItems", key = "#category")
+    @Cacheable(value = "soupItems", key = "{'all', #category}")
     @Query(value = """
             SELECT id, category, description, hash, image, thumbnail, link
                     FROM SOUP
@@ -20,7 +20,7 @@ public interface SoupRepository extends CrudRepository<SoupEntity, Long> {
             """, nativeQuery = true)
     List<SoupEntity> get(String category);
 
-    @Cacheable(value = "soupItems", key = "#category + #offset")
+    @Cacheable(value = "soupItems", key = "{'page', #category, #offset}")
     @Query(value = """
             SELECT id, category, description, hash, image, thumbnail, link
                     FROM SOUP
