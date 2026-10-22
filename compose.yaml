@@ -41,9 +41,33 @@ networks:
   outsideworx:
     external: true
 secrets:
-  wg_metrics_token:
+  app_clients_ciafo_token:
+    external: true
+  app_clients_peeps_token:
+    external: true
+  app_clients_soup_token:
+    external: true
+  app_clients_worx_token:
+    external: true
+  authelia_jwt_secret:
+    external: true
+  authelia_oidc_hmac_secret:
+    external: true
+  authelia_session_secret:
+    external: true
+  authelia_storage_encryption_key:
+    external: true
+  grafana_oauth_client_secret:
+    external: true
+  mailersend_sdk_token:
+    external: true
+  postgres_password:
     external: true
   rsa_private_key:
+    external: true
+  services_oauth_client_secret:
+    external: true
+  wg_metrics_token:
     external: true
 services:
   authelia:
@@ -63,11 +87,11 @@ services:
         - traefik.http.routers.authelia.tls.certresolver=letsencrypt
         - traefik.http.services.authelia.loadbalancer.server.port=80
     environment:
-      AUTHELIA_IDENTITY_PROVIDERS_OIDC_HMAC_SECRET: $AUTHELIA_IDENTITY_PROVIDERS_OIDC_HMAC_SECRET
+      AUTHELIA_IDENTITY_PROVIDERS_OIDC_HMAC_SECRET_FILE: /run/secrets/authelia_oidc_hmac_secret
       AUTHELIA_IDENTITY_PROVIDERS_OIDC_ISSUER_PRIVATE_KEY_FILE: /run/secrets/rsa_private_key
-      AUTHELIA_JWT_SECRET: $AUTHELIA_JWT_SECRET
-      AUTHELIA_SESSION_SECRET: $AUTHELIA_SESSION_SECRET
-      AUTHELIA_STORAGE_ENCRYPTION_KEY: $AUTHELIA_STORAGE_ENCRYPTION_KEY
+      AUTHELIA_JWT_SECRET_FILE: /run/secrets/authelia_jwt_secret
+      AUTHELIA_SESSION_SECRET_FILE: /run/secrets/authelia_session_secret
+      AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE: /run/secrets/authelia_storage_encryption_key
     healthcheck:
       <<: *healthcheck
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/api/health"]
@@ -77,6 +101,10 @@ services:
         aliases:
           - services-authelia
     secrets:
+      - authelia_jwt_secret
+      - authelia_oidc_hmac_secret
+      - authelia_session_secret
+      - authelia_storage_encryption_key
       - rsa_private_key
   grafana:
     <<: *networks
@@ -91,14 +119,12 @@ services:
         - traefik.http.routers.grafana.rule=Host(`grafana.outsideworx.net`)
         - traefik.http.routers.grafana.tls.certresolver=letsencrypt
         - traefik.http.services.grafana.loadbalancer.server.port=80
-    environment:
-      GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET: $GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET
-      GF_SECURITY_ADMIN_PASSWORD: $GF_SECURITY_ADMIN_PASSWORD
-      GF_SECURITY_ADMIN_USER: $GF_SECURITY_ADMIN_USER
     healthcheck:
       <<: *healthcheck
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/api/health"]
     image: grafana/grafana:12.3.0
+    secrets:
+      - grafana_oauth_client_secret
     user: root
     volumes:
       - grafana:/var/lib/grafana
@@ -140,7 +166,7 @@ services:
     deploy:
       <<: *placement
     environment:
-      POSTGRES_PASSWORD: $SPRING_DATASOURCE_PASSWORD
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
       POSTGRES_USER: $SPRING_DATASOURCE_USERNAME
     healthcheck:
       <<: *healthcheck
@@ -150,6 +176,8 @@ services:
       outsideworx:
         aliases:
           - services-postgres
+    secrets:
+      - postgres_password
     volumes:
       - postgres:/var/lib/postgresql/data
   postgres-exporter:
@@ -159,13 +187,15 @@ services:
     deploy:
       <<: *placement
     environment:
-      DATA_SOURCE_PASS: $SPRING_DATASOURCE_PASSWORD
+      DATA_SOURCE_PASS_FILE: /run/secrets/postgres_password
       DATA_SOURCE_URI: services_postgres:5432/?sslmode=disable
       DATA_SOURCE_USER: $SPRING_DATASOURCE_USERNAME
     healthcheck:
       <<: *healthcheck
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/metrics"]
     image: quay.io/prometheuscommunity/postgres-exporter:v0.18.1
+    secrets:
+      - postgres_password
   prometheus:
     command:
       - --config.file=/etc/prometheus/prometheus.yml
@@ -211,14 +241,8 @@ services:
         - traefik.http.routers.services.tls.certresolver=letsencrypt
         - traefik.http.services.services.loadbalancer.server.port=80
     environment:
-      APP_CLIENTS_CIAFO_TOKEN: $APP_CLIENTS_CIAFO_TOKEN
-      APP_CLIENTS_PEEPS_TOKEN: $APP_CLIENTS_PEEPS_TOKEN
-      APP_CLIENTS_SOUP_TOKEN: $APP_CLIENTS_SOUP_TOKEN
-      APP_CLIENTS_WORX_TOKEN: $APP_CLIENTS_WORX_TOKEN
-      MAILERSEND_SDK_TOKEN: $MAILERSEND_SDK_TOKEN
-      SPRING_DATASOURCE_PASSWORD: $SPRING_DATASOURCE_PASSWORD
+      SPRING_CONFIG_IMPORT: configtree:/run/secrets/
       SPRING_DATASOURCE_USERNAME: $SPRING_DATASOURCE_USERNAME
-      SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_AUTHELIA_CLIENT_SECRET: $SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_AUTHELIA_CLIENT_SECRET
     healthcheck:
       <<: *healthcheck
       test: ["CMD", "curl", "-f", "http://localhost:81/actuator/health"]
@@ -227,6 +251,21 @@ services:
       outsideworx:
         aliases:
           - services-services
+    secrets:
+      - source: app_clients_ciafo_token
+        target: app.clients.ciafo.token
+      - source: app_clients_peeps_token
+        target: app.clients.peeps.token
+      - source: app_clients_soup_token
+        target: app.clients.soup.token
+      - source: app_clients_worx_token
+        target: app.clients.worx.token
+      - source: mailersend_sdk_token
+        target: mailersend.sdk.token
+      - source: postgres_password
+        target: spring.datasource.password
+      - source: services_oauth_client_secret
+        target: spring.security.oauth2.client.registration.authelia.client-secret
   traefik:
     command:
       - --certificatesresolvers.letsencrypt.acme.httpchallenge=true
@@ -277,9 +316,11 @@ services:
       <<: *placement
     environment:
       DB_HOST: services_postgres
-      DB_PASSWORD: $SPRING_DATASOURCE_PASSWORD
+      DB_PASSWORD_FILE: /run/secrets/postgres_password
       DB_USERNAME: $SPRING_DATASOURCE_USERNAME
     image: python:3.13-slim
+    secrets:
+      - postgres_password
     volumes:
       - cache:/utils/cache
       - ./utils:/etc/utils

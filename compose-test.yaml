@@ -128,7 +128,7 @@ services:
     container_name: utils
     environment:
       DB_HOST: postgres
-      DB_PASSWORD: ""
+      DB_PASSWORD_FILE: /dev/null
       DB_USERNAME: postgres
     image: python:3.13-slim
     volumes:
