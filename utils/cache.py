@@ -5,7 +5,6 @@ import psycopg2
 import psycopg2.errors
 import time
 from datetime import datetime
-from pathlib import Path
 
 from commons.logging_config import setup_logging
 
@@ -16,7 +15,7 @@ OUTPUT_DIR = "/utils/cache"
 CIAFO_LABELS = ["image1", "image2", "image3", "image4", "thumbnail1", "thumbnail2", "thumbnail3", "thumbnail4"]
 DB_HOST = os.environ["DB_HOST"]
 DB_NAME = os.environ["DB_USERNAME"]
-DB_PASS = Path(os.environ["DB_PASSWORD_FILE"]).read_text().strip()
+DB_PASS = os.environ["DB_PASSWORD"]
 DB_PORT = "5432"
 DB_USER = os.environ["DB_USERNAME"]
 HASH_FILE = f"{OUTPUT_DIR}/hashes.properties"

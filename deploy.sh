@@ -10,12 +10,10 @@ fi
 
 if [ "$1" == "--network" ]; then
     if [ -n "$2" ]; then
-        # Required ports:
-        # 2377/tcp      - communication between nodes
-        # 7946          - overlay network node discovery
+        # Required open ports:
+        # 2377/tcp      - communication with and between manager nodes
+        # 7946/tcp+udp  - overlay network node discovery
         # 4789/udp      - overlay network traffic (configurable)
-        # 51820/udp     - WireGuard gateway
-        # 51821/tcp     - operator SSH
         docker swarm init --advertise-addr "$2"
     else
         echo "Warning: no IP address provided, skipping swarm init"
@@ -33,36 +31,10 @@ if [ "$1" == "--network" ]; then
 fi
 
 if [ "$1" == "--secrets" ]; then
-    if ! docker secret inspect rsa_private_key > /dev/null 2>&1; then
-        openssl genrsa 4096 | docker secret create rsa_private_key -
-    fi
-    for secret in \
-        grafana_oauth_client_secret \
-        mailersend_sdk_token \
-        services_oauth_client_secret; do
-        if ! docker secret inspect "$secret" > /dev/null 2>&1; then
-            read -rsp "$secret: " value
-            echo
-            printf '%s' "$value" | docker secret create "$secret" -
-        fi
-    done
-    for secret in \
-        app_clients_ciafo_token \
-        app_clients_peeps_token \
-        app_clients_soup_token \
-        app_clients_worx_token \
-        authelia_jwt_secret \
-        authelia_oidc_hmac_secret \
-        authelia_session_secret \
-        authelia_storage_encryption_key \
-        postgres_password \
-        wg_metrics_token; do
-        if ! docker secret inspect "$secret" > /dev/null 2>&1; then
-            value=$(openssl rand -base64 32)
-            echo "$secret: $value"
-            printf '%s' "$value" | docker secret create "$secret" -
-        fi
-    done
+    wg_metrics_token=$(openssl rand -base64 32)
+    echo "wg_metrics_token: $wg_metrics_token"
+    echo "$wg_metrics_token" | docker secret create wg_metrics_token -
+    openssl genrsa 4096 | docker secret create rsa_private_key -
     exit 0
 fi
 
