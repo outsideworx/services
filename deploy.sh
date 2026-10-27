@@ -6,18 +6,15 @@ if [ "$1" == "--network" ]; then
     if [ -n "$2" ]; then
         # Required open ports:
         # 2377/tcp      - communication with and between manager nodes
-        # 7946/tcp+udp  - overlay network node discovery
+        # 7946          - overlay network node discovery
         # 4789/udp      - overlay network traffic (configurable)
-        # 51820/udp     - wg-easy WireGuard tunnel (host mode, public)
+        # 51820/udp     - WireGuard tunnel (host mode, public)
         docker swarm init --advertise-addr "$2"
     else
         echo "Warning: no IP address provided, skipping swarm init"
     fi
-    # edge: traefik, prometheus, wg-easy and the backend-free sites
-    # outsideworx: everything that needs backend connectivity
     docker network create -d overlay --attachable edge
     docker network create -d overlay --attachable outsideworx
-    # wg-easy NAT/forwarding needs iptables kernel modules loaded on the host
     cat <<-EOF > /etc/modules-load.d/wg-easy.conf
 			ip_tables
 			iptable_nat
@@ -29,8 +26,6 @@ if [ "$1" == "--network" ]; then
 fi
 
 if [ "$1" == "--secrets" ]; then
-    # Prometheus reads the secret file; the printed value must also be entered
-    # as the Prometheus metrics password in the wg-easy admin UI
     wg_metrics_token=$(openssl rand -base64 32)
     echo "wg_metrics_token: $wg_metrics_token"
     echo "$wg_metrics_token" | docker secret create wg_metrics_token -
