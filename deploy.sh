@@ -14,15 +14,25 @@ if [ "$1" == "--host" ]; then
         echo "Error: --host requires a target (e.g. user@server)"
         exit 1
     fi
+    # Only --network is self-contained: --secrets must run on the Swarm manager
+    # it targets, and the deployment needs the repo's config files and .env.
+    if [ "$3" != "--network" ]; then
+        echo "Error: --host only supports --network (e.g. --host user@server --network <IP>)"
+        exit 1
+    fi
     HOST="$2"
     shift 2
     SCRIPT_NAME=$(basename "$0")
     scp "$0" "$HOST:~/$SCRIPT_NAME"
-    ssh "$HOST" "cd ~ && ./$SCRIPT_NAME $*"
+    ssh "$HOST" "cd ~ && ./$SCRIPT_NAME $(printf '%q ' "$@")"
     exit 0
 fi
 
 if [ "$1" == "--network" ]; then
+    if [ -n "$3" ]; then
+        echo "Error: Unknown parameter: '$3'"
+        exit 1
+    fi
     if [ -n "$2" ]; then
         # Required open ports:
         # 2377/tcp      - communication with and between manager nodes
