@@ -2,12 +2,6 @@
 
 set -e
 
-if [ "$1" == "--install" ]; then
-    apt update
-    apt install -y docker-compose-v2 git maven npm openjdk-25-jdk
-    exit 0
-fi
-
 if [ "$1" == "--network" ]; then
     if [ -n "$2" ]; then
         # Required open ports:
