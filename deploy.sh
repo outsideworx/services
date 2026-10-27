@@ -2,6 +2,26 @@
 
 set -e
 
+for arg in "${@:2}"; do
+    if [ "$arg" == "--host" ]; then
+        echo "Error: --host must be the first parameter"
+        exit 1
+    fi
+done
+
+if [ "$1" == "--host" ]; then
+    if [ -z "$2" ]; then
+        echo "Error: --host requires a target (e.g. user@server)"
+        exit 1
+    fi
+    HOST="$2"
+    shift 2
+    SCRIPT_NAME=$(basename "$0")
+    scp "$0" "$HOST:~/$SCRIPT_NAME"
+    ssh "$HOST" "cd ~ && ./$SCRIPT_NAME $*"
+    exit 0
+fi
+
 if [ "$1" == "--network" ]; then
     if [ -n "$2" ]; then
         # Required open ports:
