@@ -35,6 +35,9 @@ configs:
   promtail:
     file: ./promtail.yaml
     name: promtail-${HASH_PROMTAIL}
+  utils:
+    file: ./utils.tar
+    name: utils-${HASH_UTILS}
 networks:
   edge:
     external: true
@@ -266,6 +269,8 @@ services:
     <<: *networks
     command: >-
       bash -c '
+        mkdir -p /etc/utils;
+        tar -xf /etc/utils.tar -C /etc/utils;
         cd /etc/utils;
         pip install -r requirements.txt -q &&
         for script in *.py; do
@@ -273,6 +278,9 @@ services:
           python "$$script" &
         done;
         wait'
+    configs:
+      - source: utils
+        target: /etc/utils.tar
     deploy:
       <<: *placement
     environment:
@@ -282,7 +290,6 @@ services:
     image: python:3.13-slim
     volumes:
       - cache:/utils/cache
-      - ./utils:/etc/utils
   wg-easy:
     cap_add:
       - NET_ADMIN
