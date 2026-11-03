@@ -77,9 +77,12 @@ export HASH_LOKI=$(sha256sum loki.yaml | cut -c1-8)
 export HASH_NTFY=$(sha256sum ntfy.yaml | cut -c1-8)
 export HASH_PROMETHEUS=$(sha256sum prometheus.yaml | cut -c1-8)
 export HASH_PROMTAIL=$(sha256sum promtail.yaml | cut -c1-8)
+
 tar --sort=name --mtime='@0' --owner=0 --group=0 --numeric-owner \
     -cf utils.tar -C utils --exclude=operations .
 export HASH_UTILS=$(sha256sum utils.tar | cut -c1-8)
+
+echo "$DISPATCH_TOKEN" | docker login ghcr.io -u outsideworx --password-stdin
 
 docker compose pull
 docker stack deploy -c compose.yaml services --detach=false --resolve-image=always
