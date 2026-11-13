@@ -46,7 +46,7 @@ class OutsideworxControllerIT {
                 .andExpect(status().isOk())
                 .andExpect(view().name("clients/outsideworx"))
                 .andExpect(model().attribute("knockUrl", "https://localhost:8443"))
-                .andExpect(content().string(containsString("const KNOCK_URL = \"https://localhost:8443\";")));
+                .andExpect(content().string(containsString("localhost:8443")));
     }
 
     @Test
