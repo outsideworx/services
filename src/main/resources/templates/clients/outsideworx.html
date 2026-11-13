@@ -58,29 +58,23 @@
     <!-- Operator tunnel control -->
     <div class="card mb-4">
         <div class="card-header d-flex align-items-center">
-            <span><i class="bi bi-hdd-network me-2"></i>Operator tunnel</span>
-            <span id="tunnelStatus" class="ms-auto badge text-bg-secondary">Unknown</span>
+            <span><i class="bi bi-hdd-network me-2"></i>Operator SSH tunnel</span>
+            <span id="tunnelCountdown" class="ms-auto fw-semibold text-success d-none"></span>
         </div>
         <div class="card-body">
             <p class="mb-2">
-                Opens or closes the SSH tunnel to the <strong>operator</strong> container by sending a
-                <code>Bearer</code>-token knock to
-                <code>https://outsideworx.net:8443/login</code> and <code>/logout</code>.
+                Opening sends a <code>Bearer</code>-token knock to the <strong>operator</strong>
+                and arms the tunnel for <strong>60&nbsp;seconds</strong> &mdash; the window to
+                connect &mdash; after which it re-closes automatically. Open again to extend it.
             </p>
             <p class="mb-3 text-secondary">
-                The token is read from the key-value table below — store it under the key
-                <code>operator-knock-token</code> (its value is the contents of
-                <code>/etc/knock/secret</code> on the operator). Browsers must trust the
-                operator's self-signed certificate once (visit the endpoint directly) before these
-                buttons can reach it.
+                The token is read from the key-value table below under the key
+                <code>operator-knock-token</code>. Trust the operator's self-signed certificate
+                once (visit it directly) before this button can reach it.
             </p>
-            <button class="btn btn-success me-2" type="button" onclick="knock('login')">
+            <button id="tunnelOpen" class="btn btn-success" type="button" onclick="knock()">
                 <i class="bi bi-door-open me-1"></i>
                 Open tunnel
-            </button>
-            <button class="btn btn-danger" type="button" onclick="knock('logout')">
-                <i class="bi bi-door-closed me-1"></i>
-                Close tunnel
             </button>
         </div>
     </div>
@@ -169,30 +163,47 @@
         new bootstrap.Modal(document.getElementById('warningModal')).show();
     }
 
-    function setStatus(action) {
-        const status = document.getElementById('tunnelStatus');
-        if (action === 'login') {
-            status.className = 'ms-auto badge text-bg-success';
-            status.textContent = 'Open';
-        } else {
-            status.className = 'ms-auto badge text-bg-danger';
-            status.textContent = 'Closed';
-        }
+    let countdownTimer = null;
+
+    function startCountdown(seconds) {
+        const countdown = document.getElementById('tunnelCountdown');
+        let remaining = seconds;
+
+        const render = () => {
+            countdown.classList.remove('d-none');
+            countdown.textContent = `Open \u2014 closes in ${remaining}s`;
+        };
+
+        clearInterval(countdownTimer);
+        render();
+        countdownTimer = setInterval(() => {
+            remaining -= 1;
+            if (remaining <= 0) {
+                clearInterval(countdownTimer);
+                countdownTimer = null;
+                countdown.classList.add('d-none');
+                countdown.textContent = '';
+                return;
+            }
+            render();
+        }, 1000);
     }
 
-    async function knock(action) {
+    async function knock() {
         const token = readToken();
         if (!token) {
             showModal(`No token found. Add a row with the key "${TOKEN_KEY}" and save it first.`);
             return;
         }
         try {
-            const response = await fetch(`${KNOCK_URL}/${action}`, {
+            const response = await fetch(`${KNOCK_URL}/login`, {
                 method: 'POST',
                 headers: {'Authorization': `Bearer ${token}`}
             });
             if (response.ok) {
-                setStatus(action);
+                const data = await response.json().catch(() => ({}));
+                const ttl = Number.isFinite(data.ttl) ? data.ttl : 60;
+                startCountdown(ttl);
             } else if (response.status === 401) {
                 showModal('The operator rejected the token (401). Check the stored value.');
             } else {
