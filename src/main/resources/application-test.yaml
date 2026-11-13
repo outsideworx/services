@@ -19,6 +19,8 @@ app:
       url: "https://ntfy.localhost"
     oauth:
       url: "https://oauth.localhost"
+    operator:
+      url: "https://localhost:8443"
     vpn:
       url: "https://vpn.localhost"
 management:

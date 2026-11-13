@@ -1,5 +1,6 @@
 package net.outsideworx.services.controllers.clients.outsideworx;
 
+import net.outsideworx.services.configuration.utils.Properties;
 import net.outsideworx.services.controllers.ModelVisitor;
 import net.outsideworx.services.converters.clients.TunnelConverter;
 import net.outsideworx.services.models.clients.worx.TunnelEntity;
@@ -18,6 +19,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Slf4j
 class OutsideworxController implements ModelVisitor {
+    private final Properties properties;
+
     private final TunnelConverter tunnelConverter;
 
     private final TunnelRepository tunnelRepository;
@@ -35,6 +38,7 @@ class OutsideworxController implements ModelVisitor {
     public ModelAndView getModel() {
         ModelAndView model = new ModelAndView("clients/outsideworx");
         model.addObject("items", tunnelRepository.findAll());
+        model.addObject("knockUrl", properties.getServices().get("operator").getUrl());
         return model;
     }
 }
