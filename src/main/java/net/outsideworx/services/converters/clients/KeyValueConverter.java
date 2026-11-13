@@ -1,7 +1,7 @@
 package net.outsideworx.services.converters.clients;
 
 import net.outsideworx.services.converters.ItemsConverter;
-import net.outsideworx.services.models.clients.worx.TunnelEntity;
+import net.outsideworx.services.models.clients.worx.KeyValueEntity;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.util.StringUtils;
 
@@ -10,21 +10,21 @@ import java.util.Map;
 import java.util.Objects;
 
 @Component
-public final class TunnelConverter extends ItemsConverter {
-    public List<Long> filterIdsToDelete(List<TunnelEntity> items) {
+public final class KeyValueConverter extends ItemsConverter {
+    public List<Long> filterIdsToDelete(List<KeyValueEntity> items) {
         return items
                 .stream()
                 .filter(item -> Objects.nonNull(item.getId()))
-                .filter(TunnelEntity::getDelete)
-                .map(TunnelEntity::getId)
+                .filter(KeyValueEntity::getDelete)
+                .map(KeyValueEntity::getId)
                 .toList();
     }
 
-    public List<TunnelEntity> processItems(Map<String, String> params) {
+    public List<KeyValueEntity> processItems(Map<String, String> params) {
         return getIterators(params)
                 .stream()
                 .map(iterator -> {
-                    TunnelEntity item = new TunnelEntity();
+                    KeyValueEntity item = new KeyValueEntity();
                     item.setId(getValue(params, iterator, "id")
                             .filter(id -> !StringUtils.isEmptyOrWhitespace(id))
                             .map(Long::valueOf)

@@ -1,6 +1,6 @@
 package net.outsideworx.services.converters.clients;
 
-import net.outsideworx.services.models.clients.worx.TunnelEntity;
+import net.outsideworx.services.models.clients.worx.KeyValueEntity;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -8,8 +8,8 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class TunnelConverterTest {
-    private final TunnelConverter converter = new TunnelConverter();
+class KeyValueConverterTest {
+    private final KeyValueConverter converter = new KeyValueConverter();
 
     @Test
     void processItems_mapsFieldsCorrectly() {
@@ -20,10 +20,10 @@ class TunnelConverterTest {
                 "items[0].delete", ""
         );
 
-        List<TunnelEntity> result = converter.processItems(params);
+        List<KeyValueEntity> result = converter.processItems(params);
 
         assertThat(result).hasSize(1);
-        TunnelEntity item = result.getFirst();
+        KeyValueEntity item = result.getFirst();
         assertThat(item.getId()).isEqualTo(42L);
         assertThat(item.getName()).isEqualTo("operator-knock-token");
         assertThat(item.getValue()).isEqualTo("secret");
@@ -34,7 +34,7 @@ class TunnelConverterTest {
     void processItems_whenIdIsBlank_setsIdToNull() {
         Map<String, String> params = Map.of("items[0].name", "key");
 
-        List<TunnelEntity> result = converter.processItems(params);
+        List<KeyValueEntity> result = converter.processItems(params);
 
         assertThat(result.getFirst().getId()).isNull();
     }
@@ -46,22 +46,22 @@ class TunnelConverterTest {
                 "items[0].delete", "on"
         );
 
-        List<TunnelEntity> result = converter.processItems(params);
+        List<KeyValueEntity> result = converter.processItems(params);
 
         assertThat(result.getFirst().getDelete()).isTrue();
     }
 
     @Test
     void filterIdsToDelete_returnsOnlyMarkedItems() {
-        TunnelEntity toDelete = new TunnelEntity();
+        KeyValueEntity toDelete = new KeyValueEntity();
         toDelete.setId(1L);
         toDelete.setDelete(true);
 
-        TunnelEntity toKeep = new TunnelEntity();
+        KeyValueEntity toKeep = new KeyValueEntity();
         toKeep.setId(2L);
         toKeep.setDelete(false);
 
-        TunnelEntity newItem = new TunnelEntity();
+        KeyValueEntity newItem = new KeyValueEntity();
         newItem.setDelete(true);
 
         assertThat(converter.filterIdsToDelete(List.of(toDelete, toKeep, newItem))).containsExactly(1L);

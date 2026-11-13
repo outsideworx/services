@@ -1,8 +1,8 @@
 package it.controllers;
 
 import net.outsideworx.services.SpringApplication;
-import net.outsideworx.services.models.clients.worx.TunnelEntity;
-import net.outsideworx.services.repositories.clients.TunnelRepository;
+import net.outsideworx.services.models.clients.worx.KeyValueEntity;
+import net.outsideworx.services.repositories.clients.KeyValueRepository;
 import it.IntegrationTestBase;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,13 +31,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RequiredArgsConstructor
 @SpringBootTest(classes = SpringApplication.class)
 class OutsideworxControllerIT {
-    private final MockMvc mockMvc;
+    private final KeyValueRepository keyValueRepository;
 
-    private final TunnelRepository tunnelRepository;
+    private final MockMvc mockMvc;
 
     @BeforeEach
     void setUp() {
-        tunnelRepository.deleteAll();
+        keyValueRepository.deleteAll();
     }
 
     @Test
@@ -65,8 +65,8 @@ class OutsideworxControllerIT {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/"));
 
-        assertThat(tunnelRepository.findAll())
-                .extracting(TunnelEntity::getName, TunnelEntity::getValue)
+        assertThat(keyValueRepository.findAll())
+                .extracting(KeyValueEntity::getName, KeyValueEntity::getValue)
                 .containsExactly(tuple("operator-knock-token", "secret"));
     }
 }

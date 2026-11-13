@@ -18,7 +18,7 @@
     <div class="mb-3 d-flex align-items-center">
         <!-- Left side -->
         <div>
-            <button class="btn btn-success me-2" type="submit" form="tunnelForm">
+            <button class="btn btn-success me-2" type="submit" form="keyValueForm">
                 <i class="bi bi-floppy me-1"></i>
                 Save changes
                 <span class="spinner-border spinner-border-sm d-none ms-2" role="status" aria-hidden="true"></span>
@@ -81,7 +81,7 @@
     </div>
 
     <!-- Key-value store -->
-    <form id="tunnelForm" th:action="@{'/outsideworx'}" method="post">
+    <form id="keyValueForm" th:action="@{'/outsideworx'}" method="post">
         <table class="table table-bordered">
             <thead>
             <tr>
@@ -215,7 +215,7 @@
             button.disabled = true;
             button.querySelector('.spinner-border').classList.remove('d-none');
             setTimeout(() => {
-                document.getElementById('tunnelForm').submit();
+                document.getElementById('keyValueForm').submit();
             }, 50);
         });
     });

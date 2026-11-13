@@ -9,8 +9,8 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "TUNNEL")
-public final class TunnelEntity {
+@Table(name = "KEY_VALUE")
+public final class KeyValueEntity {
     @Id
     @GeneratedValue
     private Long id;
