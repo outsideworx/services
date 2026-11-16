@@ -3,6 +3,7 @@ on:
   push:
 jobs:
   verify:
+    if: ${{ !startsWith(github.event.head_commit.message, 'DOC:') }}
     runs-on: outsideworx
     steps:
       - uses: actions/checkout@v4
