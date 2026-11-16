@@ -43,8 +43,11 @@ if [ "$1" == "--network" ]; then
     else
         echo "Warning: no IP address provided, skipping swarm init"
     fi
-    docker network create -d overlay --attachable edge
-    docker network create -d overlay --attachable outsideworx
+    for network in edge outsideworx; do
+        if ! docker network inspect "$network" > /dev/null 2>&1; then
+            docker network create -d overlay --attachable "$network"
+        fi
+    done
     cat <<-EOF > /etc/modules-load.d/wg-easy.conf
 			ip_tables
 			iptable_nat
