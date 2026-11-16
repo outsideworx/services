@@ -20,7 +20,7 @@ app:
     oauth:
       url: "https://oauth.outsideworx.net"
     operator:
-      url: "https://outsideworx.net:8443"
+      url: "https://outsideworx.net:444"
     vpn:
       url: "https://vpn.outsideworx.net"
 management:

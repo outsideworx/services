@@ -45,15 +45,15 @@ class OutsideworxControllerIT {
         mockMvc.perform(get("/").with(oidcLogin().idToken(t -> t.claim("email", "user@outsideworx.net"))))
                 .andExpect(status().isOk())
                 .andExpect(view().name("clients/outsideworx"))
-                .andExpect(model().attribute("knockUrl", "https://localhost:8443"))
-                .andExpect(content().string(containsString("localhost:8443")));
+                .andExpect(model().attribute("knockUrl", "https://localhost:444"))
+                .andExpect(content().string(containsString("localhost:444")));
     }
 
     @Test
     void operator_whenAuthenticated_redirectsToKnockUrl() throws Exception {
         mockMvc.perform(get("/operator").with(oidcLogin()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("https://localhost:8443"));
+                .andExpect(redirectedUrl("https://localhost:444"));
     }
 
     @Test
