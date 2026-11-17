@@ -89,4 +89,3 @@ echo "$DISPATCH_TOKEN" | docker login ghcr.io -u outsideworx --password-stdin
 
 docker compose pull
 docker stack deploy -c compose.yaml services --detach=false --resolve-image=always
-docker stack services services --format '{{.Name}}' | xargs -rn1 docker service update --force
